@@ -1,0 +1,79 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Testdotnet_CompetitionWebsite
+build_property.RootNamespace = Testdotnet_CompetitionWebsite
+build_property.ProjectDir = C:\Mostaql Jobs\Test for Fahed Project\TestDotNet-CompetitionWebsite\Testdotnet-CompetitionWebsite\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Mostaql Jobs\Test for Fahed Project\TestDotNet-CompetitionWebsite\Testdotnet-CompetitionWebsite
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/Admin/AddQuestion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRkUXVlc3Rpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/Admin/ManageQuestions.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTWFuYWdlUXVlc3Rpb25zLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/Auth/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/Auth/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/Profile/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZmlsZVxQcm9maWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/Questions/MatchingQuestion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVlc3Rpb25zXE1hdGNoaW5nUXVlc3Rpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/Questions/MultipleChoice.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVlc3Rpb25zXE11bHRpcGxlQ2hvaWNlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/Questions/WordBuilding.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVlc3Rpb25zXFdvcmRCdWlsZGluZy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/Test for Fahed Project/TestDotNet-CompetitionWebsite/Testdotnet-CompetitionWebsite/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-i57pag0uex

@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "مسابقات تعليمية إسلامية";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    <header>
+        <nav class="main-nav">
+            <div class="logo">
+                <h1>مسابقات تعليمية</h1>
+            </div>
+            <div class="nav-links">
+                <a href="@Url.Action("Index", "Home")" class="active">الرئيسية</a>
+                <a href="@Url.Action("Login", "Auth")">تسجيل الدخول</a>
+                <a href="@Url.Action("Profile", "Profile")">الملف الشخصي</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>مرحباً بك في منصة المسابقات التعليمية</h2>
+            <p>اختبر معرفتك الإسلامية من خلال مجموعة متنوعة من المسابقات</p>
+        </section>
+
+        <section class="competitions-grid">
+            <div class="competition-card" data-category="quran">
+                <i class="fas fa-book-quran"></i>
+                <h3>مسابقات القرآن الكريم</h3>
+                <p>اختبر حفظك وفهمك للقرآن الكريم</p>
+                <a href="@Url.Action("ChooseDifficulty", "Questions", new { type = "quran" })" class="btn">ابدأ المسابقة</a>
+            </div>
+
+            <div class="competition-card" data-category="sunnah">
+                <i class="fas fa-sun"></i>
+                <h3>السنة النبوية</h3>
+                <p>تعرف على الأحاديث النبوية الشريفة</p>
+                <a href="@Url.Action("ChooseDifficulty", "Questions", new { type = "sunnah" })" class="btn">ابدأ المسابقة</a>
+            </div>
+
+            <div class="competition-card" data-category="aqeedah">
+                <i class="fas fa-mosque"></i>
+                <h3>العقيدة الإسلامية</h3>
+                <p>اختبر معرفتك بأصول العقيدة</p>
+                <a href="@Url.Action("ChooseDifficulty", "Questions", new { type = "aqeedah" })" class="btn">ابدأ المسابقة</a>
+            </div>
+
+            <div class="competition-card" data-category="culture">
+                <i class="fas fa-landmark"></i>
+                <h3>الثقافة الإسلامية</h3>
+                <p>تعرف على تاريخ وحضارة الإسلام</p>
+                <a href="@Url.Action("ChooseDifficulty", "Questions", new { type = "culture" })" class="btn">ابدأ المسابقة</a>
+            </div>
+
+            <div class="competition-card" data-category="puzzles">
+                <i class="fas fa-puzzle-piece"></i>
+                <h3>ألغاز إسلامية</h3>
+                <p>اختبر ذكاءك من خلال ألغاز ممتعة</p>
+                <a href="@Url.Action("ChooseDifficulty", "Questions", new { type = "puzzles" })" class="btn">ابدأ المسابقة</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>جميع الحقوق محفوظة © @DateTime.Now.Year</p>
+    </footer>
+
+    <script src="~/js/main.js"></script>
+</body>
+</html>

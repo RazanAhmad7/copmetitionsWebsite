@@ -1,0 +1,195 @@
+@{
+    ViewData["Title"] = "الملف الشخصي - مسابقات تعليمية إسلامية";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="../css/site.css" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        .profile-container {
+          max-width: 800px;
+          margin: 2rem auto;
+          padding: 2rem;
+          background: var(--white);
+          border-radius: 8px;
+          box-shadow: var(--shadow);
+        }
+
+        .profile-header {
+          text-align: center;
+          margin-bottom: 2rem;
+        }
+
+        .profile-header img {
+          width: 150px;
+          height: 150px;
+          border-radius: 50%;
+          margin-bottom: 1rem;
+          border: 4px solid var(--primary-color);
+        }
+
+        .profile-info {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 2rem;
+          margin-bottom: 2rem;
+        }
+
+        .info-card {
+          background: var(--light-bg);
+          padding: 1.5rem;
+          border-radius: 8px;
+          text-align: center;
+        }
+
+        .info-card i {
+          font-size: 2rem;
+          color: var(--primary-color);
+          margin-bottom: 1rem;
+        }
+
+        .quiz-history {
+          margin-top: 2rem;
+        }
+
+        .quiz-history h3 {
+          color: var(--primary-color);
+          margin-bottom: 1rem;
+        }
+
+        .history-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 1rem;
+        }
+
+        .history-table th,
+        .history-table td {
+          padding: 1rem;
+          text-align: right;
+          border-bottom: 1px solid var(--light-bg);
+        }
+
+        .history-table th {
+          background-color: var(--primary-color);
+          color: var(--white);
+        }
+
+        .history-table tr:hover {
+          background-color: var(--light-bg);
+        }
+
+        .badge {
+          display: inline-block;
+          padding: 0.25rem 0.5rem;
+          border-radius: 4px;
+          font-size: 0.875rem;
+          font-weight: bold;
+        }
+
+        .badge-gold {
+          background-color: var(--accent-color);
+          color: var(--text-color);
+        }
+
+        .badge-silver {
+          background-color: #c0c0c0;
+          color: var(--text-color);
+        }
+
+        .badge-bronze {
+          background-color: #cd7f32;
+          color: var(--white);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="main-nav">
+            <div class="logo">
+                <h1>مسابقات تعليمية</h1>
+            </div>
+            <div class="nav-links">
+                <a href="@Url.Action("Index", "Home")" class="active">الرئيسية</a>
+                <a href="@Url.Action("Login", "Auth")">تسجيل الدخول</a>
+                <a href="@Url.Action("Profile", "Profile")">الملف الشخصي</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="profile-container">
+            <div class="profile-header">
+                <img src="../assets/default-avatar.png" alt="الصورة الشخصية" />
+                <h2>اسم المستخدم</h2>
+                <p>عضو منذ: يناير 2024</p>
+            </div>
+
+            <div class="profile-info">
+                <div class="info-card">
+                    <i class="fas fa-trophy"></i>
+                    <h3>المسابقات المكتملة</h3>
+                    <p>15</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-star"></i>
+                    <h3>النقاط الإجمالية</h3>
+                    <p>1,250</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-medal"></i>
+                    <h3>المركز</h3>
+                    <p>المركز الثالث</p>
+                </div>
+            </div>
+
+            <div class="quiz-history">
+                <h3>سجل المسابقات</h3>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>المسابقة</th>
+                            <th>التاريخ</th>
+                            <th>النتيجة</th>
+                            <th>المركز</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>مسابقة القرآن الكريم</td>
+                            <td>15/01/2024</td>
+                            <td>95%</td>
+                            <td><span class="badge badge-gold">المركز الأول</span></td>
+                        </tr>
+                        <tr>
+                            <td>مسابقة السنة النبوية</td>
+                            <td>10/01/2024</td>
+                            <td>85%</td>
+                            <td><span class="badge badge-silver">المركز الثاني</span></td>
+                        </tr>
+                        <tr>
+                            <td>مسابقة العقيدة</td>
+                            <td>05/01/2024</td>
+                            <td>80%</td>
+                            <td><span class="badge badge-bronze">المركز الثالث</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>جميع الحقوق محفوظة © 2024</p>
+    </footer>
+
+    <script src="../js/profile.js"></script>
+</body>
+</html>

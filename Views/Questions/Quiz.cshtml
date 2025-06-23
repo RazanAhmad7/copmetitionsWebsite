@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "المسابقة - مسابقات تعليمية إسلامية";
+    Layout =null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="../css/site.css" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    <header>
+        <nav class="main-nav">
+            <div class="logo">
+                <h1>مسابقات تعليمية</h1>
+            </div>
+            <div class="nav-links">
+                <a href="@Url.Action("Index", "Home")" class="active">الرئيسية</a>
+                <a href="@Url.Action("Login", "Auth")">تسجيل الدخول</a>
+                <a href="@Url.Action("Profile", "Profile")">الملف الشخصي</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h2 id="quizTitle">عنوان المسابقة</h2>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" style="width: 0%"></div>
+                </div>
+                <div class="timer" id="timer">الوقت المتبقي: 00:00</div>
+            </div>
+
+            <!-- Multiple Choice Question Template -->
+            <div id="multipleChoice" class="question-type" style="display: none">
+                <h3 class="question-text">نص السؤال</h3>
+                <div class="options-container">
+                    <div class="option" data-option="A">الخيار الأول</div>
+                    <div class="option" data-option="B">الخيار الثاني</div>
+                    <div class="option" data-option="C">الخيار الثالث</div>
+                    <div class="option" data-option="D">الخيار الرابع</div>
+                </div>
+            </div>
+
+            <!-- Matching Question Template -->
+            <div id="matching" class="question-type" style="display: none">
+                <h3 class="question-text">صل بين العناصر المتطابقة</h3>
+                <div class="matching-container">
+                    <div class="matching-column">
+                        <div class="matching-item" draggable="true">العنصر 1</div>
+                        <div class="matching-item" draggable="true">العنصر 2</div>
+                        <div class="matching-item" draggable="true">العنصر 3</div>
+                    </div>
+                    <div class="matching-column">
+                        <div class="matching-item" draggable="true">الإجابة 1</div>
+                        <div class="matching-item" draggable="true">الإجابة 2</div>
+                        <div class="matching-item" draggable="true">الإجابة 3</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Word Building Template -->
+            <div id="wordBuilding" class="question-type" style="display: none">
+                <h3 class="question-text">رتب الحروف لتكوين الكلمة الصحيحة</h3>
+                <div class="word-building-container">
+                    <div class="letter-box">ح</div>
+                    <div class="letter-box">ر</div>
+                    <div class="letter-box">ف</div>
+                    <div class="letter-box">ا</div>
+                    <div class="letter-box">ل</div>
+                </div>
+                <div class="word-preview"></div>
+            </div>
+
+            <div class="quiz-controls">
+                <button class="btn" id="nextQuestion">التالي</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>جميع الحقوق محفوظة © 2024</p>
+    </footer>
+
+    <script src="../js/quiz.js"></script>
+</body>
+</html>

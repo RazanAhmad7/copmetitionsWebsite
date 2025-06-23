@@ -1,0 +1,132 @@
+@model CompetitionsWebsite.ViewModels.UserRegisterViewModel
+@{
+    ViewData["Title"] = "تسجيل حساب جديد - مسابقات تعليمية إسلامية";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        .auth-container {
+            max-width: 400px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .auth-container h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .auth-links {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .auth-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        .password-requirements {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="main-nav">
+            <div class="logo">
+                <h1>مسابقات تعليمية</h1>
+            </div>
+          <div class="nav-links">
+                <a href="@Url.Action("Index", "Home")" class="active">الرئيسية</a>
+                <a href="@Url.Action("Login", "Auth")">تسجيل الدخول</a>
+                <a href="@Url.Action("Profile", "Profile")">الملف الشخصي</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="auth-container">
+            <h2>إنشاء حساب جديد</h2>
+            <form asp-action="Register" asp-controller="Auth" method="post">
+                <div class="form-group">
+                    <label asp-for="FullName"></label>
+                    <input asp-for="FullName" class="form-control" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <div class="password-requirements">
+                        يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، وتشمل حروف وأرقام
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn" style="width: 100%">تسجيل الحساب</button>
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </form>
+
+            <div class="auth-links">
+                <p>لديك حساب بالفعل؟ <a href="@Url.Action("Login", "Auth")">سجل الدخول الآن</a></p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>جميع الحقوق محفوظة © @DateTime.Now.Year</p>
+    </footer>
+
+    <script src="~/js/auth.js"></script>
+</body>
+</html>

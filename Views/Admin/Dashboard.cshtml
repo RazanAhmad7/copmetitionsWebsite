@@ -1,0 +1,718 @@
+@model CompetitionsWebsite.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "لوحة التحكم - مسابقات تعليمية إسلامية";
+  
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        /* All your previous CSS styles remain the same */
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .admin-tab {
+            padding: 1rem 2rem;
+            background: var(--light-bg);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .admin-tab.active {
+                background: var(--primary-color);
+                color: var(--white);
+            }
+
+        .admin-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .question-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+            .form-group label {
+                font-weight: bold;
+                color: var(--text-color);
+            }
+
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                padding: 0.8rem;
+                border: 2px solid var(--primary-color);
+                border-radius: 4px;
+                font-size: 1rem;
+            }
+
+            .form-group textarea {
+                min-height: 100px;
+                resize: vertical;
+            }
+
+        .options-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option-item {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+            .option-item input {
+                flex: 1;
+            }
+
+            .option-item button {
+                padding: 0.5rem;
+                background: #ff4444;
+                color: var(--white);
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+        .add-option {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--secondary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .elements-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .elements-card {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .element-info {
+            flex: 1;
+        }
+
+        .element-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--white);
+        }
+        .show-btn {
+            background-color: #17a2b8; /* أزرق معلوماتي */
+        }
+        .edit-btn {
+            background: var(--primary-color);
+        }
+
+        .delete-btn {
+            background: #ff4444;
+        }
+
+        .matching-pairs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .matching-column {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .word-building-letters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .letter-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 1.5rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+   
+
+    <main>
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2>لوحة التحكم</h2>
+                <button class="btn" id="addQuestionBtn" asp-action="AddQuestion" asp-controller="Admin">إضافة سؤال جديد</button>
+                <button class="btn" id="addCategoryBtn" style="display:none;">إضافة قسم جديد</button>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="questions">الأسئلة</button>
+                <button class="admin-tab" data-tab="categories">الأقسام</button>
+                <button class="admin-tab" data-tab="users">المستخدمين</button>
+            </div>
+
+            <div class="admin-content">
+                <!-- Questions List -->
+                <div class="elements-list" id="questionsList">
+                    @foreach (var question in Model.Questions)
+                    {
+                        <div class="elements-card m-2" data-id="@question.Id">
+                            <div class="element-info">
+                                <h4>@question.Text</h4>
+                                <p>نوع السؤال: @question.Type</p>
+                                <p>القسم: @(Model.Categories.FirstOrDefault(c => c.Id == question.CategoryId)?.Name ?? "غير محدد")</p>
+
+                               
+                            </div>
+                            <div class="element-actions">
+                                <button class="action-btn edit-btn">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+
+                <!-- Categories List -->
+                <div class="elements-list" id="categoriesList" style="display:none">
+                    @foreach (var category in Model.Categories)
+                    {
+                        <div class="elements-card m-2" data-id="@category.Id">
+                            <div class="element-info">
+                                <h4>@category.Name</h4>
+                                <p>الوصف: @category.Description</p>
+                                <p>عدد الأسئلة: @(Model.Questions.Count(q => q.CategoryId == category.Id))</p>
+                            </div>
+                            <div class="element-actions">
+                                <button class="action-btn show-btn"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="انقر لعرض الأسئلة">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn edit-btn">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Users List -->
+                <div class="elements-list" id="usersList" style="display:none">
+                    @foreach (var user in Model.Users)
+                    {
+                        <div class="elements-card m-2" data-id="@user.Id">
+                            <div class="element-info">
+                                <h4>اسم المستخدم: @user.UserName</h4>
+                                <p>البريد الإلكتروني: @user.Email</p>
+                                <p>تاريخ التسجيل: @user.JoinedAt.ToString("yyyy-MM-dd")</p>
+                                <!-- يمكنك إضافة دور المستخدم لو كنت تملكين هذه البيانات -->
+                            </div>
+                            <div class="element-actions">
+                                <button class="action-btn show-btn"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="عرض تفاصيل المستخدم">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn edit-btn"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="تعديل المستخدم">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete-btn"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="حذف المستخدم">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+
+                <!-- Add/Edit Question Form -->
+                <form asp-action="SaveQuestion" asp-controller="Admin" method="post" class="question-form" id="questionForm" style="display: none">
+                    <input type="hidden" id="questionId" value="0">
+
+                    <div class="form-group">
+                        <label for="questionType">نوع السؤال</label>
+                        <select id="questionType" required>
+                            <option value="multipleChoice">اختيار من متعدد</option>
+                            <option value="matching">توصيل</option>
+                            <option value="wordBuilding">تركيب كلمات</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="questionText">نص السؤال</label>
+                        <textarea id="questionText" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="questionCategory">القسم</label>
+                        <select id="questionCategory" required>
+                            <option value="القرآن الكريم">القرآن الكريم</option>
+                            <option value="السنة النبوية">السنة النبوية</option>
+                            <option value="العقيدة">العقيدة</option>
+                            <option value="الثقافة الإسلامية">الثقافة الإسلامية</option>
+                            <option value="الفقه">الفقه</option>
+                            <option value="الألغاز">الألغاز</option>
+                        </select>
+                    </div>
+
+                    <!-- Multiple Choice Options -->
+                    <div id="multipleChoiceOptions" class="form-group">
+                        <label>الخيارات</label>
+                        <div class="options-list" id="optionsContainer">
+                            <div class="option-item">
+                                <input type="text" placeholder="الخيار الأول" required>
+                                <input type="radio" name="correctAnswer" value="0" required>
+                                <button type="button" class="remove-option">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" class="add-option" id="addOptionBtn">
+                            <i class="fas fa-plus"></i>
+                            إضافة خيار
+                        </button>
+                    </div>
+
+                    <!-- Matching Pairs -->
+                    <div id="matchingPairs" class="form-group" style="display: none">
+                        <label>أزواج التوصيل</label>
+                        <div class="matching-pairs">
+                            <div class="matching-column">
+                                <h4>العناصر</h4>
+                                <div class="matching-items" id="matchingItemsContainer">
+                                    <input type="text" placeholder="العنصر الأول" required>
+                                </div>
+                                <button type="button" class="add-option" id="addMatchingItemBtn">
+                                    <i class="fas fa-plus"></i>
+                                    إضافة عنصر
+                                </button>
+                            </div>
+                            <div class="matching-column">
+                                <h4>الإجابات</h4>
+                                <div class="matching-answers" id="matchingAnswersContainer">
+                                    <input type="text" placeholder="الإجابة الأولى" required>
+                                </div>
+                                <button type="button" class="add-option" id="addMatchingAnswerBtn">
+                                    <i class="fas fa-plus"></i>
+                                    إضافة إجابة
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Word Building -->
+                    <div id="wordBuildingLetters" class="form-group" style="display: none">
+                        <label>الحروف</label>
+                        <div class="word-building-letters">
+                            <input type="text" class="letter-input" maxlength="1" required>
+                            <input type="text" class="letter-input" maxlength="1" required>
+                            <input type="text" class="letter-input" maxlength="1" required>
+                            <input type="text" class="letter-input" maxlength="1" required>
+                            <input type="text" class="letter-input" maxlength="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="correctWord">الكلمة الصحيحة</label>
+                            <input type="text" id="correctWord" required>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn">حفظ السؤال</button>
+                        <button type="button" class="btn" id="cancelBtn" style="background: #ff4444">
+                            إلغاء
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>جميع الحقوق محفوظة © @DateTime.Now.Year</p>
+    </footer>
+
+    <script>
+        // تفعيل جميع التولتيبات في الصفحة
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.admin-tab');
+            const addCatBtn = document.getElementById('addCategoryBtn');
+            const addQuesBtn = document.getElementById('addQuestionBtn');
+            const sections = {
+                questions: document.getElementById('questionsList'),
+                categories: document.getElementById('categoriesList'),
+                users: document.getElementById('usersList'),
+            };
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // أزل active من جميع الأزرار
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    // أخفِ جميع الأقسام
+                    Object.values(sections).forEach(sec => sec.style.display = 'none');
+
+                    // اعرض القسم المطلوب
+                    const tabName = tab.getAttribute('data-tab');
+                    if (sections[tabName]) {
+                        sections[tabName].style.display = 'block';
+                    }
+
+                    // عرض أو إخفاء الأزرار حسب القسم
+                    switch (tabName) {
+                        case 'questions':
+                            addQuesBtn.style.display = 'inline-block';
+                            addCatBtn.style.display = 'none';
+                            break;
+                        case 'categories':
+                            addQuesBtn.style.display = 'none';
+                            addCatBtn.style.display = 'inline-block';
+                            break;
+                        case 'users':
+                            addQuesBtn.style.display = 'none';
+                            addCatBtn.style.display = 'none';
+                            break;
+                    }
+                });
+            });
+
+            // Trigger click on the active tab on load (to initialize state)
+            document.querySelector('.admin-tab.active')?.click();
+        });
+
+        // Admin Panel State
+        let isEditing = false;
+        let currentQuestionId = null;
+
+        // DOM Elements
+        const addQuestionBtn = document.getElementById("addQuestionBtn");
+        const questionForm = document.querySelector(".question-form");
+        const questionsList = document.querySelector(".elements-list");
+        const questionTypeSelect = document.getElementById("questionType");
+        const multipleChoiceOptions = document.getElementById("multipleChoiceOptions");
+        const matchingPairs = document.getElementById("matchingPairs");
+        const wordBuildingLetters = document.getElementById("wordBuildingLetters");
+
+        // Event Listeners
+        document.addEventListener("DOMContentLoaded", () => {
+          
+
+            // Add question button
+            document.getElementById('addQuestionBtn').addEventListener('click', function () {
+                window.location.href = '@Url.Action("AddQuestion", "Admin")';
+            });
+
+            // Question type change
+            questionTypeSelect.addEventListener("change", handleQuestionTypeChange);
+
+            // Form submission
+            questionForm.addEventListener("submit", handleFormSubmit);
+
+            // Add option buttons
+            document.getElementById("addOptionBtn").addEventListener("click", () => addOption(document.getElementById("addOptionBtn")));
+            document.getElementById("addMatchingItemBtn").addEventListener("click", () => addOption(document.getElementById("addMatchingItemBtn")));
+            document.getElementById("addMatchingAnswerBtn").addEventListener("click", () => addOption(document.getElementById("addMatchingAnswerBtn")));
+
+            // Remove option buttons (for initial options)
+            document.querySelectorAll(".remove-option").forEach((btn) => {
+                btn.addEventListener("click", () => removeOption(btn));
+            });
+
+            // Edit and delete buttons
+            document.querySelectorAll(".edit-btn").forEach((btn) => {
+                btn.addEventListener("click", () => editQuestion(btn));
+            });
+
+            document.querySelectorAll(".delete-btn").forEach((btn) => {
+                btn.addEventListener("click", () => deleteQuestion(btn));
+            });
+
+            // Cancel button
+            document.getElementById("cancelBtn").addEventListener("click", () => {
+                questionForm.style.display = "none";
+                questionsList.style.display = "grid";
+            });
+        });
+
+      
+
+        // Show question form
+        function showQuestionForm() {
+            questionsList.style.display = "none";
+            questionForm.style.display = "grid";
+            isEditing = false;
+            currentQuestionId = null;
+            questionForm.reset();
+            handleQuestionTypeChange();
+        }
+
+        // Handle question type change
+        function handleQuestionTypeChange() {
+            const type = questionTypeSelect.value;
+
+            // Hide all question type specific sections
+            multipleChoiceOptions.style.display = "none";
+            matchingPairs.style.display = "none";
+            wordBuildingLetters.style.display = "none";
+
+            // Show the selected type
+            switch (type) {
+                case "multipleChoice":
+                    multipleChoiceOptions.style.display = "block";
+                    break;
+                case "matching":
+                    matchingPairs.style.display = "block";
+                    break;
+                case "wordBuilding":
+                    wordBuildingLetters.style.display = "block";
+                    break;
+            }
+        }
+
+        // Add new option
+        function addOption(button) {
+            const container = button.closest(".form-group");
+            const optionsList = container.querySelector(
+                ".options-list, .matching-items, .matching-answers"
+            );
+
+            const optionItem = document.createElement("div");
+            optionItem.className = "option-item";
+
+            if (container.id === "multipleChoiceOptions") {
+                const optionCount = optionsList.querySelectorAll(".option-item").length;
+                optionItem.innerHTML = `
+                            <input type="text" placeholder="الخيار الجديد" required>
+                            <input type="radio" name="correctAnswer" value="${optionCount}" required>
+                            <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                        `;
+            } else if (container.id === "matchingPairs") {
+                if (button.id === "addMatchingItemBtn") {
+                    optionItem.innerHTML = `
+                                <input type="text" placeholder="عنصر جديد" required>
+                                <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                            `;
+                } else {
+                    optionItem.innerHTML = `
+                                <input type="text" placeholder="إجابة جديدة" required>
+                                <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                            `;
+                }
+            }
+
+            optionsList.appendChild(optionItem);
+
+            // Add event listener to new remove button
+            optionItem
+                .querySelector(".remove-option")
+                .addEventListener("click", () =>
+                    removeOption(optionItem.querySelector(".remove-option"))
+                );
+        }
+
+        // Remove option
+        function removeOption(button) {
+            const optionItem = button.closest(".option-item");
+            if (optionItem) {
+                optionItem.remove();
+            }
+        }
+
+        // Handle form submission
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const questionData = {
+                id: document.getElementById("questionId").value || Date.now().toString(),
+                type: questionTypeSelect.value,
+                text: document.getElementById("questionText").value,
+                category: document.getElementById("questionCategory").value,
+                options: [],
+                correctAnswer: null,
+                pairs: [],
+                letters: [],
+                correctWord: ""
+            };
+
+            // Collect data based on question type
+            switch (questionData.type) {
+                case "multipleChoice":
+                    document.querySelectorAll('#multipleChoiceOptions .option-item input[type="text"]').forEach((input, index) => {
+                        questionData.options.push(input.value);
+                        if (document.querySelector(`input[name="correctAnswer"][value="${index}"]:checked`)) {
+                            questionData.correctAnswer = index;
+                        }
+                    });
+                    break;
+                case "matching":
+                    document.querySelectorAll('.matching-items input').forEach(input => {
+                        questionData.pairs.push({ item: input.value });
+                    });
+                    document.querySelectorAll('.matching-answers input').forEach((input, index) => {
+                        if (questionData.pairs[index]) {
+                            questionData.pairs[index].answer = input.value;
+                        }
+                    });
+                    break;
+                case "wordBuilding":
+                    document.querySelectorAll('.letter-input').forEach(input => {
+                        questionData.letters.push(input.value);
+                    });
+                    questionData.correctWord = document.getElementById("correctWord").value;
+                    break;
+            }
+
+            fetch('/Admin/SaveQuestion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value // Only if you use anti-forgery
+                },
+                body: JSON.stringify(questionData)
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error("Failed to save question");
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Saved successfully:", data);
+                    if (isEditing) {
+                        updateQuestionInList(questionData);
+                    } else {
+                        addQuestionToList(questionData);
+                    }
+
+                    // Reset form
+                    questionForm.reset();
+                    questionForm.style.display = "none";
+                    questionsList.style.display = "grid";
+                })
+                .catch(error => {
+                    console.error("Error saving question:", error);
+                    alert("حدث خطأ أثناء حفظ السؤال. حاول مرة أخرى.");
+                });
+
+
+            // Add or update the question in the list
+            if (isEditing) {
+                updateQuestionInList(questionData);
+            } else {
+                addQuestionToList(questionData);
+            }
+
+            // Reset form
+            e.target.reset();
+            questionForm.style.display = "none";
+            questionsList.style.display = "grid";
+        }
+
+        
+
+        // Helper function to generate question details HTML
+        function getQuestionDetailsHTML(questionData) {
+            switch (questionData.type) {
+                case "multipleChoice":
+                    return `
+                                <p><strong>الخيارات:</strong></p>
+                                <ul>
+                                    ${questionData.options.map(option => `<li>${option}</li>`).join('')}
+                                </ul>
+                                <p><strong>الإجابة الصحيحة:</strong> ${questionData.options[questionData.correctAnswer]}</p>
+                            `;
+                case "matching":
+                    return `
+                                <p><strong>أزواج التوصيل:</strong></p>
+                                <ul>
+                                    ${questionData.pairs.map(pair => `<li>${pair.item} ↔ ${pair.answer}</li>`).join('')}
+                                </ul>
+                            `;
+                case "wordBuilding":
+                    return `
+                                <p><strong>الحروف:</strong> ${questionData.letters.join('، ')}</p>
+                                <p><strong>الكلمة الصحيحة:</strong> ${questionData.correctWord}</p>
+                            `;
+                default:
+                    return '';
+            }
+        }
+    </script>
+</body>
+</html>
