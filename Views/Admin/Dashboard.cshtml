@@ -713,6 +713,43 @@
                     return '';
             }
         }
+
+        // Edit question function - redirect to edit page
+        function editQuestion(button) {
+            const questionCard = button.closest('.elements-card');
+            const questionId = questionCard.getAttribute('data-id');
+            window.location.href = `/Admin/EditQuestion/${questionId}`;
+        }
+
+        // Delete question function
+        function deleteQuestion(button) {
+            const questionCard = button.closest('.elements-card');
+            const questionId = questionCard.getAttribute('data-id');
+            
+            if (confirm('هل أنت متأكد من حذف هذا السؤال؟')) {
+                fetch(`/Admin/DeleteQuestion/${questionId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("Failed to delete question");
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Deleted successfully:", data);
+                    // Remove the question card from the UI
+                    questionCard.remove();
+                    alert('تم حذف السؤال بنجاح!');
+                })
+                .catch(error => {
+                    console.error("Error deleting question:", error);
+                    alert("حدث خطأ أثناء حذف السؤال. حاول مرة أخرى.");
+                });
+            }
+        }
     </script>
 </body>
 </html>

@@ -143,3 +143,4 @@ C:\Mostaql Jobs\My Second Job - Competitions Website\CompetitionsWebsite\Competi
 C:\Mostaql Jobs\My Second Job - Competitions Website\CompetitionsWebsite\CompetitionsWebsite\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Mostaql Jobs\My Second Job - Competitions Website\CompetitionsWebsite\CompetitionsWebsite\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Mostaql Jobs\My Second Job - Competitions Website\CompetitionsWebsite\CompetitionsWebsite\obj\Debug\net8.0\CompetitionsWebsite.MvcApplicationPartsAssemblyInfo.cs
+C:\Mostaql Jobs\My Second Job - Competitions Website\CompetitionsWebsite\CompetitionsWebsite\obj\Debug\net8.0\CompetitionsWebsite.sourcelink.json

@@ -30,8 +30,8 @@
 
         .admin-tabs {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .admin-tab {
@@ -216,15 +216,12 @@
     <main>
         <div class="admin-container">
             <div class="admin-header">
-                <h2>لوحة التحكم</h2>
-                <button class="btn" id="addQuestionBtn">إضافة سؤال جديد</button>
-                <button class="btn" id="addCategoryBtn" style="display:none;">إضافة قسم جديد</button>
+                <h2>إضافة سؤال جديد </h2>
+                <button asp-action="Dashboard" asp-controller="Admin" class="btn" id="backToHome">عودة إلى الرئيسية</button>
             </div>
 
             <div class="admin-tabs">
-                <button class="admin-tab active" data-tab="questions">الأسئلة</button>
-                <button class="admin-tab" data-tab="categories">الأقسام</button>
-                <button class="admin-tab" data-tab="users">المستخدمين</button>
+             <p> حدد نوع السؤال المراد إضافته واملأ جميع الأقسام ثم اضغط حفظ السؤال</p>
             </div>
 
 
@@ -250,18 +247,20 @@
                     <div class="form-group">
                         <label for="questionCategory">القسم</label>
                         <select id="questionCategory" name="Category" required>
-                            <option value="القرآن الكريم">القرآن الكريم</option>
-                            <option value="السنة النبوية">السنة النبوية</option>
-                            <option value="العقيدة">العقيدة</option>
-                            <option value="الثقافة الإسلامية">الثقافة الإسلامية</option>
-                            <option value="الفقه">الفقه</option>
-                            <option value="الألغاز">الألغاز</option>
+                            @foreach (var category in (List<CompetitionsWebsite.Models.Category>)ViewBag.Categories)
+                            {
+                                <option value="@category.Name">@category.Name</option>
+                            }
                         </select>
-                    </div>
 
+                    </div>
+                  
                     <!-- Multiple Choice Options -->
                     <div id="multipleChoiceOptions" class="form-group">
                         <label>الخيارات</label>
+                        <p class="hint-text" style="color: gray; font-size: 14px; margin-bottom: 10px;">
+                            يمكنك إضافة من ثلاثة إلى أربعة خيارات.
+                        </p>
                         <div class="options-list" id="optionsContainer">
                             <div class="option-item">
                                 <input type="text" name="Options" placeholder="الخيار الأول" required>
@@ -280,29 +279,30 @@
                     <!-- Matching Pairs -->
                     <div id="matchingPairs" class="form-group" style="display: none">
                         <label>أزواج التوصيل</label>
-                        <div class="matching-pairs">
-                            <div class="matching-column">
-                                <h4>العناصر</h4>
-                                <div class="matching-items" id="matchingItemsContainer">
-                                    <input type="text" name="MatchingItems" placeholder="العنصر الأول" >
-                                </div>
-                                <button type="button" class="add-option" id="addMatchingItemBtn">
-                                    <i class="fas fa-plus"></i>
-                                    إضافة عنصر
-                                </button>
+                        <p class="hint-text" style="color: gray; font-size: 14px; margin-bottom: 10px;">
+                            يمكنك إضافة من زوجين إلى أربعة أزواج.
+                        </p>
+                        <div id="matchingPairsContainer" class="matching-pairs">
+                            <!-- زوجان افتراضيان -->
+                            <div class="matching-pair option-item">
+                                <input type="text" name="MatchingItems" placeholder="العنصر الأول" >
+                                <input type="text" name="MatchingAnswers" placeholder="الإجابة الأولى" >
+                                <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
                             </div>
-                            <div class="matching-column">
-                                <h4>الإجابات</h4>
-                                <div class="matching-answers" id="matchingAnswersContainer">
-                                    <input type="text" name="MatchingAnswers" placeholder="الإجابة الأولى" >
-                                </div>
-                                <button type="button" class="add-option" id="addMatchingAnswerBtn">
-                                    <i class="fas fa-plus"></i>
-                                    إضافة إجابة
-                                </button>
+                            <div class="matching-pair option-item">
+                                <input type="text" name="MatchingItems" placeholder="العنصر الثاني" >
+                                <input type="text" name="MatchingAnswers" placeholder="الإجابة الثانية" >
+                                <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
                             </div>
                         </div>
+
+                        <button type="button" class="add-option" id="addPairBtn">
+                            <i class="fas fa-plus"></i>
+                            إضافة زوج جديد
+                        </button>
                     </div>
+
+
 
                     <!-- Word Building -->
                     <div id="wordBuildingLetters" class="form-group" style="display: none">
@@ -353,6 +353,10 @@
         const multipleChoiceOptions = document.getElementById("multipleChoiceOptions");
         const matchingPairs = document.getElementById("matchingPairs");
         const wordBuildingLetters = document.getElementById("wordBuildingLetters");
+        // Add question button
+        document.getElementById('backToHome').addEventListener('click', function () {
+            window.location.href = '@Url.Action("Dashboard", "Admin")';
+        });
 
         // Event Listeners
         document.addEventListener("DOMContentLoaded", () => {
@@ -365,8 +369,8 @@
 
             // Add option buttons
             document.getElementById("addOptionBtn").addEventListener("click", () => addOption(document.getElementById("addOptionBtn")));
-            document.getElementById("addMatchingItemBtn").addEventListener("click", () => addOption(document.getElementById("addMatchingItemBtn")));
-            document.getElementById("addMatchingAnswerBtn").addEventListener("click", () => addOption(document.getElementById("addMatchingAnswerBtn")));
+            document.getElementById("addPairBtn").addEventListener("click", () => addOption(document.getElementById("addPairBtn")));
+
 
             // Remove option buttons (for initial options)
             document.querySelectorAll(".remove-option").forEach((btn) => {
@@ -427,12 +431,19 @@
             }
         }
 
-
         function addOption(button) {
             const container = button.closest(".form-group");
-            const optionsList = container.querySelector(".options-list, .matching-items, .matching-answers");
+            const optionsList = container.querySelector(".options-list, #matchingPairsContainer");
 
-            const optionCount = optionsList.querySelectorAll(".option-item").length;
+            // عدد الأزواج الحالية
+            const currentPairsCount = optionsList.querySelectorAll(".option-item").length;
+
+            // إذا وصلنا الحد الأقصى (4) لا نضيف زوج جديد
+            if (currentPairsCount >= 4) {
+                // إخفاء زر الإضافة عند الوصول للحد الأقصى
+                button.style.display = "none";
+                return;
+            }
 
             const optionItem = document.createElement("div");
             optionItem.className = "option-item";
@@ -440,29 +451,37 @@
             if (container.id === "multipleChoiceOptions") {
                 optionItem.innerHTML = `
                     <input type="text" name="Options" placeholder="الخيار الجديد" required>
-                    <input type="radio" name="correctAnswer" value="${optionCount}" required>
+                    <input type="radio" name="correctAnswer" value="${currentPairsCount}" required>
                     <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
                 `;
             } else if (container.id === "matchingPairs") {
-                if (button.id === "addMatchingItemBtn") {
-                    optionItem.innerHTML = `
-                        <input type="text" name="MatchingItems" placeholder="عنصر جديد" required>
-                        <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
-                    `;
-                } else {
-                    optionItem.innerHTML = `
-                        <input type="text" name="MatchingAnswers" placeholder="إجابة جديدة" required>
-                        <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
-                    `;
-                }
+                optionItem.innerHTML = `
+                    <input type="text" name="MatchingItems" placeholder="عنصر" required>
+                    <input type="text" name="MatchingAnswers" placeholder="إجابة" required>
+                    <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                `;
             }
 
             optionsList.appendChild(optionItem);
 
-            // Add event listener to remove button
-            optionItem.querySelector(".remove-option").addEventListener("click", () => removeOption(optionItem.querySelector(".remove-option")));
-        }
+            // إضافة حدث إزالة العنصر
+            optionItem.querySelector(".remove-option").addEventListener("click", () => {
+                removeOption(optionItem.querySelector(".remove-option"));
 
+                // بعد الإزالة، إظهار زر الإضافة مجددًا إذا كان مخفي
+                if (currentPairsCount - 1 < 4) {
+                    button.style.display = "inline-block";
+                }
+            });
+
+            // إظهار الزر (للتأكد من ظهوره لو كان مخفي سابقًا)
+            button.style.display = "inline-block";
+
+            // إذا أصبحنا بالحد الأقصى بعد الإضافة، نخفي الزر
+            if (currentPairsCount + 1 >= 4) {
+                button.style.display = "none";
+            }
+        }
 
         // Remove option
         function removeOption(button) {
@@ -472,7 +491,6 @@
             }
         }
 
-        // Handle form submission
         function handleFormSubmit(e) {
             e.preventDefault();
 
@@ -488,6 +506,54 @@
                 correctWord: ""
             };
 
+            // ✅ إضافة البيانات حسب نوع السؤال
+            switch (questionData.type) {
+                case "multipleChoice":
+                    const options = document.querySelectorAll('#multipleChoiceOptions input[name="Options"]');
+                    options.forEach((input, index) => {
+                        questionData.options.push(input.value);
+                    });
+
+                    const correctAnswerRadio = document.querySelector('input[name="correctAnswer"]:checked');
+                    if (correctAnswerRadio) {
+                        questionData.correctAnswer = parseInt(correctAnswerRadio.value);
+                    }
+                    break;
+
+                case "matching":
+                    const pairRows = document.querySelectorAll('#matchingPairsContainer .matching-pair');
+                    pairRows.forEach(pair => {
+                        const leftInput = pair.querySelector('input[name="MatchingItems"]');
+                        const rightInput = pair.querySelector('input[name="MatchingAnswers"]');
+                        const leftValue = leftInput?.value.trim();
+                        const rightValue = rightInput?.value.trim();
+                        if (leftValue && rightValue) {
+                            questionData.pairs.push({
+                                item: leftValue,
+                                answer: rightValue
+                            });
+                        }
+                    });
+
+                    if (questionData.pairs.length < 2) {
+                        alert("يجب إدخال على الأقل زوجين من العناصر والإجابات.");
+                        return;
+                    }
+                    break;
+
+
+
+                case "wordBuilding":
+                    const letterInputs = document.querySelectorAll('input[name="Letters"]');
+                    letterInputs.forEach(input => {
+                        questionData.letters.push(input.value);
+                    });
+
+                    questionData.correctWord = document.getElementById("correctWord").value;
+                    break;
+            }
+
+            // ✅ إرسال الطلب
             fetch('/Admin/SaveQuestion', {
                 method: 'POST',
                 headers: {
@@ -505,16 +571,15 @@
                     showToast();
                     questionForm.reset();
                 })
-
                 .catch(async (error) => {
                     const errorText = await error.text?.() || error.message;
                     console.error("Error saving question:", errorText);
                     alert("حدث خطأ أثناء حفظ السؤال. حاول مرة أخرى.");
                 });
 
-            // Reset form
             e.target.reset();
         }
+
         function showToast(message = "تم حفظ السؤال بنجاح!") {
             const toast = document.getElementById("toast");
             toast.textContent = message;
