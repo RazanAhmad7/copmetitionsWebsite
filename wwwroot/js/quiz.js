@@ -4,6 +4,9 @@ let score = 0;
 let timer = null;
 let timeLeft = 0;
 
+// ✅ Use questions from server
+const questions = window.questionsFromServer;
+
 // تعريف درجات الألوان المختلفة
 const colorShades = [
   { bg: "#FFF3E0", border: "#FF9800" }, // برتقالي فاتح
@@ -25,45 +28,6 @@ function shuffleArray(array) {
   return array;
 }
 
-// Sample questions (in a real application, these would come from a backend)
-const questions = [
-  {
-    type: "multipleChoice",
-    question: "ما هي أول آية نزلت من القرآن الكريم؟",
-    options: [
-      "اقرأ باسم ربك الذي خلق",
-      "بسم الله الرحمن الرحيم",
-      "الحمد لله رب العالمين",
-      "قل هو الله أحد",
-    ],
-    correctAnswer: "A",
-  },
-  {
-    type: "matching",
-    question: "صل بين الصحابة وصفاتهم",
-    items: [
-      { id: 1, text: "أبو بكر الصديق" },
-      { id: 2, text: "عمر بن الخطاب" },
-      { id: 3, text: "عثمان بن عفان" },
-    ],
-    matches: [
-      { id: 1, text: "أول الخلفاء الراشدين" },
-      { id: 2, text: "الفاروق" },
-      { id: 3, text: "ذي النورين" },
-    ],
-    correctMatches: {
-      1: 1,
-      2: 2,
-      3: 3,
-    },
-  },
-  {
-    type: "wordBuilding",
-    question: "رتب الحروف لتكوين اسم من أسماء الله الحسنى",
-    letters: ["ر", "ح", "م", "ن", "ا"],
-    correctWord: "رحمن",
-  },
-];
 
 // Initialize the quiz
 function initQuiz() {
@@ -89,33 +53,33 @@ function initQuiz() {
 
 // Display the current question
 function showQuestion() {
-  const question = questions[currentQuestion];
-  hideAllQuestionTypes();
+    const container = document.getElementById("questionContainer");
+    container.innerHTML = ""; // مسح السؤال السابق
 
-  // Update progress bar
-  const progress = ((currentQuestion + 1) / questions.length) * 100;
-  document.querySelector(".progress-bar-fill").style.width = `${progress}%`;
+    const question = questions[currentQuestion];
 
-  // Show the appropriate question type
-  const questionElement = document.getElementById(question.type);
-  questionElement.style.display = "block";
+    const questionBox = document.createElement("div");
+    questionBox.className = "question-type";
+    questionBox.innerHTML = `
+    <div class="question-text">${question.text}</div>
+    <div class="options-container"></div>
+  `;
+    container.appendChild(questionBox);
 
-  // Set question text
-  questionElement.querySelector(".question-text").textContent =
-    question.question;
+    document.querySelector(".progress-bar-fill").style.width =
+        ((currentQuestion + 1) / questions.length) * 100 + "%";
 
-  // Handle different question types
-  switch (question.type) {
-    case "multipleChoice":
-      setupMultipleChoice(question);
-      break;
-    case "matching":
-      setupMatching(question);
-      break;
-    case "wordBuilding":
-      setupWordBuilding(question);
-      break;
-  }
+    switch (question.type.toLowerCase()) {
+        case "mcq":
+            setupMultipleChoice(question);
+            break;
+        case "matching":
+            setupMatching(question);
+            break;
+        case "spelling":
+            setupWordBuilding(question);
+            break;
+    }
 }
 
 // Hide all question types

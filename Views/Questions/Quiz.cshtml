@@ -1,28 +1,206 @@
-﻿@{
+﻿@model List<CompetitionsWebsite.ViewModels.QuizQuestionViewModel>
+
+@{
     ViewData["Title"] = "المسابقة - مسابقات تعليمية إسلامية";
-    Layout =null;
+    Layout = null;
 }
+@using System.Text.Json
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="../css/site.css" />
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        /* تنسيقات بسيطة للسؤال */
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .quiz-container {
+            max-width: 700px;
+            background: white;
+            margin: 40px auto;
+            padding: 20px 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .quiz-header h2 {
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: #eee;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 12px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: #4caf50;
+            transition: width 0.3s ease;
+        }
+
+        .question-type {
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .option {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: background-color 0.2s, border-color 0.2s;
+            user-select: none;
+        }
+
+            .option.selected {
+                background: #c8e6c9;
+                border-color: #4caf50;
+            }
+
+            .option:hover {
+                background: #d7ffd9;
+            }
+
+        /* أسئلة التوصيل */
+        .matching-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .matching-column {
+            width: 48%;
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 6px;
+            min-height: 150px;
+        }
+
+        .matching-item {
+            padding: 8px 12px;
+            background: white;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            user-select: none;
+            transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+        }
+
+            .matching-item.selected {
+                border-color: #1976d2;
+                background-color: #bbdefb;
+            }
+
+            .matching-item.matched {
+                cursor: default;
+                font-weight: bold;
+                color: white !important;
+            }
+
+            .matching-item.correct {
+                background-color: #4caf50 !important;
+                border-color: #388e3c !important;
+                color: white !important;
+            }
+
+            .matching-item.incorrect {
+                background-color: #f44336 !important;
+                border-color: #d32f2f !important;
+                color: white !important;
+            }
+
+        /* تركيب الكلمات */
+        .word-building-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .letter-box {
+            padding: 10px 15px;
+            background: #eceff1;
+            border-radius: 6px;
+            font-size: 1.3em;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s;
+        }
+
+            .letter-box:hover {
+                background: #cfd8dc;
+            }
+
+        .word-preview {
+            min-height: 30px;
+            font-weight: bold;
+            font-size: 1.4em;
+            border-bottom: 2px solid #4caf50;
+            padding-bottom: 5px;
+            user-select: none;
+        }
+
+        /* أزرار */
+        .quiz-controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .btn:hover {
+                background-color: #388e3c;
+            }
+
+        footer {
+            text-align: center;
+            margin: 30px 0;
+            color: #888;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="main-nav">
-            <div class="logo">
-                <h1>مسابقات تعليمية</h1>
+        <nav class="main-nav" style="background:#4caf50; padding:10px 30px;">
+            <div class="logo" style="color:white; font-weight:bold; font-size:1.5em;">
+                مسابقات تعليمية
             </div>
-            <div class="nav-links">
-                <a href="@Url.Action("Index", "Home")" class="active">الرئيسية</a>
-                <a href="@Url.Action("Login", "Auth")">تسجيل الدخول</a>
-                <a href="@Url.Action("Profile", "Profile")">الملف الشخصي</a>
+            <div class="nav-links" style="margin-top:5px;">
+                <a href="@Url.Action("Index", "Home")" style="color:white; margin-left:15px; text-decoration:none;">الرئيسية</a>
+                <a href="@Url.Action("Login", "Auth")" style="color:white; margin-left:15px; text-decoration:none;">تسجيل الدخول</a>
+                <a href="@Url.Action("Profile", "Profile")" style="color:white; text-decoration:none;">الملف الشخصي</a>
             </div>
         </nav>
     </header>
@@ -30,52 +208,14 @@
     <main>
         <div class="quiz-container">
             <div class="quiz-header">
-                <h2 id="quizTitle">عنوان المسابقة</h2>
+                <h2 id="quizTitle">المسابقة: @ViewBag.CategoryName - المستوى: @ViewBag.Level</h2>
                 <div class="progress-bar">
                     <div class="progress-bar-fill" style="width: 0%"></div>
                 </div>
-                <div class="timer" id="timer">الوقت المتبقي: 00:00</div>
             </div>
 
-            <!-- Multiple Choice Question Template -->
-            <div id="multipleChoice" class="question-type" style="display: none">
-                <h3 class="question-text">نص السؤال</h3>
-                <div class="options-container">
-                    <div class="option" data-option="A">الخيار الأول</div>
-                    <div class="option" data-option="B">الخيار الثاني</div>
-                    <div class="option" data-option="C">الخيار الثالث</div>
-                    <div class="option" data-option="D">الخيار الرابع</div>
-                </div>
-            </div>
-
-            <!-- Matching Question Template -->
-            <div id="matching" class="question-type" style="display: none">
-                <h3 class="question-text">صل بين العناصر المتطابقة</h3>
-                <div class="matching-container">
-                    <div class="matching-column">
-                        <div class="matching-item" draggable="true">العنصر 1</div>
-                        <div class="matching-item" draggable="true">العنصر 2</div>
-                        <div class="matching-item" draggable="true">العنصر 3</div>
-                    </div>
-                    <div class="matching-column">
-                        <div class="matching-item" draggable="true">الإجابة 1</div>
-                        <div class="matching-item" draggable="true">الإجابة 2</div>
-                        <div class="matching-item" draggable="true">الإجابة 3</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Word Building Template -->
-            <div id="wordBuilding" class="question-type" style="display: none">
-                <h3 class="question-text">رتب الحروف لتكوين الكلمة الصحيحة</h3>
-                <div class="word-building-container">
-                    <div class="letter-box">ح</div>
-                    <div class="letter-box">ر</div>
-                    <div class="letter-box">ف</div>
-                    <div class="letter-box">ا</div>
-                    <div class="letter-box">ل</div>
-                </div>
-                <div class="word-preview"></div>
+            <div id="questionContainer">
+                <!-- سيتم عرض السؤال هنا -->
             </div>
 
             <div class="quiz-controls">
@@ -88,6 +228,284 @@
         <p>جميع الحقوق محفوظة © 2024</p>
     </footer>
 
-    <script src="../js/quiz.js"></script>
+    <script>
+        // بيانات الأسئلة من السيرفر
+        window.questionsFromServer = @Html.Raw(Json.Serialize(Model));
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        const questions = window.questionsFromServer;
+
+        // دالة خلط مصفوفة (Fisher-Yates)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // عرض السؤال الحالي حسب النوع
+        function showQuestion() {
+            const container = document.getElementById("questionContainer");
+            container.innerHTML = "";
+
+            if (currentQuestion >= questions.length) {
+                showResults();
+                return;
+            }
+
+            const question = questions[currentQuestion];
+
+            // بناء هيكل السؤال حسب النوع
+            const questionBox = document.createElement("div");
+            questionBox.className = "question-type";
+
+            // عنوان السؤال
+            const questionText = document.createElement("div");
+            questionText.className = "question-text";
+            questionText.textContent = question.text;
+            questionBox.appendChild(questionText);
+
+            if (question.type.toLowerCase() === "mcq") {
+                const optionsContainer = document.createElement("div");
+                optionsContainer.className = "options-container";
+
+                question.options.forEach((opt, idx) => {
+                    const option = document.createElement("div");
+                    option.className = "option";
+                    option.textContent = opt;
+                    option.dataset.index = idx;
+                    option.addEventListener("click", () => selectOption(option));
+                    optionsContainer.appendChild(option);
+                });
+
+                questionBox.appendChild(optionsContainer);
+            }
+            else if (question.type.toLowerCase() === "matching") {
+                const matchingContainer = document.createElement("div");
+                matchingContainer.className = "matching-container";
+
+                // عمود الكلمات
+                const rightColumn = document.createElement("div");
+                rightColumn.className = "matching-column fixed-column";
+
+                // عمود التعريفات (مختلط)
+                const leftColumn = document.createElement("div");
+                leftColumn.className = "matching-column movable-column";
+
+                let selectedWord = null;
+                let selectedDefinition = null;
+                let matchCount = 0;
+
+                // الكلمات (items)
+                question.items.forEach(item => {
+                    const wordDiv = document.createElement("div");
+                    wordDiv.className = "matching-item word-item";
+                    wordDiv.textContent = item.text;
+                    wordDiv.dataset.word = item.text;
+
+                    wordDiv.addEventListener("click", () => {
+                        if (wordDiv.classList.contains("matched")) return;
+
+                        // إزالة التحديد من غيره
+                        [...rightColumn.querySelectorAll(".selected")].forEach(el => {
+                            if (el !== wordDiv) el.classList.remove("selected");
+                        });
+
+                        if (wordDiv.classList.contains("selected")) {
+                            wordDiv.classList.remove("selected");
+                            selectedWord = null;
+                        } else {
+                            wordDiv.classList.add("selected");
+                            selectedWord = wordDiv;
+                        }
+
+                        checkMatch();
+                    });
+
+                    rightColumn.appendChild(wordDiv);
+                });
+
+                // تعريفات (matches) مخلوطة
+                const shuffledMatches = shuffleArray([...question.matches]);
+
+                shuffledMatches.forEach(match => {
+                    const defDiv = document.createElement("div");
+                    defDiv.className = "matching-item definition-item";
+                    defDiv.textContent = match.text;
+                    defDiv.dataset.definition = match.text;
+
+                    defDiv.addEventListener("click", () => {
+                        if (defDiv.classList.contains("matched")) return;
+
+                        // إزالة التحديد من غيره
+                        [...leftColumn.querySelectorAll(".selected")].forEach(el => {
+                            if (el !== defDiv) el.classList.remove("selected");
+                        });
+
+                        if (defDiv.classList.contains("selected")) {
+                            defDiv.classList.remove("selected");
+                            selectedDefinition = null;
+                        } else {
+                            defDiv.classList.add("selected");
+                            selectedDefinition = defDiv;
+                        }
+
+                        checkMatch();
+                    });
+
+                    leftColumn.appendChild(defDiv);
+                });
+
+                function checkMatch() {
+                    if (!selectedWord || !selectedDefinition) return;
+
+                    // تحقق من التطابق الصحيح
+                    const word = selectedWord.dataset.word;
+                    const definition = selectedDefinition.dataset.definition;
+
+                    // جلب التعريف الصحيح من question.matches لـ word المحدد
+                    const correctDefinition = question.matches.find(m => m.text === definition)?.text;
+
+                    // افتراضياً: ترتيب items و matches متطابق، لذا ممكن نستخدم index
+                    // لكن أفضل نستخدم question.items مع definition المقابل
+                    const wordIndex = question.items.findIndex(i => i.text === word);
+                    const correctMatch = question.matches[wordIndex]?.text;
+
+                    if (definition === correctMatch) {
+                        // تطابق صحيح
+                        selectedWord.classList.add("matched", "correct");
+                        selectedDefinition.classList.add("matched", "correct");
+                        selectedWord.style.backgroundColor = "#4caf50";
+                        selectedWord.style.color = "white";
+                        selectedDefinition.style.backgroundColor = "#4caf50";
+                        selectedDefinition.style.color = "white";
+
+                        selectedWord.classList.remove("selected");
+                        selectedDefinition.classList.remove("selected");
+
+                        // زيادة عدد التطابقات
+                        matchCount++;
+
+                        // إلغاء الاختيار
+                        selectedWord = null;
+                        selectedDefinition = null;
+
+                        // تحقق من اكتمال التطابقات
+                        if (matchCount === question.items.length) {
+                            setTimeout(() => {
+                                nextQuestion();
+                            }, 1200);
+                        }
+                    } else {
+                        // تطابق خاطئ
+                        selectedWord.classList.add("incorrect");
+                        selectedDefinition.classList.add("incorrect");
+
+                        setTimeout(() => {
+                            selectedWord.classList.remove("incorrect", "selected");
+                            selectedDefinition.classList.remove("incorrect", "selected");
+                            selectedWord = null;
+                            selectedDefinition = null;
+                        }, 900);
+                    }
+                }
+
+                matchingContainer.appendChild(leftColumn);
+                matchingContainer.appendChild(rightColumn);
+                questionBox.appendChild(matchingContainer);
+            }
+            else if (question.type.toLowerCase() === "spelling") {
+                // عرض الحروف
+                const wordBuildingContainer = document.createElement("div");
+                wordBuildingContainer.className = "word-building-container";
+
+                const wordPreview = document.createElement("div");
+                wordPreview.className = "word-preview";
+
+                // خلط الحروف
+                const shuffledLetters = shuffleArray([...question.letters]);
+
+                shuffledLetters.forEach(letter => {
+                    const letterBox = document.createElement("div");
+                    letterBox.className = "letter-box";
+                    letterBox.textContent = letter;
+
+                    letterBox.addEventListener("click", () => {
+                        wordPreview.textContent += letterBox.textContent;
+                        letterBox.style.visibility = "hidden";
+                    });
+
+                    wordBuildingContainer.appendChild(letterBox);
+                });
+
+                questionBox.appendChild(wordBuildingContainer);
+                questionBox.appendChild(wordPreview);
+            }
+            else {
+                // نوع سؤال غير معروف
+                questionBox.innerHTML += "<p>نوع السؤال غير مدعوم</p>";
+            }
+
+            container.appendChild(questionBox);
+
+            // تحديث شريط التقدم
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.querySelector(".progress-bar-fill").style.width = progress + "%";
+        }
+
+        // التعامل مع اختيار خيار في mcq
+        function selectOption(option) {
+            // إزالة تحديد من كل الخيارات
+            document.querySelectorAll(".option").forEach(opt => opt.classList.remove("selected"));
+            option.classList.add("selected");
+        }
+
+        // الانتقال للسؤال التالي
+        function nextQuestion() {
+            // تحقق من صحة الإجابة للسؤال الحالي (اختياري حسب نوع السؤال)
+
+            // مثال: عند mcq، نزيد النتيجة إذا كانت الإجابة صحيحة
+            const question = questions[currentQuestion];
+
+            if (question.type.toLowerCase() === "mcq") {
+                const selectedOption = document.querySelector(".option.selected");
+                if (selectedOption) {
+                    const selectedIndex = parseInt(selectedOption.dataset.index);
+                    if (selectedIndex === question.correctOptionIndex) {
+                        score++;
+                    }
+                }
+            }
+
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // عرض النتيجة النهائية
+        function showResults() {
+            const container = document.getElementById("questionContainer");
+            container.innerHTML = `
+                        <h2>انتهت المسابقة!</h2>
+                        <p>النتيجة النهائية: ${score} من ${questions.length}</p>
+                        <button class="btn" onclick="location.reload()">إعادة المسابقة</button>
+                    `;
+
+            document.querySelector(".progress-bar-fill").style.width = "100%";
+            document.getElementById("nextQuestion").style.display = "none";
+        }
+
+        // تشغيل أول سؤال عند تحميل الصفحة
+        document.addEventListener("DOMContentLoaded", () => {
+            showQuestion();
+            document.getElementById("nextQuestion").addEventListener("click", nextQuestion);
+        });
+    </script>
 </body>
 </html>

@@ -1,6 +1,9 @@
 ﻿@{
     ViewData["Title"] = "اختر مستوى الصعوبة - مسابقات تعليمية إسلامية";
     Layout = null;
+    int categoryId = (int)ViewBag.CategoryId;
+    string categoryName = ViewBag.CategoryName as string;
+
 }
 
 <!DOCTYPE html>
@@ -186,37 +189,28 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const levelCards = document.querySelectorAll('.level-card');
             const startQuizBtn = document.getElementById('startQuizBtn');
             let selectedLevel = null;
 
-            // Handle level selection
             levelCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    // Remove selected class from all cards
+                card.addEventListener('click', function () {
                     levelCards.forEach(c => c.classList.remove('selected'));
-
-                    // Add selected class to clicked card
                     this.classList.add('selected');
-
-                    // Store selected level
                     selectedLevel = this.dataset.level;
-
-                    // Enable start button
                     startQuizBtn.disabled = false;
                 });
             });
 
-            // Handle start quiz button
-            startQuizBtn.addEventListener('click', function() {
+            startQuizBtn.addEventListener('click', function () {
                 if (selectedLevel) {
-                    
-                    // Redirect to quiz page with level parameter
-                    window.location.href = `@Url.Action("Quiz", "Questions")?level=${selectedLevel}`;
+                    const categoryId = @categoryId;
+                    window.location.href = `@Url.Action("Quiz", "Questions")?categoryId=${categoryId}&level=${selectedLevel}`;
                 }
             });
         });
     </script>
+
 </body>
 </html>

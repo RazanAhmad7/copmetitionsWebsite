@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<CompetitionsWebsite.Models.Category>
+@{
     ViewData["Title"] = "مسابقات تعليمية إسلامية";
     Layout = null;
 }
@@ -33,41 +34,17 @@
         </section>
 
         <section class="competitions-grid">
-            <div class="competition-card" data-category="quran">
-                <i class="fas fa-book-quran"></i>
-                <h3>مسابقات القرآن الكريم</h3>
-                <p>اختبر حفظك وفهمك للقرآن الكريم</p>
-                <a href="@Url.Action("ChooseDifficulty", "Questions", new { type = "quran" })" class="btn">ابدأ المسابقة</a>
-            </div>
-
-            <div class="competition-card" data-category="sunnah">
-                <i class="fas fa-sun"></i>
-                <h3>السنة النبوية</h3>
-                <p>تعرف على الأحاديث النبوية الشريفة</p>
-                <a href="@Url.Action("ChooseDifficulty", "Questions", new { type = "sunnah" })" class="btn">ابدأ المسابقة</a>
-            </div>
-
-            <div class="competition-card" data-category="aqeedah">
-                <i class="fas fa-mosque"></i>
-                <h3>العقيدة الإسلامية</h3>
-                <p>اختبر معرفتك بأصول العقيدة</p>
-                <a href="@Url.Action("ChooseDifficulty", "Questions", new { type = "aqeedah" })" class="btn">ابدأ المسابقة</a>
-            </div>
-
-            <div class="competition-card" data-category="culture">
-                <i class="fas fa-landmark"></i>
-                <h3>الثقافة الإسلامية</h3>
-                <p>تعرف على تاريخ وحضارة الإسلام</p>
-                <a href="@Url.Action("ChooseDifficulty", "Questions", new { type = "culture" })" class="btn">ابدأ المسابقة</a>
-            </div>
-
-            <div class="competition-card" data-category="puzzles">
-                <i class="fas fa-puzzle-piece"></i>
-                <h3>ألغاز إسلامية</h3>
-                <p>اختبر ذكاءك من خلال ألغاز ممتعة</p>
-                <a href="@Url.Action("ChooseDifficulty", "Questions", new { type = "puzzles" })" class="btn">ابدأ المسابقة</a>
-            </div>
+            @foreach (var category in Model)
+            {
+                <div class="competition-card">
+                    <i class="fas fa-landmark"></i> <!-- You can customize the icon based on the category -->
+                    <h3>@category.Name</h3>
+                    <p>@category.Description</p>
+                    <a href="@Url.Action("ChooseDifficulty", "Questions", new { categoryId = category.Id })" class="btn">ابدأ المسابقة</a>
+                </div>
+            }
         </section>
+
     </main>
 
     <footer>
