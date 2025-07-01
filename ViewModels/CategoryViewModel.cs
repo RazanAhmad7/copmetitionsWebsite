@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CompetitionsWebsite.Models
+namespace CompetitionsWebsite.ViewModels
 {
-    public class Category
+    public class CategoryViewModel
     {
         public int Id { get; set; }
 
@@ -11,8 +11,6 @@ namespace CompetitionsWebsite.Models
 
         [Required(ErrorMessage = "الوصف مطلوب")]
         public string Description { get; set; }
-
-        public ICollection<Question> Questions { get; set; } 
 
     }
 }

@@ -20,5 +20,13 @@ public class AppDbContext : IdentityDbContext<User>
     public DbSet<SpellingLetter> SpellingLetters { get; set; }
     public DbSet<Category> Categories { get; set; }
 
- 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Question>()
+            .HasOne(q => q.Category)
+            .WithMany(c => c.Questions)
+            .HasForeignKey(q => q.CategoryId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
 }

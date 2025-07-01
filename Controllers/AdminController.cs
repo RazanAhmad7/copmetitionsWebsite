@@ -279,18 +279,36 @@ public class AdminController : Controller
         return Ok(new { success = true, questionId = existingQuestion.Id });
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
+    //[HttpPost]
+    //[ValidateAntiForgeryToken]
+    //public async Task<IActionResult> DeleteQuestion(int id)
+    //{
+    //    var question = await _context.Questions.FindAsync(id);
+    //    if (question == null)
+    //        return NotFound("Question not found");
+
+    //    _context.Questions.Remove(question);
+    //    await _context.SaveChangesAsync();
+
+    //    return Ok(new { success = true });
+    //}
+
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteQuestion(int id)
     {
         var question = await _context.Questions.FindAsync(id);
         if (question == null)
-            return NotFound("Question not found");
+        {
+            TempData["DeleteMessage"] = "لم يتم العثور على السؤال.";
+            return RedirectToAction("Dashboard");
+        }
 
         _context.Questions.Remove(question);
         await _context.SaveChangesAsync();
 
-        return Ok(new { success = true });
+        TempData["DeleteMessage"] = "Done";
+        return RedirectToAction("Dashboard");
     }
 
     // Add this method inside the class!
@@ -304,5 +322,7 @@ public class AdminController : Controller
 
         return category.Id;
     }
+
+
 
 }

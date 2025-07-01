@@ -5,6 +5,7 @@
   
 }
 
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -196,11 +197,11 @@
             <div class="admin-header">
                 <h2>لوحة التحكم</h2>
                 <button class="btn" id="addQuestionBtn" asp-action="AddQuestion" asp-controller="Admin">إضافة سؤال جديد</button>
-                <button class="btn" id="addCategoryBtn" style="display:none;">إضافة قسم جديد</button>
+                <button class="btn" id="addCategoryBtn" asp-action="AddCategory" asp-controller="Category" style="display:none;">إضافة قسم جديد</button>
             </div>
 
             <div class="admin-tabs">
-                <button class="admin-tab active" data-tab="questions">الأسئلة</button>
+                <button class="admin-tab" data-tab="questions">الأسئلة</button>
                 <button class="admin-tab" data-tab="categories">الأقسام</button>
                 <button class="admin-tab" data-tab="users">المستخدمين</button>
             </div>
@@ -219,7 +220,7 @@
                                
                             </div>
                             <div class="element-actions">
-                                <button class="action-btn edit-btn">
+                                <button class="action-btn edit-btn" id="editQues-btn">
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <button class="action-btn delete-btn">
@@ -401,16 +402,22 @@
         <p>جميع الحقوق محفوظة © @DateTime.Now.Year</p>
     </footer>
 
-    <script>
-        // تفعيل جميع التولتيبات في الصفحة
-        document.addEventListener('DOMContentLoaded', function () {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-                new bootstrap.Tooltip(tooltipTriggerEl);
+    @if (TempData["DeleteMessage"] != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'تم الحذف بنجاح!',
+                    confirmButtonText: 'حسنًا'
+                });
             });
-        });
+        </script>
+    }
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             const tabs = document.querySelectorAll('.admin-tab');
             const addCatBtn = document.getElementById('addCategoryBtn');
@@ -423,20 +430,20 @@
 
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
-                    // أزل active من جميع الأزرار
+                    // Remove active from all tabs
                     tabs.forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
 
-                    // أخفِ جميع الأقسام
+                    // Hide all sections
                     Object.values(sections).forEach(sec => sec.style.display = 'none');
 
-                    // اعرض القسم المطلوب
+                    // Show the selected section
                     const tabName = tab.getAttribute('data-tab');
                     if (sections[tabName]) {
                         sections[tabName].style.display = 'block';
                     }
 
-                    // عرض أو إخفاء الأزرار حسب القسم
+                    // Show/hide buttons
                     switch (tabName) {
                         case 'questions':
                             addQuesBtn.style.display = 'inline-block';
@@ -454,8 +461,22 @@
                 });
             });
 
-            // Trigger click on the active tab on load (to initialize state)
-            document.querySelector('.admin-tab.active')?.click();
+            // --- THIS IS THE ONLY PLACE TO ACTIVATE THE INITIAL TAB ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const tab = urlParams.get('tab');
+            let tabToActivate = 'questions';
+            if (tab === 'categories') tabToActivate = 'categories';
+            if (tab === 'users') tabToActivate = 'users';
+            const tabBtn = document.querySelector('.admin-tab[data-tab="' + tabToActivate + '"]');
+            if (tabBtn) tabBtn.click();
+        });
+
+        // تفعيل جميع التولتيبات في الصفحة
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
         });
 
         // Admin Panel State
@@ -480,6 +501,12 @@
                 window.location.href = '@Url.Action("AddQuestion", "Admin")';
             });
 
+            // Add question button
+            document.getElementById('addCategoryBtn').addEventListener('click', function () {
+                window.location.href = '@Url.Action("AddCategory", "Category")';
+            });
+
+
             // Question type change
             questionTypeSelect.addEventListener("change", handleQuestionTypeChange);
 
@@ -498,6 +525,10 @@
 
             // Edit and delete buttons
             document.querySelectorAll(".edit-btn").forEach((btn) => {
+                btn.addEventListener("click", () => editCategory(btn));
+            });
+            // Edit question button
+            document.querySelectorAll("#editQues-btn").forEach((btn) => {
                 btn.addEventListener("click", () => editQuestion(btn));
             });
 
@@ -510,19 +541,28 @@
                 questionForm.style.display = "none";
                 questionsList.style.display = "grid";
             });
+
+            // Add this after other event listeners
+            document.querySelectorAll('#categoriesList .delete-btn').forEach((btn) => {
+                btn.addEventListener('click', function () {
+                    const categoryCard = btn.closest('.elements-card');
+                    const categoryId = categoryCard.getAttribute('data-id');
+                    Swal.fire({
+                        title: 'هل أنت متأكد؟',
+                        text: 'سيتم حذف القسم وجميع أسئلته المرتبطة به! لن يمكنك التراجع عن هذا الإجراء!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'نعم، احذف',
+                        cancelButtonText: 'لا، إلغاء',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = `/Category/DeleteCategory/${categoryId}`;
+                        }
+                    });
+                });
+            });
         });
-
-      
-
-        // Show question form
-        function showQuestionForm() {
-            questionsList.style.display = "none";
-            questionForm.style.display = "grid";
-            isEditing = false;
-            currentQuestionId = null;
-            questionForm.reset();
-            handleQuestionTypeChange();
-        }
 
         // Handle question type change
         function handleQuestionTypeChange() {
@@ -684,34 +724,11 @@
             questionsList.style.display = "grid";
         }
 
-        
-
-        // Helper function to generate question details HTML
-        function getQuestionDetailsHTML(questionData) {
-            switch (questionData.type) {
-                case "multipleChoice":
-                    return `
-                                <p><strong>الخيارات:</strong></p>
-                                <ul>
-                                    ${questionData.options.map(option => `<li>${option}</li>`).join('')}
-                                </ul>
-                                <p><strong>الإجابة الصحيحة:</strong> ${questionData.options[questionData.correctAnswer]}</p>
-                            `;
-                case "matching":
-                    return `
-                                <p><strong>أزواج التوصيل:</strong></p>
-                                <ul>
-                                    ${questionData.pairs.map(pair => `<li>${pair.item} ↔ ${pair.answer}</li>`).join('')}
-                                </ul>
-                            `;
-                case "wordBuilding":
-                    return `
-                                <p><strong>الحروف:</strong> ${questionData.letters.join('، ')}</p>
-                                <p><strong>الكلمة الصحيحة:</strong> ${questionData.correctWord}</p>
-                            `;
-                default:
-                    return '';
-            }
+        // Edit question function - redirect to edit page
+        function editCategory(button) {
+            const questionCard = button.closest('.elements-card');
+            const questionId = questionCard.getAttribute('data-id');
+            window.location.href = `/Category/EditCategory/${questionId}`;
         }
 
         // Edit question function - redirect to edit page
@@ -726,29 +743,19 @@
             const questionCard = button.closest('.elements-card');
             const questionId = questionCard.getAttribute('data-id');
             
-            if (confirm('هل أنت متأكد من حذف هذا السؤال؟')) {
-                fetch(`/Admin/DeleteQuestion/${questionId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error("Failed to delete question");
-                    return response.json();
-                })
-                .then(data => {
-                    console.log("Deleted successfully:", data);
-                    // Remove the question card from the UI
-                    questionCard.remove();
-                    alert('تم حذف السؤال بنجاح!');
-                })
-                .catch(error => {
-                    console.error("Error deleting question:", error);
-                    alert("حدث خطأ أثناء حذف السؤال. حاول مرة أخرى.");
-                });
-            }
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: 'لن يمكنك التراجع عن هذا الإجراء!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، احذف',
+                cancelButtonText: 'لا، إلغاء',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/Admin/DeleteQuestion/${questionId}`;
+                }
+            });
         }
     </script>
 </body>
