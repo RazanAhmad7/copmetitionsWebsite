@@ -2,7 +2,7 @@
 {
     public class SpellingQuestion : Question
     {
-        public string CorrectWord { get; set; }
+    
         public ICollection<SpellingLetter> Letters { get; set; }
     }
 

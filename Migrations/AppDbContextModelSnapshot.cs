@@ -51,23 +51,14 @@ namespace CompetitionsWebsite.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("Score")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Ttile")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("UserId");
 
@@ -169,6 +160,10 @@ namespace CompetitionsWebsite.Migrations
 
                     b.Property<int?>("CompetitionId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CorrectWord")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
@@ -298,22 +293,35 @@ namespace CompetitionsWebsite.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AnswerText")
+                    b.Property<string>("Answer")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CompetitionId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ParticipantId")
+                    b.Property<int?>("ParticipantId")
                         .HasColumnType("int");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("CompetitionId");
+
                     b.HasIndex("ParticipantId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserAnswers");
                 });
@@ -469,26 +477,18 @@ namespace CompetitionsWebsite.Migrations
                 {
                     b.HasBaseType("CompetitionsWebsite.Models.Question");
 
-                    b.Property<string>("CorrectWord")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasDiscriminator().HasValue("SpellingQuestion");
                 });
 
             modelBuilder.Entity("CompetitionsWebsite.Models.Competition", b =>
                 {
-                    b.HasOne("CompetitionsWebsite.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
+                    b.HasOne("CompetitionsWebsite.Models.User", "User")
+                        .WithMany("Competitions")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CompetitionsWebsite.Models.User", null)
-                        .WithMany("Competitions")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Category");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CompetitionsWebsite.Models.MCQOption", b =>
@@ -535,11 +535,33 @@ namespace CompetitionsWebsite.Migrations
 
             modelBuilder.Entity("CompetitionsWebsite.Models.UserAnswer", b =>
                 {
-                    b.HasOne("CompetitionsWebsite.Models.Participant", null)
-                        .WithMany("Answers")
-                        .HasForeignKey("ParticipantId")
+                    b.HasOne("CompetitionsWebsite.Models.Competition", "Competition")
+                        .WithMany()
+                        .HasForeignKey("CompetitionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("CompetitionsWebsite.Models.Participant", null)
+                        .WithMany("Answers")
+                        .HasForeignKey("ParticipantId");
+
+                    b.HasOne("CompetitionsWebsite.Models.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CompetitionsWebsite.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Competition");
+
+                    b.Navigation("Question");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

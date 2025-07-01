@@ -14,182 +14,7 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="../css/site.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <style>
-        /* تنسيقات بسيطة للسؤال */
-        body {
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            background: #f9f9f9;
-            margin: 0;
-            padding: 0;
-            direction: rtl;
-            text-align: right;
-        }
-
-        .quiz-container {
-            max-width: 700px;
-            background: white;
-            margin: 40px auto;
-            padding: 20px 30px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 8px;
-        }
-
-        .quiz-header h2 {
-            margin-bottom: 10px;
-        }
-
-        .progress-bar {
-            background: #eee;
-            border-radius: 20px;
-            overflow: hidden;
-            height: 12px;
-            margin-bottom: 20px;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: #4caf50;
-            transition: width 0.3s ease;
-        }
-
-        .question-type {
-            margin-bottom: 30px;
-        }
-
-        .question-text {
-            font-size: 1.2em;
-            margin-bottom: 15px;
-        }
-
-        .option {
-            padding: 10px 15px;
-            margin-bottom: 10px;
-            background: #f0f0f0;
-            border-radius: 5px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: background-color 0.2s, border-color 0.2s;
-            user-select: none;
-        }
-
-            .option.selected {
-                background: #c8e6c9;
-                border-color: #4caf50;
-            }
-
-            .option:hover {
-                background: #d7ffd9;
-            }
-
-        /* أسئلة التوصيل */
-        .matching-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .matching-column {
-            width: 48%;
-            background: #f5f5f5;
-            padding: 10px;
-            border-radius: 6px;
-            min-height: 150px;
-        }
-
-        .matching-item {
-            padding: 8px 12px;
-            background: white;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            user-select: none;
-            transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-        }
-
-            .matching-item.selected {
-                border-color: #1976d2;
-                background-color: #bbdefb;
-            }
-
-            .matching-item.matched {
-                cursor: default;
-                font-weight: bold;
-                color: white !important;
-            }
-
-            .matching-item.correct {
-                background-color: #4caf50 !important;
-                border-color: #388e3c !important;
-                color: white !important;
-            }
-
-            .matching-item.incorrect {
-                background-color: #f44336 !important;
-                border-color: #d32f2f !important;
-                color: white !important;
-            }
-
-        /* تركيب الكلمات */
-        .word-building-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .letter-box {
-            padding: 10px 15px;
-            background: #eceff1;
-            border-radius: 6px;
-            font-size: 1.3em;
-            cursor: pointer;
-            user-select: none;
-            transition: background-color 0.2s;
-        }
-
-            .letter-box:hover {
-                background: #cfd8dc;
-            }
-
-        .word-preview {
-            min-height: 30px;
-            font-weight: bold;
-            font-size: 1.4em;
-            border-bottom: 2px solid #4caf50;
-            padding-bottom: 5px;
-            user-select: none;
-        }
-
-        /* أزرار */
-        .quiz-controls {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .btn {
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1.1em;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-            .btn:hover {
-                background-color: #388e3c;
-            }
-
-        footer {
-            text-align: center;
-            margin: 30px 0;
-            color: #888;
-        }
-    </style>
+  
 </head>
 <body>
     <header>
@@ -234,6 +59,18 @@
 
         let currentQuestion = 0;
         let score = 0;
+
+        // تعريف درجات الألوان المختلفة
+        const colorShades = [
+            { bg: "#FFF3E0", border: "#FF9800" }, // برتقالي فاتح
+            { bg: "#F3E5F5", border: "#9C27B0" }, // بنفسجي فاتح
+            { bg: "#FFEBEE", border: "#F44336" }, // أحمر فاتح
+            { bg: "#E0F7FA", border: "#00BCD4" }, // سماوي فاتح
+            { bg: "#F1F8E9", border: "#8BC34A" }, // أخضر مصفر
+            { bg: "#FFF8E1", border: "#FFC107" }, // أصفر فاتح
+            { bg: "#E8EAF6", border: "#3F51B5" }, // نيلي فاتح
+            { bg: "#FCE4EC", border: "#E91E63" }, // وردي فاتح
+        ];
 
         const questions = window.questionsFromServer;
 
@@ -362,56 +199,26 @@
                 function checkMatch() {
                     if (!selectedWord || !selectedDefinition) return;
 
-                    // تحقق من التطابق الصحيح
-                    const word = selectedWord.dataset.word;
-                    const definition = selectedDefinition.dataset.definition;
+                    const randomColor = colorShades[Math.floor(Math.random() * colorShades.length)];
 
-                    // جلب التعريف الصحيح من question.matches لـ word المحدد
-                    const correctDefinition = question.matches.find(m => m.text === definition)?.text;
+                    selectedWord.classList.add("matched");
+                    selectedDefinition.classList.add("matched");
 
-                    // افتراضياً: ترتيب items و matches متطابق، لذا ممكن نستخدم index
-                    // لكن أفضل نستخدم question.items مع definition المقابل
-                    const wordIndex = question.items.findIndex(i => i.text === word);
-                    const correctMatch = question.matches[wordIndex]?.text;
+                    selectedWord.style.backgroundColor = randomColor.bg;
+                    selectedWord.style.border = `2px solid ${randomColor.border}`;
+                    selectedDefinition.style.backgroundColor = randomColor.bg;
+                    selectedDefinition.style.border = `2px solid ${randomColor.border}`;
 
-                    if (definition === correctMatch) {
-                        // تطابق صحيح
-                        selectedWord.classList.add("matched", "correct");
-                        selectedDefinition.classList.add("matched", "correct");
-                        selectedWord.style.backgroundColor = "#4caf50";
-                        selectedWord.style.color = "white";
-                        selectedDefinition.style.backgroundColor = "#4caf50";
-                        selectedDefinition.style.color = "white";
+                    // حفظ الكلمة والتعريف في خصائص data لتقييمهم لاحقًا
+                    selectedWord.dataset.matchedWith = selectedDefinition.dataset.definition;
 
-                        selectedWord.classList.remove("selected");
-                        selectedDefinition.classList.remove("selected");
+                    selectedWord.classList.remove("selected");
+                    selectedDefinition.classList.remove("selected");
 
-                        // زيادة عدد التطابقات
-                        matchCount++;
-
-                        // إلغاء الاختيار
-                        selectedWord = null;
-                        selectedDefinition = null;
-
-                        // تحقق من اكتمال التطابقات
-                        if (matchCount === question.items.length) {
-                            setTimeout(() => {
-                                nextQuestion();
-                            }, 1200);
-                        }
-                    } else {
-                        // تطابق خاطئ
-                        selectedWord.classList.add("incorrect");
-                        selectedDefinition.classList.add("incorrect");
-
-                        setTimeout(() => {
-                            selectedWord.classList.remove("incorrect", "selected");
-                            selectedDefinition.classList.remove("incorrect", "selected");
-                            selectedWord = null;
-                            selectedDefinition = null;
-                        }, 900);
-                    }
+                    selectedWord = null;
+                    selectedDefinition = null;
                 }
+
 
                 matchingContainer.appendChild(leftColumn);
                 matchingContainer.appendChild(rightColumn);
@@ -477,6 +284,31 @@
                     if (selectedIndex === question.correctOptionIndex) {
                         score++;
                     }
+                }
+            }
+            else if (question.type.toLowerCase() === "matching") {
+                let correctMatches = 0;
+
+                question.items.forEach((item, index) => {
+                    const wordEl = [...document.querySelectorAll(".word-item")].find(el => el.dataset.word === item.text);
+                    const matchedDef = wordEl?.dataset.matchedWith;
+                    const correctDef = question.matches[index]?.text;
+
+                    if (matchedDef === correctDef) {
+                        correctMatches++;
+                    }
+                });
+
+                if (correctMatches === question.items.length) {
+                    score++;
+                }
+
+            }
+            else if (question.type.toLowerCase() === "spelling") {
+                const userAnswer = document.querySelector(".word-preview")?.textContent.trim();
+                const correctAnswer = question.CorrectWord;
+                if (userAnswer && userAnswer === correctAnswer) {
+                    score++;
                 }
             }
 
