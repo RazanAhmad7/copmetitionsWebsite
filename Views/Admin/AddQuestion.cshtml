@@ -255,6 +255,16 @@
 
                     </div>
                   
+                    <div class="form-group">
+                        <label for="questionLevel">مستوى السؤال</label>
+                        <select id="questionLevel" name="Level" required>
+                            <option value="">اختر المستوى</option>
+                            <option value="easy">سهل</option>
+                            <option value="medium">متوسط</option>
+                            <option value="hard">صعب</option>
+                        </select>
+                    </div>
+
                     <!-- Multiple Choice Options -->
                     <div id="multipleChoiceOptions" class="form-group">
                         <label>الخيارات</label>
@@ -339,8 +349,6 @@
 
     <script>
       
-            
-
         // Admin Panel State
         let isEditing = false;
         let currentQuestionId = null;
@@ -499,6 +507,7 @@
                 type: questionTypeSelect.value,
                 text: document.getElementById("questionText").value,
                 category: document.getElementById("questionCategory").value,
+                level: document.getElementById("questionLevel").value, // ✅ مستوى السؤال
                 options: [],
                 correctAnswer: null,
                 pairs: [],
@@ -569,7 +578,9 @@
                 .then(data => {
                     console.log("Saved successfully:", data);
                     showToast();
-                    questionForm.reset();
+                    setTimeout(() => {
+                        window.location.href = '@Url.Action("Dashboard", "Admin")';
+                    }, 2000);
                 })
                 .catch(async (error) => {
                     const errorText = await error.text?.() || error.message;

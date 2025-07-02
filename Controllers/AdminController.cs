@@ -49,7 +49,7 @@ public class AdminController : Controller
 
         // Resolve the category ID
         int categoryId = await GetCategoryIdAsync(model.Category);
-        const string defaultLevel = "Easy"; // Default level if not specified
+      
         Category currentCategory = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
         switch (model.Type)
         {
@@ -59,7 +59,7 @@ public class AdminController : Controller
                     Text = model.Text,
                     Type = "MCQ",
                     CategoryId = categoryId,
-                    Level = defaultLevel,
+                    Level = model.Level,
                     Options = model.Options.Select((text, index) => new MCQOption
                     {
                         Text = text,
@@ -75,7 +75,7 @@ public class AdminController : Controller
                     Text = model.Text,
                     Type = "Matching",
                     CategoryId = categoryId,
-                    Level = "Easy",
+                    Level = model.Level,
                     Pairs = model.Pairs.Select(p => new MatchingPair
                     {
                         LeftItem = p.Item,
@@ -91,7 +91,7 @@ public class AdminController : Controller
                     Text = model.Text,
                     Type = "Spelling",
                     CategoryId = categoryId,
-                    Level = "Easy",
+                    Level = model.Level,
                     CorrectWord = model.CorrectWord,
                     Letters = model.Letters.Select(l => new SpellingLetter
                     {
@@ -110,7 +110,7 @@ public class AdminController : Controller
 
         return Ok(new { success = true, questionId = question.Id });
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> EditQuestion(int id)
     {
@@ -136,7 +136,8 @@ public class AdminController : Controller
                 _ => question.Type.ToLower()
             },
             Text = question.Text,
-            Category = question.Category?.Name ?? ""
+            Category = question.Category?.Name ?? "",
+            Level = question.Level,
         };
 
         switch (question.Type)
@@ -200,6 +201,7 @@ public class AdminController : Controller
         existingQuestion.Text = model.Text;
         existingQuestion.CategoryId = categoryId;
         existingQuestion.Category = currentCategory;
+        existingQuestion.Level = model.Level;
 
         // Remove existing related data
         switch (existingQuestion.Type)

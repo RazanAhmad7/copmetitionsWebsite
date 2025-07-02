@@ -6,6 +6,7 @@
         public string Type { get; set; }
         public string Text { get; set; }
         public string Category { get; set; }
+        public string Level { get; set; } // "easy", "medium", "hard"
 
         public List<string> Options { get; set; } = new();
         public int? CorrectAnswer { get; set; }

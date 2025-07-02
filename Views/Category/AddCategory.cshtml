@@ -108,7 +108,7 @@
             </div>
 
             <div class="admin-content">
-                <form id="myform" asp-action="SaveCategory" asp-controller="Category" method="post">
+                <form id="myform" method="post">
                    
                     <div class="form-group">
                         <label for="Name">اسم القسم</label>
@@ -134,7 +134,55 @@
     </footer>
     <div id="toast" class="toast">تم حفظ القسم بنجاح!</div>
 
-   
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('myform');
+            const toast = document.getElementById('toast');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const name = document.getElementById('Name').value;
+                const description = document.getElementById('Description').value;
+
+                fetch('/Category/SaveCategory', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                    },
+                    body: JSON.stringify({ Name: name, Description: description })
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('حدث خطأ أثناء حفظ القسم');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            showToast('تم حفظ القسم بنجاح!');
+                            setTimeout(() => {
+                                window.location.href = '/Admin/Dashboard?tab=categories';
+                            }, 1500);
+                        } else {
+                            showToast('لم يتم الحفظ. تحقق من البيانات.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        showToast('حدث خطأ أثناء حفظ القسم');
+                    });
+            });
+
+            function showToast(message) {
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }
+        });
+    </script>
+
 
 </body>
 </html>

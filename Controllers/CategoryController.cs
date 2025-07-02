@@ -23,7 +23,9 @@ namespace CompetitionsWebsite.Controllers
 
         // POST: Admin/SaveCategory
         [HttpPost]
-        public IActionResult SaveCategory(CategoryViewModel model)
+        [ValidateAntiForgeryToken]
+
+        public IActionResult SaveCategory([FromBody] CategoryViewModel model)
         {
             if (!ModelState.IsValid)
                 return View("AddCategory", model);
@@ -39,7 +41,7 @@ namespace CompetitionsWebsite.Controllers
 
             TempData["SuccessMessage"] = "تم حفظ القسم بنجاح!";
 
-            return RedirectToAction("Dashboard", "Admin", new { tab = "categories" });
+            return Ok(new { success = true });
         }
 
         public IActionResult EditCategory(int id)
