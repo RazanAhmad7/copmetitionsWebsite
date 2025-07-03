@@ -41,6 +41,7 @@ public class ProfileController : Controller
                 QuestionText = ans.Question?.Text ?? "غير معروف",
                 UserResponse = ans.UserResponse,
                 IsCorrect = ans.IsCorrect,
+                QuestionType = ans.QuestionType,
                 CorrectAnswer = GetCorrectAnswer(ans.Question)
             }).ToList()
         }).ToList();
@@ -60,22 +61,38 @@ public class ProfileController : Controller
 
     private string GetCorrectAnswer(Question question)
     {
-        switch (question)
+        if (question == null)
+            return "غير معروف";
+
+        // إعادة جلب السؤال من قاعدة البيانات حسب نوعه
+        var mcq = _context.MCQQuestions
+            .Include(q => q.Options)
+            .FirstOrDefault(q => q.Id == question.Id);
+
+        if (mcq != null)
         {
-            case MCQQuestion mcq when mcq.Options != null:
-                var correctOption = mcq.Options.FirstOrDefault(o => o.IsCorrect);
-                return correctOption?.Text ?? "غير متوفرة";
-
-            case MatchingQuestion match when match.Pairs != null:
-                return string.Join(", ", match.Pairs.Select(p => $"{p.LeftItem} => {p.RightItem}"));
-
-            case SpellingQuestion spell:
-                return spell.CorrectWord ?? "غير متوفرة";
-
-            default:
-                return "غير معروف";
+            var correctOption = mcq.Options.FirstOrDefault(o => o.IsCorrect);
+            return correctOption?.Text ?? "غير متوفرة";
         }
-    }
 
+        var matching = _context.MatchingQuestions
+            .Include(q => q.Pairs)
+            .FirstOrDefault(q => q.Id == question.Id);
+
+        if (matching != null)
+        {
+            return string.Join(", ", matching.Pairs.Select(p => $"{p.LeftItem} => {p.RightItem}"));
+        }
+
+        var spelling = _context.SpellingQuestions
+            .FirstOrDefault(q => q.Id == question.Id);
+
+        if (spelling != null)
+        {
+            return spelling.CorrectWord ?? "غير متوفرة";
+        }
+
+        return "غير معروف";
+    }
 
 }

@@ -34,6 +34,12 @@
         </section>
 
         <section class="competitions-grid">
+            <div class="competition-card">
+                <i class="fas fa-landmark"></i> <!-- You can customize the icon based on the category -->
+                <h3> نماذج اختبار من القران الكريم</h3>
+                <p>توليد نماذج اختبار من القران الكريم لاختبار حفظك</p>
+                <a href="@Url.Action("QuraanTest", "Home")" class="btn">ابدأ </a>
+            </div>
             @foreach (var category in Model)
             {
                 <div class="competition-card">

@@ -22,4 +22,9 @@ public class HomeController : Controller
         return View(categories);
     }
 
+    public IActionResult QuraanTest()
+    {
+        return View();
+    }
+
 }

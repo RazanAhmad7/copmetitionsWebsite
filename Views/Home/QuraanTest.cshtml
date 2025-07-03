@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>توليد اختبار من القرآن الكريم</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+            text-align: right;
+        }
+
+        .form-section {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+            .form-section h2 {
+                margin-bottom: 20px;
+                text-align: center;
+                color: #2c3e50;
+            }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        select, input[type="number"], input[type="range"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .range-value {
+            text-align: center;
+            margin-top: 5px;
+            font-weight: bold;
+            color: #1e8449;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background-color: #1e8449;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+            button:hover {
+                background-color: #145a32;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="form-section">
+        <h2>توليد اختبار من القرآن الكريم</h2>
+
+        <label for="startJuzRange">اختر بداية الجزء</label>
+        <input type="range" id="startJuzRange" min="1" max="30" value="1" />
+        <div class="range-value">البداية: <span id="startJuzValue">1</span></div>
+
+        <label for="endJuzRange">اختر نهاية الجزء</label>
+        <input type="range" id="endJuzRange" min="1" max="30" value="30" />
+        <div class="range-value">النهاية: <span id="endJuzValue">30</span></div>
+
+        <label for="lineCount">عدد الأسطر في الاختبار</label>
+        <input type="number" id="lineCount" name="lineCount" min="1" max="20" value="5" />
+
+        <label for="questionCount">عدد الأسئلة المطلوبة</label>
+        <input type="number" id="questionCount" name="questionCount" min="1" max="15" value="5" />
+
+        <button onclick="generateTest()">توليد الاختبار</button>
+    </div>
+
+    <div id="results" style="max-width: 600px; margin: 20px auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 0 5px #ccc; display: none;">
+        <h3>الاختبارات المُولَّدة</h3>
+        <div id="testContent"></div>
+    </div>
+
+    <script>
+        // Elements
+        const startJuzRange = document.getElementById('startJuzRange');
+        const endJuzRange = document.getElementById('endJuzRange');
+        const startJuzValue = document.getElementById('startJuzValue');
+        const endJuzValue = document.getElementById('endJuzValue');
+        const resultsDiv = document.getElementById('results');
+        const testContentDiv = document.getElementById('testContent');
+
+        // Sync sliders
+        startJuzRange.addEventListener('input', () => {
+            let startVal = parseInt(startJuzRange.value);
+            let endVal = parseInt(endJuzRange.value);
+            if (startVal > endVal) {
+                endJuzRange.value = startVal;
+                endJuzValue.textContent = startVal;
+            }
+            startJuzValue.textContent = startVal;
+        });
+
+        endJuzRange.addEventListener('input', () => {
+            let startVal = parseInt(startJuzRange.value);
+            let endVal = parseInt(endJuzRange.value);
+            if (endVal < startVal) {
+                startJuzRange.value = endVal;
+                startJuzValue.textContent = endVal;
+            }
+            endJuzValue.textContent = endVal;
+        });
+
+        function shortenText(text, wordLimit = 9) {
+            const words = text.trim().split(/\s+/);
+            return words.length <= wordLimit ? text : words.slice(0, wordLimit).join(" ") + " ...";
+        }
+
+        async function generateTest() {
+            const startJuz = parseInt(startJuzRange.value);
+            const endJuz = parseInt(endJuzRange.value);
+            const lineCount = parseInt(document.getElementById('lineCount').value);
+            const questionCount = parseInt(document.getElementById('questionCount').value);
+
+            testContentDiv.innerHTML = '';
+            resultsDiv.style.display = 'none';
+
+            try {
+                const response = await fetch('http://api.alquran.cloud/v1/quran/ar');
+                const data = await response.json();
+
+                if (data.code === 200) {
+                    const allAyahs = [];
+
+                    data.data.surahs.forEach(surah => {
+                        surah.ayahs.forEach(ayah => {
+                            if (ayah.juz >= startJuz && ayah.juz <= endJuz) {
+                                allAyahs.push({
+                                    text: ayah.text,
+                                    surahName: surah.name,
+                                    ayahNumber: ayah.numberInSurah,
+                                    juz: ayah.juz,
+                                    surahNumber: surah.number
+                                });
+                            }
+                        });
+                    });
+
+                    if (allAyahs.length === 0) {
+                        testContentDiv.innerHTML = '<p>لا توجد آيات في هذا النطاق!</p>';
+                        return;
+                    }
+
+                    const targetCharCount = lineCount * 80;
+
+                    for (let t = 0; t < questionCount; t++) {
+                        let startIndex = Math.floor(Math.random() * (allAyahs.length - 1));
+                        let currentCharCount = 0;
+                        const passage = [];
+
+                        for (let i = startIndex; i < allAyahs.length; i++) {
+                            const ayah = allAyahs[i];
+                            passage.push(ayah);
+                            currentCharCount += ayah.text.length;
+                            if (currentCharCount >= targetCharCount) break;
+                        }
+
+                        if (passage.length > 0) {
+                            const fromAyah = passage[0];
+                            const toAyah = passage[passage.length - 1];
+
+                            const box = document.createElement('div');
+                            box.classList.add('ayah-box');
+                            box.style.padding = '10px';
+                            box.style.border = '1px solid #ddd';
+                            box.style.marginBottom = '20px';
+                            box.style.borderRadius = '8px';
+                            box.style.backgroundColor = '#f0f9f0';
+                            box.style.cursor = 'pointer';
+
+                            box.innerHTML = `
+                              <strong>الاختبار ${t + 1} - ${fromAyah.surahName}</strong><br>
+                              من: ${shortenText(fromAyah.text)}<br>
+                              إلى: ${shortenText(toAyah.text)}<br>
+                              <small style="color:#777;">اضغط لعرض الإجابة</small>
+                            `;
+
+
+                            const answerText = passage.map(p => `● ${p.text}`).join('<br>');
+                            const answerDiv = document.createElement('div');
+                            answerDiv.style.display = 'none';
+                            answerDiv.style.marginTop = '10px';
+                            answerDiv.style.padding = '10px';
+                            answerDiv.style.backgroundColor = '#e8f5e9';
+                            answerDiv.style.border = '1px dashed #1e8449';
+                            answerDiv.innerHTML = answerText;
+
+                            box.appendChild(answerDiv);
+
+                            box.addEventListener('click', () => {
+                                answerDiv.style.display = answerDiv.style.display === 'none' ? 'block' : 'none';
+                            });
+
+                            testContentDiv.appendChild(box);
+                        }
+                    }
+
+                    resultsDiv.style.display = 'block';
+                } else {
+                    alert("حدث خطأ أثناء تحميل البيانات.");
+                }
+            } catch (error) {
+                alert("فشل في الاتصال بواجهة API.");
+                console.error(error);
+            }
+        }
+    </script>
+
+</body>
+</html>
