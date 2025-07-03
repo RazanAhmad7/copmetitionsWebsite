@@ -7,6 +7,6 @@ namespace CompetitionsWebsite.Models
      public DateTime JoinedAt { get; set; }
 
     // You can also add navigation properties here
-    public ICollection<Competition> Competitions { get; set; }
+    public ICollection<UserQuizAttempt> UserQuizAttempts { get; set; }
     }
 }

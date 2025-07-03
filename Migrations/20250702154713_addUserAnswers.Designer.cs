@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CompetitionsWebsite.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250701155258_CascadeDeleteForCategoryQuestions")]
-    partial class CascadeDeleteForCategoryQuestions
+    [Migration("20250702154713_addUserAnswers")]
+    partial class addUserAnswers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,28 +44,6 @@ namespace CompetitionsWebsite.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("CompetitionsWebsite.Models.Competition", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Competitions");
                 });
 
             modelBuilder.Entity("CompetitionsWebsite.Models.MCQOption", b =>
@@ -161,9 +139,6 @@ namespace CompetitionsWebsite.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CompetitionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CorrectWord")
                         .HasColumnType("nvarchar(max)");
 
@@ -187,8 +162,6 @@ namespace CompetitionsWebsite.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("CompetitionId");
 
                     b.ToTable("Questions");
 
@@ -295,13 +268,6 @@ namespace CompetitionsWebsite.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CompetitionId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
@@ -311,21 +277,60 @@ namespace CompetitionsWebsite.Migrations
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
+                    b.Property<string>("QuestionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserQuizAttemptId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserResponse")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParticipantId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("UserQuizAttemptId");
+
+                    b.ToTable("UserAnswers");
+                });
+
+            modelBuilder.Entity("CompetitionsWebsite.Models.UserQuizAttempt", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AttemptDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompetitionId");
-
-                    b.HasIndex("ParticipantId");
-
-                    b.HasIndex("QuestionId");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserAnswers");
+                    b.ToTable("UserQuizAttempts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -482,17 +487,6 @@ namespace CompetitionsWebsite.Migrations
                     b.HasDiscriminator().HasValue("SpellingQuestion");
                 });
 
-            modelBuilder.Entity("CompetitionsWebsite.Models.Competition", b =>
-                {
-                    b.HasOne("CompetitionsWebsite.Models.User", "User")
-                        .WithMany("Competitions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("CompetitionsWebsite.Models.MCQOption", b =>
                 {
                     b.HasOne("CompetitionsWebsite.Models.MCQQuestion", null)
@@ -519,10 +513,6 @@ namespace CompetitionsWebsite.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CompetitionsWebsite.Models.Competition", null)
-                        .WithMany("Questions")
-                        .HasForeignKey("CompetitionId");
-
                     b.Navigation("Category");
                 });
 
@@ -537,12 +527,6 @@ namespace CompetitionsWebsite.Migrations
 
             modelBuilder.Entity("CompetitionsWebsite.Models.UserAnswer", b =>
                 {
-                    b.HasOne("CompetitionsWebsite.Models.Competition", "Competition")
-                        .WithMany()
-                        .HasForeignKey("CompetitionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CompetitionsWebsite.Models.Participant", null)
                         .WithMany("Answers")
                         .HasForeignKey("ParticipantId");
@@ -553,15 +537,32 @@ namespace CompetitionsWebsite.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CompetitionsWebsite.Models.User", "User")
+                    b.HasOne("CompetitionsWebsite.Models.UserQuizAttempt", "UserQuizAttempt")
+                        .WithMany("Answers")
+                        .HasForeignKey("UserQuizAttemptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+
+                    b.Navigation("UserQuizAttempt");
+                });
+
+            modelBuilder.Entity("CompetitionsWebsite.Models.UserQuizAttempt", b =>
+                {
+                    b.HasOne("CompetitionsWebsite.Models.Category", "Category")
                         .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CompetitionsWebsite.Models.User", "User")
+                        .WithMany("UserQuizAttempts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Competition");
-
-                    b.Navigation("Question");
+                    b.Navigation("Category");
 
                     b.Navigation("User");
                 });
@@ -622,11 +623,6 @@ namespace CompetitionsWebsite.Migrations
                     b.Navigation("Questions");
                 });
 
-            modelBuilder.Entity("CompetitionsWebsite.Models.Competition", b =>
-                {
-                    b.Navigation("Questions");
-                });
-
             modelBuilder.Entity("CompetitionsWebsite.Models.Participant", b =>
                 {
                     b.Navigation("Answers");
@@ -634,7 +630,12 @@ namespace CompetitionsWebsite.Migrations
 
             modelBuilder.Entity("CompetitionsWebsite.Models.User", b =>
                 {
-                    b.Navigation("Competitions");
+                    b.Navigation("UserQuizAttempts");
+                });
+
+            modelBuilder.Entity("CompetitionsWebsite.Models.UserQuizAttempt", b =>
+                {
+                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("CompetitionsWebsite.Models.MCQQuestion", b =>

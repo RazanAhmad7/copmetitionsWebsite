@@ -6,7 +6,8 @@
         public string Text { get; set; }
         public string Type { get; set; }
         public string Level { get; set; }
-
+        public string CorrectWord { get; set; }
+        public int CategoryId { get; set; }
         // Multiple Choice
         public List<string> Options { get; set; }
         public int CorrectOptionIndex { get; set; }

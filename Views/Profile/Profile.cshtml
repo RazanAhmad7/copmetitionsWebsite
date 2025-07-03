@@ -1,3 +1,5 @@
+@model CompetitionsWebsite.ViewModels.ProfileViewModel
+
 @{
     ViewData["Title"] = "الملف الشخصي - مسابقات تعليمية إسلامية";
     Layout = null;
@@ -10,104 +12,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="../css/site.css" />
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/profile.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
-        .profile-container {
-          max-width: 800px;
-          margin: 2rem auto;
-          padding: 2rem;
-          background: var(--white);
-          border-radius: 8px;
-          box-shadow: var(--shadow);
-        }
-
-        .profile-header {
-          text-align: center;
-          margin-bottom: 2rem;
-        }
-
-        .profile-header img {
-          width: 150px;
-          height: 150px;
-          border-radius: 50%;
-          margin-bottom: 1rem;
-          border: 4px solid var(--primary-color);
-        }
-
-        .profile-info {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 2rem;
-          margin-bottom: 2rem;
-        }
-
-        .info-card {
-          background: var(--light-bg);
-          padding: 1.5rem;
-          border-radius: 8px;
-          text-align: center;
-        }
-
-        .info-card i {
-          font-size: 2rem;
-          color: var(--primary-color);
-          margin-bottom: 1rem;
-        }
-
-        .quiz-history {
-          margin-top: 2rem;
-        }
-
-        .quiz-history h3 {
-          color: var(--primary-color);
-          margin-bottom: 1rem;
-        }
-
-        .history-table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-top: 1rem;
-        }
-
-        .history-table th,
-        .history-table td {
-          padding: 1rem;
-          text-align: right;
-          border-bottom: 1px solid var(--light-bg);
-        }
-
-        .history-table th {
-          background-color: var(--primary-color);
-          color: var(--white);
-        }
-
-        .history-table tr:hover {
-          background-color: var(--light-bg);
-        }
-
-        .badge {
-          display: inline-block;
-          padding: 0.25rem 0.5rem;
-          border-radius: 4px;
-          font-size: 0.875rem;
-          font-weight: bold;
-        }
-
-        .badge-gold {
-          background-color: var(--accent-color);
-          color: var(--text-color);
-        }
-
-        .badge-silver {
-          background-color: #c0c0c0;
-          color: var(--text-color);
-        }
-
-        .badge-bronze {
-          background-color: #cd7f32;
-          color: var(--white);
-        }
+      
     </style>
 </head>
 <body>
@@ -117,71 +25,105 @@
                 <h1>مسابقات تعليمية</h1>
             </div>
             <div class="nav-links">
-                <a href="@Url.Action("Index", "Home")" class="active">الرئيسية</a>
+                <a href="@Url.Action("Index", "Home")">الرئيسية</a>
                 <a href="@Url.Action("Login", "Auth")">تسجيل الدخول</a>
-                <a href="@Url.Action("Profile", "Profile")">الملف الشخصي</a>
+                <a href="@Url.Action("Profile", "Profile")" class="active">الملف الشخصي</a>
             </div>
         </nav>
     </header>
 
     <main>
         <div class="profile-container">
-            <div class="profile-header">
-                <img src="../assets/default-avatar.png" alt="الصورة الشخصية" />
-                <h2>اسم المستخدم</h2>
-                <p>عضو منذ: يناير 2024</p>
+            <!-- User Header Section -->
+            <div class="user-header">
+                <h1>@Model.UserName</h1>
+                <p class="member-since">عضو منذ: @Model.JoinDate.ToString("MMMM yyyy")</p>
+
+                <p class="welcome-message">مرحباً بك في رحلتك التعليمية الإسلامية!</p>
             </div>
 
-            <div class="profile-info">
-                <div class="info-card">
-                    <i class="fas fa-trophy"></i>
-                    <h3>المسابقات المكتملة</h3>
-                    <p>15</p>
+            <!-- Statistics Dashboard -->
+            <div class="stats-dashboard">
+                <div class="stat-card completed">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="stat-number">@Model.TotalAttempts</div>
+                    <div class="stat-label">المسابقات المكتملة</div>
                 </div>
-                <div class="info-card">
+
+                <div class="stat-card average">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-number">@Model.AverageScore%</div>
+                    <div class="stat-label">المتوسط العام</div>
+                </div>
+                <div class="stat-card best">
                     <i class="fas fa-star"></i>
-                    <h3>النقاط الإجمالية</h3>
-                    <p>1,250</p>
+                    <div class="stat-number">@Model.BestScore%</div>
+                    <div class="stat-label">أفضل نتيجة</div>
                 </div>
-                <div class="info-card">
-                    <i class="fas fa-medal"></i>
-                    <h3>المركز</h3>
-                    <p>المركز الثالث</p>
-                </div>
+
             </div>
 
+            <!-- Quiz History Section -->
             <div class="quiz-history">
-                <h3>سجل المسابقات</h3>
-                <table class="history-table">
-                    <thead>
-                        <tr>
-                            <th>المسابقة</th>
-                            <th>التاريخ</th>
-                            <th>النتيجة</th>
-                            <th>المركز</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>مسابقة القرآن الكريم</td>
-                            <td>15/01/2024</td>
-                            <td>95%</td>
-                            <td><span class="badge badge-gold">المركز الأول</span></td>
-                        </tr>
-                        <tr>
-                            <td>مسابقة السنة النبوية</td>
-                            <td>10/01/2024</td>
-                            <td>85%</td>
-                            <td><span class="badge badge-silver">المركز الثاني</span></td>
-                        </tr>
-                        <tr>
-                            <td>مسابقة العقيدة</td>
-                            <td>05/01/2024</td>
-                            <td>80%</td>
-                            <td><span class="badge badge-bronze">المركز الثالث</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h2><i class="fas fa-history"></i> سجل المسابقات</h2>
+                
+                @foreach (var attempt in Model.Attempts)
+                {
+                    <div class="quiz-item">
+                        <div class="quiz-item-header">
+                            <div class="quiz-name">
+                                @attempt.CategoryName
+                                <span class="difficulty-indicator">@attempt.Level</span>
+                            </div>
+                            <div class="quiz-date">@attempt.AttemptDate.ToString("dd/MM/yyyy")</div>
+                        </div>
+
+                        <div class="quiz-item-body">
+                            <div class="quiz-metric">
+                                <div class="quiz-metric-value">@attempt.Score</div>
+                                <div class="quiz-metric-label">النتيجة</div>
+                            </div>
+                        </div>
+
+                        <div class="quiz-actions">
+                            <a href="javascript:void(0);" onclick="toggleDetails(@attempt.AttemptId)" class="btn-small btn-details">
+                                <i class="fas fa-eye"></i> عرض التفاصيل
+                            </a>
+                        </div>
+
+                        <div class="quiz-details" id="details-@attempt.AttemptId" style="display:none;">
+                            <ul>
+                                @foreach (var answer in attempt.Answers)
+                                {
+                                    <li>
+                                        <strong>@answer.QuestionText</strong><br />
+                                        إجابتك: @answer.UserResponse<br />
+                                        الإجابة الصحيحة: @answer.CorrectAnswer<br />
+                                        <span style="color:@(answer.IsCorrect ? "green" : "red")">
+                                            @(answer.IsCorrect ? "صحيحة ✅" : "خاطئة ❌")
+                                        </span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2><i class="fas fa-bolt"></i> الإجراءات السريعة</h2>
+                <div class="action-buttons">
+                    <a href="@Url.Action("Index", "Quiz")" class="btn-action">
+                        <i class="fas fa-play"></i>
+                        ابدأ مسابقة جديدة
+                    </a>
+                    <a href="@Url.Action("Browse", "Quiz")" class="btn-action">
+                        <i class="fas fa-search"></i>
+                        تصفح المسابقات
+                    </a>
+                </div>
             </div>
         </div>
     </main>
@@ -190,6 +132,57 @@
         <p>جميع الحقوق محفوظة © 2024</p>
     </footer>
 
-    <script src="../js/profile.js"></script>
+    <script>
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate stat cards on scroll
+            const statCards = document.querySelectorAll('.stat-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+                    }
+                });
+            });
+
+            statCards.forEach(card => {
+                observer.observe(card);
+            });
+
+            // Add hover effects to quiz items
+            const quizItems = document.querySelectorAll('.quiz-item');
+            quizItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'var(--primary-color)';
+                });
+                item.addEventListener('mouseleave', function() {
+                    this.style.borderColor = 'var(--border-color)';
+                });
+            });
+        });
+
+        // CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @@keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+            function toggleDetails(id) {
+                const el = document.getElementById(`details-${id}`);
+            el.style.display = el.style.display === "none" ? "block" : "none";
+            }
+ 
+
+    </script>
 </body>
 </html>

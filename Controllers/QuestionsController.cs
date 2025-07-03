@@ -1,7 +1,8 @@
-using CompetitionsWebsite.Models;
+﻿using CompetitionsWebsite.Models;
 using CompetitionsWebsite.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace CompetitionsWebsite.Controllers;
 
@@ -20,6 +21,8 @@ public class QuestionsController : Controller
 
         var questions = _context.Questions
             .Where(q => q.CategoryId == categoryId && q.Level == level)
+            .OrderBy(q => Guid.NewGuid())  // ✅ ترتيب عشوائي
+            .Take(10)                      // ✅ فقط 10 أسئلة
             .ToList();
 
         foreach (var q in questions)
@@ -46,19 +49,17 @@ public class QuestionsController : Controller
             Text = q.Text,
             Type = q.Type,
             Level = q.Level,
+            CorrectWord = q.CorrectWord,
+            CategoryId = categoryId,
 
-            // Multiple Choice
             Options = q is MCQQuestion mcq ? mcq.Options.Select(o => o.Text).ToList() : null,
             CorrectOptionIndex = q is MCQQuestion mcq2
-            ? mcq2.Options.ToList().FindIndex(o => o.IsCorrect)
-            : -1,
+                ? mcq2.Options.ToList().FindIndex(o => o.IsCorrect)
+                : -1,
 
-
-            // Matching
             Items = q is MatchingQuestion match ? match.Pairs.Select(p => new Item { Text = p.LeftItem }).ToList() : null,
             Matches = q is MatchingQuestion match2 ? match2.Pairs.Select(p => new Item { Text = p.RightItem }).ToList() : null,
 
-            // Spelling
             Letters = q is SpellingQuestion spell ? spell.Letters.Select(l => l.Letter).ToList() : null
 
         }).ToList();
@@ -80,4 +81,29 @@ public class QuestionsController : Controller
 
         return View();
     }
+
+    [HttpPost]
+    public IActionResult SaveResult([FromBody] QuizResultViewModel model)
+    {
+        var quizResult = new UserQuizAttempt
+        {
+            UserId = "0e5a03f7-e589-4040-a367-5b2369a7a0a1", // حسب طريقة تسجيل الدخول
+            CategoryId = model.CategoryId,
+            Level = model.Level,
+            Score = model.Score,
+            AttemptDate = DateTime.Now,
+            Answers = model.UserResponses.Select(r => new UserAnswer
+            {
+                QuestionId = r.QuestionId,
+                QuestionType = r.QuestionType,
+                UserResponse = r.UserResponse,
+                IsCorrect = r.IsCorrect
+            }).ToList()
+        };
+
+        _context.UserQuizAttempts.Add(quizResult);
+        _context.SaveChanges();
+        return Ok();
+    }
+
 }

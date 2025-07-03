@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CompetitionsWebsite.Migrations
 {
     /// <inheritdoc />
-    public partial class updateDatabase : Migration
+    public partial class addUserAnswers : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -190,26 +190,6 @@ namespace CompetitionsWebsite.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Competitions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Score = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Competitions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Competitions_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Questions",
                 columns: table => new
                 {
@@ -218,9 +198,8 @@ namespace CompetitionsWebsite.Migrations
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Level = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CorrectWord = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CorrectWord = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    CompetitionId = table.Column<int>(type: "int", nullable: true),
                     Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false)
                 },
                 constraints: table =>
@@ -232,11 +211,35 @@ namespace CompetitionsWebsite.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserQuizAttempts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    Level = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AttemptDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Score = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserQuizAttempts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Questions_Competitions_CompetitionId",
-                        column: x => x.CompetitionId,
-                        principalTable: "Competitions",
-                        principalColumn: "Id");
+                        name: "FK_UserQuizAttempts_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserQuizAttempts_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -307,28 +310,16 @@ namespace CompetitionsWebsite.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CompetitionId = table.Column<int>(type: "int", nullable: false),
+                    UserQuizAttemptId = table.Column<int>(type: "int", nullable: false),
                     QuestionId = table.Column<int>(type: "int", nullable: false),
-                    Answer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuestionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserResponse = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsCorrect = table.Column<bool>(type: "bit", nullable: false),
                     ParticipantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserAnswers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserAnswers_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserAnswers_Competitions_CompetitionId",
-                        column: x => x.CompetitionId,
-                        principalTable: "Competitions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_UserAnswers_Participants_ParticipantId",
                         column: x => x.ParticipantId,
@@ -340,6 +331,12 @@ namespace CompetitionsWebsite.Migrations
                         principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserAnswers_UserQuizAttempts_UserQuizAttemptId",
+                        column: x => x.UserQuizAttemptId,
+                        principalTable: "UserQuizAttempts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
@@ -382,11 +379,6 @@ namespace CompetitionsWebsite.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Competitions_UserId",
-                table: "Competitions",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MatchingPairs_MatchingQuestionId",
                 table: "MatchingPairs",
                 column: "MatchingQuestionId");
@@ -402,19 +394,9 @@ namespace CompetitionsWebsite.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Questions_CompetitionId",
-                table: "Questions",
-                column: "CompetitionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SpellingLetters_SpellingQuestionId",
                 table: "SpellingLetters",
                 column: "SpellingQuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserAnswers_CompetitionId",
-                table: "UserAnswers",
-                column: "CompetitionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserAnswers_ParticipantId",
@@ -427,8 +409,18 @@ namespace CompetitionsWebsite.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserAnswers_UserId",
+                name: "IX_UserAnswers_UserQuizAttemptId",
                 table: "UserAnswers",
+                column: "UserQuizAttemptId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserQuizAttempts_CategoryId",
+                table: "UserQuizAttempts",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserQuizAttempts_UserId",
+                table: "UserQuizAttempts",
                 column: "UserId");
         }
 
@@ -472,13 +464,13 @@ namespace CompetitionsWebsite.Migrations
                 name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "Competitions");
+                name: "UserQuizAttempts");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

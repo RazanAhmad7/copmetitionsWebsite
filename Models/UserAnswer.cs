@@ -4,22 +4,15 @@
     {
         public int Id { get; set; }
 
-        // The user who answered
-        public string UserId { get; set; }
-        public User User { get; set; }
+        public int UserQuizAttemptId { get; set; }
+        public UserQuizAttempt UserQuizAttempt { get; set; }
 
-        // The competition attempt this answer belongs to
-        public int CompetitionId { get; set; }
-        public Competition Competition { get; set; }
-
-        // The question that was answered
-        public int QuestionId { get; set; }
+        public int QuestionId { get; set; } // رقم السؤال الذي أجاب عليه
         public Question Question { get; set; }
 
-        // The user's answer (can be text, JSON, etc.)
-        public string Answer { get; set; }
+        public string QuestionType { get; set; } // "mcq", "matching", "spelling"
 
-        // Whether the answer was correct
+        public string UserResponse { get; set; } // للإجابة النصية أو الخيار المختار أو JSON لتطابق
         public bool IsCorrect { get; set; }
     }
 
