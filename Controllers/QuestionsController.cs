@@ -1,5 +1,6 @@
 ﻿using CompetitionsWebsite.Models;
 using CompetitionsWebsite.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -9,9 +10,11 @@ namespace CompetitionsWebsite.Controllers;
 public class QuestionsController : Controller
 {
     private readonly AppDbContext _context;
-    public QuestionsController(AppDbContext context)
+    private readonly UserManager<User> _userManager;
+    public QuestionsController(AppDbContext context, UserManager<User> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
     public IActionResult Quiz(int categoryId, string level)
     {
@@ -85,11 +88,11 @@ public class QuestionsController : Controller
     [HttpPost]
     public IActionResult SaveResult([FromBody] QuizResultViewModel model)
     {
+        var userId = _userManager.GetUserId(User); // أو حسب طريقتك الحالية
+
         var quizResult = new UserQuizAttempt
         {
-            UserId = "0e5a03f7-e589-4040-a367-5b2369a7a0a1", // حسب طريقة تسجيل الدخول
-            CategoryId = model.CategoryId,
-            Level = model.Level,
+            UserId = userId,
             Score = model.Score,
             AttemptDate = DateTime.Now,
             Answers = model.UserResponses.Select(r => new UserAnswer
@@ -101,9 +104,63 @@ public class QuestionsController : Controller
             }).ToList()
         };
 
+        // نحدد إن كانت المسابقة خاصة أو عادية
+        if (model.QuizId.HasValue)
+        {
+            quizResult.SpecialQuizAssignmentId = model.QuizId.Value;
+        }
+        else
+        {
+            quizResult.CategoryId = model.CategoryId;
+            quizResult.Level = model.Level;
+        }
+
         _context.UserQuizAttempts.Add(quizResult);
         _context.SaveChanges();
         return Ok();
+    }
+
+
+    public IActionResult StartSpecialQuiz(int quizId)
+    {
+        var quiz = _context.SpecialQuizzes
+            .Include(q => q.Questions)
+            .ThenInclude(q => (q.Question as MCQQuestion).Options)
+            .Include(q => q.Questions)
+            .ThenInclude(q => (q.Question as MatchingQuestion).Pairs)
+            .Include(q => q.Questions)
+            .ThenInclude(q => (q.Question as SpellingQuestion).Letters)
+            .FirstOrDefault(q => q.Id == quizId);
+
+        if (quiz == null)
+            return NotFound();
+
+        var viewModel = quiz.Questions.Select(q => new QuizQuestionViewModel
+        {
+            Id = q.Id,
+            Text = q.Question.Text,
+            Type = q.Question.Type,
+            Level = q.Question.Level,
+            CorrectWord = q.Question.CorrectWord,
+            CategoryId = q.Question.CategoryId,
+
+            Options = q.Question is MCQQuestion mcq ? mcq.Options.Select(o => o.Text).ToList() : null,
+            CorrectOptionIndex = q.Question is MCQQuestion mcq2
+                ? mcq2.Options.ToList().FindIndex(o => o.IsCorrect)
+                : -1,
+
+            Items = q.Question is MatchingQuestion match ? match.Pairs.Select(p => new Item { Text = p.LeftItem }).ToList() : null,
+            Matches = q.Question is MatchingQuestion match2 ? match2.Pairs.Select(p => new Item { Text = p.RightItem }).ToList() : null,
+
+            Letters = q.Question is SpellingQuestion spell ? spell.Letters.Select(l => l.Letter).ToList() : null
+
+        }).ToList();
+
+        ViewBag.QuizType = "special";
+        ViewBag.QuizId = quizId;
+
+
+        return View("Quiz", viewModel); // نستخدم نفس الـ View quiz.cshtml
     }
 
 }

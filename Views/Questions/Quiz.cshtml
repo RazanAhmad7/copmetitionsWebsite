@@ -500,6 +500,9 @@
             document.getElementById("nextQuestion").style.display = "none";
             document.getElementById("timerContainer").style.display = "none";
 
+            const isSpecialQuiz = '@ViewBag.QuizType' === 'special';
+            const quizId = parseInt('@ViewBag.QuizId');
+
             // إرسال البيانات
             fetch('/Questions/SaveResult', {
                 method: 'POST',
@@ -508,12 +511,12 @@
                     'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
                 },
                 body: JSON.stringify({
-                    categoryId: questions[currentQuestion-1].categoryId,
-                    level: questions[currentQuestion-1].level,
+                    quizId: isSpecialQuiz ? quizId : null,
+                    categoryId: isSpecialQuiz ? null : questions[currentQuestion - 1].categoryId,
+                    level: isSpecialQuiz ? null : questions[currentQuestion - 1].level,
                     score: score,
-                    userResponses: userResponses  // تأكدي من الاسم
+                    userResponses: userResponses
                 })
-
             }).then(response => {
                 if (!response.ok) throw new Error("خطأ أثناء الحفظ");
                 return response.json();

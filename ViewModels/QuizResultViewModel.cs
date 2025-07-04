@@ -2,10 +2,11 @@
 {
     public class QuizResultViewModel
     {
-        public int CategoryId { get; set; }
-        public string Level { get; set; }
+        public int? CategoryId { get; set; }
+        public string? Level { get; set; }
         public int Score { get; set; }
-       
+        public int? QuizId { get; set; }  // 👈 للمسابقات الخاصة
+
         public List<UserAnswerViewModel> UserResponses { get; set; }
     }
 

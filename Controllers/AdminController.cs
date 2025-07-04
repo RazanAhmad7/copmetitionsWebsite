@@ -326,5 +326,34 @@ public class AdminController : Controller
     }
 
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateSpecialQuiz([FromBody] SpecialQuizDto dto)
+    {
+        if (dto == null || dto.QuestionIds == null || dto.UserIds == null)
+            return BadRequest("Invalid data");
+
+        var quiz = new SpecialQuiz
+        {
+            Title = "مسابقة خاصة", // يمكنك تعديل العنوان أو جعله قابلاً للإدخال لاحقًا
+            CreatedAt = DateTime.Now,
+            Questions = dto.QuestionIds.Select(qid => new SpecialQuizQuestion
+            {
+                QuestionId = qid
+            }).ToList(),
+            Assignments = dto.UserIds.Select(uid => new SpecialQuizAssignment
+            {
+                UserId = uid,
+                IsCompleted = false
+            }).ToList()
+        };
+
+        _context.SpecialQuizzes.Add(quiz);
+        await _context.SaveChangesAsync();
+
+        return Json(new { success = true });
+    }
+
+
 
 }

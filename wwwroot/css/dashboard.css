@@ -1,0 +1,174 @@
+﻿/* All your previous CSS styles remain the same */
+.admin-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.admin-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.admin-tab {
+    padding: 1rem 2rem;
+    background: var(--light-bg);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .admin-tab.active {
+        background: var(--primary-color);
+        color: var(--white);
+    }
+
+.admin-content {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.question-form {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: grid;
+    gap: 0.5rem;
+}
+
+    .form-group label {
+        font-weight: bold;
+        color: var(--text-color);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 0.8rem;
+        border: 2px solid var(--primary-color);
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+
+    .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+.options-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.option-item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+    .option-item input {
+        flex: 1;
+    }
+
+    .option-item button {
+        padding: 0.5rem;
+        background: #ff4444;
+        color: var(--white);
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+.add-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--secondary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.elements-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.elements-card {
+    background: var(--light-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.element-info {
+    flex: 1;
+}
+
+.element-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--white);
+}
+
+.show-btn {
+    background-color: #17a2b8; /* أزرق معلوماتي */
+}
+
+.edit-btn {
+    background: var(--primary-color);
+}
+
+.delete-btn {
+    background: #ff4444;
+}
+
+.matching-pairs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.matching-column {
+    display: grid;
+    gap: 1rem;
+}
+
+.word-building-letters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.letter-input {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 1.5rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 4px;
+}

@@ -34,17 +34,32 @@ public class AuthController : Controller
             if (user != null)
             {
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
-                
+
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Dashboard", "Admin");
+                    // التحقق من الدور
+                    var roles = await _userManager.GetRolesAsync(user);
+
+                    if (roles.Contains("Admin"))
+                    {
+                        return RedirectToAction("Dashboard", "Admin");
+                    }
+                    else if (roles.Contains("Participant"))
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+
+                    // في حال كان له دور غير معروف
+                    await _signInManager.SignOutAsync();
+                    ModelState.AddModelError(string.Empty, "نوع المستخدم غير مصرح به.");
+                    return View(model);
                 }
             }
-            ModelState.AddModelError(string.Empty, "معلومات التسجيل غير صحيحة");
 
+            ModelState.AddModelError(string.Empty, "معلومات التسجيل غير صحيحة");
         }
 
-        // If validation fails, redisplay the login form with validation errors
+        // في حال فشل التحقق، إعادة عرض نموذج تسجيل الدخول مع الأخطاء
         return View(model);
     }
 

@@ -19,6 +19,10 @@ public class AppDbContext : IdentityDbContext<User>
     public DbSet<MatchingPair> MatchingPairs { get; set; }
     public DbSet<SpellingLetter> SpellingLetters { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<SpecialQuiz> SpecialQuizzes { get; set; }
+    public DbSet<SpecialQuizAssignment> SpecialQuizAssignments { get; set; }
+    public DbSet<SpecialQuizQuestion> SpecialQuizQuestions { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

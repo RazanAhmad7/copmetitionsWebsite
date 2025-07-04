@@ -46,6 +46,17 @@ public class ProfileController : Controller
             }).ToList()
         }).ToList();
 
+        // ✅ قراءة المسابقات الخاصة التي لم يتم حلها بعد
+        var specialQuizzes = await _context.SpecialQuizAssignments
+            .Include(usq => usq.SpecialQuiz)
+                .ThenInclude(sq => sq.Questions)
+            .Where(usq => usq.UserId == userId && !usq.IsCompleted)
+            .Select(usq => new SpecialQuizViewModel
+            {
+                QuizId = usq.SpecialQuizId,
+                QuestionsCount = usq.SpecialQuiz.Questions.Count
+            }).ToListAsync();
+
         var viewModel = new ProfileViewModel
         {
             UserName = user?.UserName ?? "مستخدم",
@@ -53,7 +64,8 @@ public class ProfileController : Controller
             TotalAttempts = attempts.Count,
             AverageScore = attempts.Count > 0 ? (int)attempts.Average(a => a.Score) : 0,
             BestScore = attempts.Count > 0 ? attempts.Max(a => a.Score) : 0,
-            Attempts = mappedAttempts
+            Attempts = mappedAttempts,
+            SpecialQuizzes = specialQuizzes
         };
 
         return View(viewModel);

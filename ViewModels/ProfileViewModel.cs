@@ -10,6 +10,16 @@
         public int BestScore { get; set; }
 
         public List<UserQuizAttemptViewModel> Attempts { get; set; }
+        public List<SpecialQuizViewModel> SpecialQuizzes { get; set; }
+
+    }
+
+    public class SpecialQuizViewModel
+    {
+        public int QuizId { get; set; }
+        public string CategoryName { get; set; }
+        public DateTime AssignedDate { get; set; }
+        public int QuestionsCount { get; set; }
     }
 
 }

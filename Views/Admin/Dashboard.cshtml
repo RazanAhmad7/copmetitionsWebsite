@@ -1,11 +1,8 @@
 @model CompetitionsWebsite.ViewModels.DashboardViewModel
-
 @{
     ViewData["Title"] = "لوحة التحكم - مسابقات تعليمية إسلامية";
   
 }
-
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -13,192 +10,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/dashboard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <style>
-        /* All your previous CSS styles remain the same */
-        .admin-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 2rem;
-        }
-
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .admin-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .admin-tab {
-            padding: 1rem 2rem;
-            background: var(--light-bg);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-            .admin-tab.active {
-                background: var(--primary-color);
-                color: var(--white);
-            }
-
-        .admin-content {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-        }
-
-        .question-form {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .form-group {
-            display: grid;
-            gap: 0.5rem;
-        }
-
-            .form-group label {
-                font-weight: bold;
-                color: var(--text-color);
-            }
-
-            .form-group input,
-            .form-group textarea,
-            .form-group select {
-                padding: 0.8rem;
-                border: 2px solid var(--primary-color);
-                border-radius: 4px;
-                font-size: 1rem;
-            }
-
-            .form-group textarea {
-                min-height: 100px;
-                resize: vertical;
-            }
-
-        .options-list {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .option-item {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-            .option-item input {
-                flex: 1;
-            }
-
-            .option-item button {
-                padding: 0.5rem;
-                background: #ff4444;
-                color: var(--white);
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-
-        .add-option {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--secondary-color);
-            color: var(--white);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .elements-list {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .elements-card {
-            background: var(--light-bg);
-            padding: 1.5rem;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .element-info {
-            flex: 1;
-        }
-
-        .element-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .action-btn {
-            padding: 0.5rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            color: var(--white);
-        }
-        .show-btn {
-            background-color: #17a2b8; /* أزرق معلوماتي */
-        }
-        .edit-btn {
-            background: var(--primary-color);
-        }
-
-        .delete-btn {
-            background: #ff4444;
-        }
-
-        .matching-pairs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        .matching-column {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .word-building-letters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .letter-input {
-            width: 50px;
-            height: 50px;
-            text-align: center;
-            font-size: 1.5rem;
-            border: 2px solid var(--primary-color);
-            border-radius: 4px;
-        }
-    </style>
+   
 </head>
 <body>
-   
-
     <main>
         <div class="admin-container">
             <div class="admin-header">
                 <h2>لوحة التحكم</h2>
                 <button class="btn" id="addQuestionBtn" asp-action="AddQuestion" asp-controller="Admin">إضافة سؤال جديد</button>
                 <button class="btn" id="addCategoryBtn" asp-action="AddCategory" asp-controller="Category" style="display:none;">إضافة قسم جديد</button>
+                <button class="btn" id="startSpecialQuizBtn" style="background-color: #007bff; color: white;">
+                    إنشاء مسابقة خاصة
+                </button>
             </div>
+
 
             <div class="admin-tabs">
                 <button class="admin-tab" data-tab="questions">الأسئلة</button>
@@ -756,6 +583,120 @@
                     window.location.href = `/Admin/DeleteQuestion/${questionId}`;
                 }
             });
+        }
+
+
+        //  for the spical compition : 
+
+        let selectedQuestionIds = [];
+        let selectedUserIds = [];
+
+        document.getElementById('startSpecialQuizBtn').addEventListener('click', function () {
+            // Show question checkboxes
+            document.querySelectorAll('#questionsList .element-actions').forEach(actionDiv => {
+                const questionId = actionDiv.closest('.elements-card').getAttribute('data-id');
+                actionDiv.innerHTML = `
+                        <label>
+                            <input type="checkbox" class="question-checkbox" value="${questionId}">
+                            اختيار
+                        </label>
+                    `;
+            });
+
+            // Add "Next" button if not exists
+            if (!document.getElementById('nextToUsersBtn')) {
+                const nextBtn = document.createElement('button');
+                nextBtn.id = 'nextToUsersBtn';
+                nextBtn.className = 'btn';
+                nextBtn.style = "margin: 15px;";
+                nextBtn.innerText = 'التالي';
+                nextBtn.addEventListener('click', goToUserSelection);
+                document.querySelector('.admin-content').prepend(nextBtn);
+            }
+
+            // Switch to questions tab if not already
+            document.querySelector('.admin-tab[data-tab="questions"]').click();
+        });
+
+        function goToUserSelection() {
+            // Get selected question IDs
+            selectedQuestionIds = Array.from(document.querySelectorAll('.question-checkbox:checked')).map(cb => cb.value);
+
+            if (selectedQuestionIds.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'يرجى اختيار سؤال واحد على الأقل',
+                    confirmButtonText: 'حسنًا'
+                });
+                return;
+            }
+
+            // Hide question section, show user section
+            document.getElementById('questionsList').style.display = 'none';
+            document.getElementById('usersList').style.display = 'grid';
+
+            // Modify user cards
+            document.querySelectorAll('#usersList .element-actions').forEach(actionDiv => {
+                const userId = actionDiv.closest('.elements-card').getAttribute('data-id');
+                actionDiv.innerHTML = `
+                        <label>
+                            <input type="checkbox" class="user-checkbox" value="${userId}">
+                            اختيار
+                        </label>
+                    `;
+            });
+
+            // Replace "Next" button to go to confirmation
+            const nextBtn = document.getElementById('nextToUsersBtn');
+            nextBtn.innerText = 'تأكيد الإرسال';
+            nextBtn.removeEventListener('click', goToUserSelection);
+            nextBtn.addEventListener('click', confirmSpecialQuiz);
+        }
+
+        function confirmSpecialQuiz() {
+            selectedUserIds = Array.from(document.querySelectorAll('.user-checkbox:checked')).map(cb => cb.value);
+
+            if (selectedUserIds.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'يرجى اختيار مستخدم واحد على الأقل',
+                    confirmButtonText: 'حسنًا'
+                });
+                return;
+            }
+
+            // Send data to backend
+            fetch('/Admin/CreateSpecialQuiz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                },
+                body: JSON.stringify({
+                    questionIds: selectedQuestionIds,
+                    userIds: selectedUserIds
+                })
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error('خطأ في إرسال المسابقة الخاصة');
+                    return res.json();
+                })
+                .then(data => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تم إنشاء المسابقة الخاصة!',
+                        confirmButtonText: 'حسنًا'
+                    }).then(() => {
+                        location.reload(); // أو الانتقال إلى صفحة عرض النتائج لاحقًا
+                    });
+                })
+                .catch(err => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'حدث خطأ!',
+                        text: err.message
+                    });
+                });
         }
     </script>
 </body>
