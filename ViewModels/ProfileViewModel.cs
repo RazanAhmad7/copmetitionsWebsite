@@ -1,4 +1,6 @@
-﻿namespace CompetitionsWebsite.ViewModels
+﻿using CompetitionsWebsite.Models;
+
+namespace CompetitionsWebsite.ViewModels
 {
     public class ProfileViewModel
     {
@@ -11,6 +13,12 @@
 
         public List<UserQuizAttemptViewModel> Attempts { get; set; }
         public List<SpecialQuizViewModel> SpecialQuizzes { get; set; }
+
+        public RamadanCompetitionQuestion? TodayRamadanQuestion { get; set; }
+        public bool? HasAnsweredToday { get; set; }
+        public RamadanUserAnswer? TodayRamadanUserAnswer { get; set; }
+
+
 
     }
 

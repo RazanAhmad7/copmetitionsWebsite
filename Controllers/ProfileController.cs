@@ -29,6 +29,11 @@ public class ProfileController : Controller
             .ThenInclude(a => a.Question)
             .ToList();
 
+        var now = DateTime.Now;
+        var todayRamadanQuestion = await _context.RamadanCompetitionQuestions
+            .FirstOrDefaultAsync(q => q.ShowFrom <= now && q.ShowTo > now);
+
+
         var mappedAttempts = attempts.Select(a => new UserQuizAttemptViewModel
         {
             AttemptId = a.Id,
@@ -46,7 +51,6 @@ public class ProfileController : Controller
             }).ToList()
         }).ToList();
 
-        // ✅ قراءة المسابقات الخاصة التي لم يتم حلها بعد
         var specialQuizzes = await _context.SpecialQuizAssignments
             .Include(usq => usq.SpecialQuiz)
                 .ThenInclude(sq => sq.Questions)
@@ -57,16 +61,26 @@ public class ProfileController : Controller
                 QuestionsCount = usq.SpecialQuiz.Questions.Count
             }).ToListAsync();
 
+        var todayUserAnswer = await _context.RamadanCompetitionAnswers
+    .Where(a => a.UserId == userId && a.QuestionId == todayRamadanQuestion.Id)
+    .FirstOrDefaultAsync();
+
+        bool hasAnsweredToday = todayUserAnswer != null;
+
         var viewModel = new ProfileViewModel
         {
             UserName = user?.UserName ?? "مستخدم",
             JoinDate = user?.JoinedAt ?? DateTime.Now,
             TotalAttempts = attempts.Count,
-            AverageScore = attempts.Count > 0 ? (int)attempts.Average(a => a.Score) : 0,
+            AverageScore = attempts.Count > 0 ? attempts.Average(a => a.Score) : 0,
             BestScore = attempts.Count > 0 ? attempts.Max(a => a.Score) : 0,
             Attempts = mappedAttempts,
-            SpecialQuizzes = specialQuizzes
+            SpecialQuizzes = specialQuizzes,
+            TodayRamadanQuestion = todayRamadanQuestion,
+            HasAnsweredToday = hasAnsweredToday,
+            TodayRamadanUserAnswer = todayUserAnswer
         };
+
 
         return View(viewModel);
     }

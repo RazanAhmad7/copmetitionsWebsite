@@ -1,6 +1,7 @@
 ﻿using CompetitionsWebsite.Models;
 using CompetitionsWebsite.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +10,12 @@ namespace CompetitionsWebsite.Controllers;
 public class AdminController : Controller
 {
     private readonly AppDbContext _context;
+    private readonly UserManager<User> _userManager;
 
-    public AdminController(AppDbContext context)
+    public AdminController(AppDbContext context , UserManager<User> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     [Authorize(Roles = "Admin")]
@@ -354,6 +357,106 @@ public class AdminController : Controller
         return Json(new { success = true });
     }
 
+    // عرض النموذج
+    [HttpGet]
+    public IActionResult CreateRamadanQuestions()
+    {
+        int? questionNumber = HttpContext.Session.GetInt32("RamadanQuestionNumber");
+
+        if (questionNumber == null)
+        {
+            // الجلسة منتهية؟ نحسب كم سؤال موجود في قاعدة البيانات
+            int existingQuestionsCount = _context.RamadanCompetitionQuestions.Count();
+            questionNumber = existingQuestionsCount + 1;
+
+            // نعيد تخزينها في الجلسة
+            HttpContext.Session.SetInt32("RamadanQuestionNumber", questionNumber.Value);
+        }
+
+        // إذا انتهينا من 30 سؤال، لا نسمح بالمزيد
+        if (questionNumber > 30)
+        {
+            return RedirectToAction("Dashboard", "Admin"); // أو عرض رسالة خاصة
+        }
+
+        var model = new RamadanQuestionInputViewModel
+        {
+            QuestionNumber = questionNumber.Value
+        };
+
+        return View(model);
+    }
+
+    // حفظ السؤال
+    [HttpPost]
+    public IActionResult CreateRamadanQuestions(RamadanQuestionInputViewModel model)
+    {
+        int questionNumber = HttpContext.Session.GetInt32("RamadanQuestionNumber") ?? 1;
+
+        // أول مرة؟ نحفظ التاريخ الأساسي
+        DateTime startDate;
+        if (questionNumber == 1)
+        {
+            startDate = model.StartDate.Value.Date;
+            HttpContext.Session.SetString("RamadanStartDate", startDate.ToString("yyyy-MM-dd"));
+        }
+        else
+        {
+            startDate = DateTime.Parse(HttpContext.Session.GetString("RamadanStartDate"));
+        }
+
+        DateTime showFrom = startDate.AddDays(questionNumber - 1).AddHours(21); // 9 PM
+        DateTime showTo = startDate.AddDays(questionNumber).AddHours(5);       // 5 AM next day
+
+        var question = new RamadanCompetitionQuestion
+        {
+            QuestionText = model.QuestionText,
+            ShowFrom = showFrom,
+            ShowTo = showTo
+        };
+
+        _context.RamadanCompetitionQuestions.Add(question);
+        _context.SaveChanges();
+
+        // Update Session
+        HttpContext.Session.SetInt32("RamadanQuestionNumber", questionNumber + 1);
+
+        if (questionNumber == 30)
+            return RedirectToAction("Dashboard");
+
+        return RedirectToAction("CreateRamadanQuestions");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SubmitRamadanAnswer(int QuestionId, string Answer)
+    {
+        var userId = _userManager.GetUserId(User);
+
+        // التأكد أن المستخدم لم يجب على هذا السؤال من قبل
+        var alreadyAnswered = await _context.RamadanCompetitionAnswers
+            .AnyAsync(x => x.UserId == userId && x.QuestionId == QuestionId);
+
+        if (alreadyAnswered)
+        {
+            TempData["Message"] = "لقد أجبت على هذا السؤال بالفعل.";
+            return RedirectToAction("Profile","Profile");
+        }
+
+        var newAnswer = new RamadanUserAnswer
+        {
+            UserId = userId,
+            QuestionId = QuestionId,
+            Answer = Answer,
+            AnsweredAt = DateTime.Now
+        };
+
+        _context.RamadanCompetitionAnswers.Add(newAnswer);
+        await _context.SaveChangesAsync();
+
+        TempData["Message"] = "تم إرسال إجابتك بنجاح، شكراً لمشاركتك!";
+        return RedirectToAction("Profile","Profile");
+    }
 
 
 }

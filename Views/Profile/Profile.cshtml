@@ -81,13 +81,71 @@
         </nav>
     </header>
 
-    <main>
-        <div class="profile-container">
-            <div class="user-header">
-                <h1>@Model.UserName</h1>
-                <p class="member-since">عضو منذ: @Model.JoinDate.ToString("MMMM yyyy")</p>
-                <p class="welcome-message">مرحباً بك في رحلتك التعليمية الإسلامية!</p>
-            </div>
+        <main>
+            <div class="profile-container">
+
+                @* ✅ عرض رسالة TempData إن وُجدت *@
+                @if (TempData["Message"] != null)
+                {
+                    <div style="background-color:#d4edda; color:#155724; padding:10px; border:1px solid #c3e6cb; border-radius:5px; margin-bottom:20px;">
+                        @TempData["Message"]
+                    </div>
+                }
+
+                <div class="user-header">
+                    <h1>@Model.UserName</h1>
+                    <p class="member-since">عضو منذ: @Model.JoinDate.ToString("MMMM yyyy")</p>
+                    <p class="welcome-message">مرحباً بك في رحلتك التعليمية الإسلامية!</p>
+                </div>
+
+                @if (Model.TodayRamadanQuestion != null)
+                {
+                    <div class="ramadan-question-highlight" style="background-color: #fffbe6; padding: 20px; border: 2px solid #f5c518; margin-bottom: 30px; border-radius: 10px;">
+                        <h2 style="color: #d9822b;">
+                            🌙 سؤال رمضان لليوم
+                        </h2>
+                        <p style="font-size: 1.2rem; margin-top: 10px;">
+                            @Model.TodayRamadanQuestion.QuestionText
+                        </p>
+
+                        @if (Model.HasAnsweredToday == true)
+                        {
+                           
+                        <p style="color:green; font-weight:bold; margin-top: 15px;">
+                            لقد أجبت على سؤال اليوم، شكراً لمشاركتك! يمكنك العودة غداً للسؤال التالي.
+                        </p>
+
+                        <button onclick="toggleTodayAnswer()" style="margin-top:10px; background-color:#007bff; color:#fff; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">
+                            عرض إجابتي اليوم
+                        </button>
+
+                        <div id="todayAnswerContainer" style="display:none; margin-top:10px; padding:10px; background-color:#f1f1f1; border-radius:6px;">
+                            <strong>إجابتك:</strong>
+                            @Model.TodayRamadanUserAnswer?.Answer
+                        </div>
+
+                        }
+                        else
+                        {
+                            <button id="btnStartAnswer" onclick="showAnswerForm()" style="background-color:#28a745; color:#fff; border:none; padding:10px 20px; border-radius:6px; cursor:pointer;">
+                                حل سؤال اليوم
+                            </button>
+
+                            <form id="answerForm" method="post" asp-controller="Admin" asp-action="SubmitRamadanAnswer" style="display:none; margin-top:15px;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="QuestionId" value="@Model.TodayRamadanQuestion.Id" />
+                                <div>
+                                    <label for="Answer">إجابتك:</label>
+                                    <textarea name="Answer" id="Answer" rows="4" required style="width:100%; padding:8px; margin-top:5px;"></textarea>
+                                </div>
+                                <button type="submit" style="margin-top:10px; background-color:#007bff; color:#fff; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">
+                                    إرسال الإجابة
+                                </button>
+                            </form>
+                        }
+                    </div>
+                }
+
 
             <div class="stats-dashboard">
                 <div class="stat-card completed">
@@ -243,12 +301,38 @@
     <footer>
         <p>جميع الحقوق محفوظة © 2024</p>
     </footer>
-
     <script>
-        function toggleDetails(id) {
-            const el = document.getElementById(`details-${id}`);
-            el.style.display = el.style.display === "none" || el.style.display === "" ? "block" : "none";
+        document.addEventListener("DOMContentLoaded", function () {
+            const alreadyAnswered = @Model.HasAnsweredToday.ToString().ToLower();
+
+            if (alreadyAnswered === "true") {
+                const btn = document.getElementById('btnStartAnswer');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.textContent = "تم حل سؤال اليوم ✅";
+                    btn.style.backgroundColor = "#6c757d";
+                    btn.style.cursor = "not-allowed";
+                }
+            }
+        });
+
+        function showAnswerForm() {
+            const alreadyAnswered = @Model.HasAnsweredToday.ToString().ToLower();
+
+            if (alreadyAnswered === "true") {
+                alert("لقد أجبت على سؤال اليوم بالفعل.");
+                return;
+            }
+
+            document.getElementById('btnStartAnswer').style.display = 'none';
+            document.getElementById('answerForm').style.display = 'block';
+        }
+
+        function toggleTodayAnswer() {
+            const container = document.getElementById("todayAnswerContainer");
+            container.style.display = container.style.display === "none" ? "block" : "none";
         }
     </script>
+
 </body>
 </html>

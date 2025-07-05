@@ -24,6 +24,10 @@
                 <button class="btn" id="startSpecialQuizBtn" style="background-color: #007bff; color: white;">
                     إنشاء مسابقة خاصة
                 </button>
+                <button class="btn" id="createRamadanQuizBtn" style="background-color: #28a745; color: white;">
+                    إنشاء مسابقة رمضان
+                </button>
+
             </div>
 
 
@@ -326,6 +330,10 @@
             // Add question button
             document.getElementById('addQuestionBtn').addEventListener('click', function () {
                 window.location.href = '@Url.Action("AddQuestion", "Admin")';
+            });
+
+            document.getElementById('createRamadanQuizBtn').addEventListener('click', function () {
+                window.location.href = '@Url.Action("CreateRamadanQuestions", "Admin")';
             });
 
             // Add question button

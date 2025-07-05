@@ -1,0 +1,118 @@
+﻿@model CompetitionsWebsite.ViewModels.RamadanQuestionInputViewModel
+
+@{
+    ViewData["Title"] = "إضافة سؤال رمضان رقم " + Model.QuestionNumber;
+    bool isLastQuestion = Model.QuestionNumber == 30;
+
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        body {
+            font-family: Arial;
+            background: #f9f9f9;
+            padding: 2rem;
+        }
+
+        .container {
+            background: #fff;
+            max-width: 600px;
+            margin: auto;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 1rem;
+            display: block;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin-top: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            margin-top: 1.5rem;
+            padding: 0.8rem 1.5rem;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .note {
+            background-color: #eef5ff;
+            border: 1px solid #99c2ff;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            color: #003366;
+        }
+
+        .question-number {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>سؤال رقم @Model.QuestionNumber من 30</h2>
+
+        <div class="note">
+            <ul>
+                <li>يجب إدخال <strong>30 سؤالاً</strong>، واحد لكل يوم من أيام رمضان.</li>
+                <li>أدخل فقط <strong>تاريخ أول يوم من رمضان</strong>، وسيتم حساب باقي التواريخ تلقائيًا.</li>
+                <li>وقت عرض كل سؤال سيكون من <strong>الساعة 9 مساءً</strong> وحتى <strong>الساعة 5 صباحًا</strong>.</li>
+                <li>يمكنك الخروج والعودة في أي وقت، وسيتم حفظ تقدمك تلقائيًا.</li>
+            </ul>
+        </div>
+
+        @if (Model.QuestionNumber == 1)
+        {
+            <p style="color: gray; margin-bottom: 20px;">
+                سيتم استخدام التاريخ الذي ستدخله الآن لحساب مواعيد عرض الأسئلة تلقائيًا، من اليوم الأول وحتى اليوم الثلاثين.
+                كل سؤال سيُعرض من الساعة 9 مساءً وحتى 5 صباحًا من اليوم التالي.
+            </p>
+        }
+        else
+        {
+            <p style="color: gray; margin-bottom: 20px;">
+                جاري إدخال السؤال رقم @Model.QuestionNumber من 30.
+                التاريخ ووقت العرض يتم احتسابه تلقائيًا بناءً على تاريخ أول يوم تم إدخاله مسبقًا.
+            </p>
+        }
+
+        <form asp-action="CreateRamadanQuestions" method="post">
+            <div class="form-group">
+                <label asp-for="QuestionText">نص السؤال</label>
+                <textarea asp-for="QuestionText" class="form-control" required></textarea>
+            </div>
+
+            @if (Model.QuestionNumber == 1)
+            {
+                <div class="form-group">
+                    <label asp-for="StartDate">تاريخ أول يوم في رمضان</label>
+                    <input asp-for="StartDate" type="date" class="form-control" required />
+                </div>
+            }
+
+            <button type="submit" class="btn btn-primary">
+                @(isLastQuestion ? "حفظ وإنهاء" : "حفظ والانتقال للسؤال التالي")
+            </button>
+        </form>
+    </div>
+</body>
+</html>

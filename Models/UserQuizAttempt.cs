@@ -21,6 +21,13 @@
         // NEW: رابط بمحاولة مسابقة خاصة (إذا كانت الإجابة داخل SpecialQuiz)
         public int? SpecialQuizAssignmentId { get; set; }
         public SpecialQuizAssignment SpecialQuizAssignment { get; set; }
+
+
+        public int? RamadanCompetitionQuestionId { get; set; }
+        public RamadanCompetitionQuestion RamadanCompetitionQuestion { get; set; }
+
+        public bool? IsRamadanAnswer { get; set; } // لتمييز النوع
+
     }
 
 }

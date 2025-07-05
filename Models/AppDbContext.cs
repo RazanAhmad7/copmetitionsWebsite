@@ -22,6 +22,8 @@ public class AppDbContext : IdentityDbContext<User>
     public DbSet<SpecialQuiz> SpecialQuizzes { get; set; }
     public DbSet<SpecialQuizAssignment> SpecialQuizAssignments { get; set; }
     public DbSet<SpecialQuizQuestion> SpecialQuizQuestions { get; set; }
+    public DbSet<RamadanCompetitionQuestion> RamadanCompetitionQuestions { get; set; }
+    public DbSet<RamadanUserAnswer> RamadanCompetitionAnswers { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

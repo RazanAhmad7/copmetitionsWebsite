@@ -21,6 +21,16 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Auth/AccessDenied"; // لو مسجل لكن ليس له صلاحية
 });
 
+builder.Services.AddDistributedMemoryCache(); // ضروري لتخزين الجلسة في الذاكرة
+
+// ✅ إضافة الجلسات
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // مدة صلاحية الجلسة
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 
 var app = builder.Build();
 
@@ -36,6 +46,9 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseSession(); // ✅ قبل أي UseRouting أو UseAuthorization
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

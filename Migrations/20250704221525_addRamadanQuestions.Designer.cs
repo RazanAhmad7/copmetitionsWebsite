@@ -4,6 +4,7 @@ using CompetitionsWebsite.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CompetitionsWebsite.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250704221525_addRamadanQuestions")]
+    partial class addRamadanQuestions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,35 +191,6 @@ namespace CompetitionsWebsite.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RamadanCompetitionQuestions");
-                });
-
-            modelBuilder.Entity("CompetitionsWebsite.Models.RamadanUserAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("AnsweredAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("RamadanCompetitionAnswers");
                 });
 
             modelBuilder.Entity("CompetitionsWebsite.Models.SpecialQuiz", b =>
@@ -655,17 +629,6 @@ namespace CompetitionsWebsite.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("CompetitionsWebsite.Models.RamadanUserAnswer", b =>
-                {
-                    b.HasOne("CompetitionsWebsite.Models.RamadanCompetitionQuestion", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("CompetitionsWebsite.Models.SpecialQuizAssignment", b =>
