@@ -502,6 +502,16 @@
 
             const isSpecialQuiz = '@ViewBag.QuizType' === 'special';
             const quizId = parseInt('@ViewBag.QuizId');
+            const assignmentId=  ('@ViewBag.AssignmentId');
+
+                console.log("البيانات المرسلة:", {
+                quizId: isSpecialQuiz ? quizId : null,
+                assignmentId: assignmentId,
+                categoryId: isSpecialQuiz ? null : questions[currentQuestion - 1].categoryId,
+                level: isSpecialQuiz ? null : questions[currentQuestion - 1].level,
+                score: score,
+                userResponses: userResponses
+            });
 
             // إرسال البيانات
             fetch('/Questions/SaveResult', {
@@ -512,6 +522,7 @@
                 },
                 body: JSON.stringify({
                     quizId: isSpecialQuiz ? quizId : null,
+                    assignmentId: assignmentId,
                     categoryId: isSpecialQuiz ? null : questions[currentQuestion - 1].categoryId,
                     level: isSpecialQuiz ? null : questions[currentQuestion - 1].level,
                     score: score,

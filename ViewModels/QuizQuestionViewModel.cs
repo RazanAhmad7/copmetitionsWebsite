@@ -18,6 +18,8 @@
 
         // Spelling
         public List<string> Letters { get; set; }
+        public int? AssignmentId { get; set; } // أضف هذا
+
 
     }
 

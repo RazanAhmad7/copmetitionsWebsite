@@ -7,7 +7,12 @@ namespace CompetitionsWebsite.ViewModels
         public List<Question> Questions { get; set; } = new();
         public List<Category> Categories { get; set; } = new();
         public List<User> Users { get; set; } = new();
-    
-}
+
+        public List<SpecialQuizAssignmentViewModel> SpecialQuizAssignments { get; set; } // 👈 أضيفي هذا فقط
+
+
+    }
+
+
 
 }

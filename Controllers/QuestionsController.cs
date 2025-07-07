@@ -107,13 +107,27 @@ public class QuestionsController : Controller
         // نحدد إن كانت المسابقة خاصة أو عادية
         if (model.QuizId.HasValue)
         {
-            quizResult.SpecialQuizAssignmentId = model.QuizId.Value;
+            // special quiz
+            quizResult.SpecialQuizAssignmentId = model.AssignmentId.Value;
+
+            // تحديث السجل في SpecialQuizAssignment
+            var assignment = _context.SpecialQuizAssignments.FirstOrDefault(a =>
+                a.Id == model.AssignmentId.Value && a.UserId == userId);
+
+            if (assignment != null)
+            {
+                assignment.Score = model.Score;
+                assignment.CompletedAt = DateTime.Now;
+                assignment.IsCompleted = true;
+            }
         }
         else
         {
+            // regular quiz
             quizResult.CategoryId = model.CategoryId;
             quizResult.Level = model.Level;
         }
+
 
         _context.UserQuizAttempts.Add(quizResult);
         _context.SaveChanges();
@@ -123,6 +137,7 @@ public class QuestionsController : Controller
 
     public IActionResult StartSpecialQuiz(int quizId)
     {
+        var userId = _userManager.GetUserId(User);
         var quiz = _context.SpecialQuizzes
             .Include(q => q.Questions)
             .ThenInclude(q => (q.Question as MCQQuestion).Options)
@@ -137,7 +152,7 @@ public class QuestionsController : Controller
 
         var viewModel = quiz.Questions.Select(q => new QuizQuestionViewModel
         {
-            Id = q.Id,
+            Id = q.Question.Id,
             Text = q.Question.Text,
             Type = q.Question.Type,
             Level = q.Question.Level,
@@ -155,6 +170,13 @@ public class QuestionsController : Controller
             Letters = q.Question is SpellingQuestion spell ? spell.Letters.Select(l => l.Letter).ToList() : null
 
         }).ToList();
+        var assignment = _context.SpecialQuizAssignments
+        .FirstOrDefault(a => a.SpecialQuizId == quizId && a.UserId == userId);
+
+        if (assignment == null)
+            return Unauthorized();
+
+        ViewBag.AssignmentId = assignment.Id;
 
         ViewBag.QuizType = "special";
         ViewBag.QuizId = quizId;

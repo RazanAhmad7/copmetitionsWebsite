@@ -16,7 +16,7 @@
         public bool IsCorrect { get; set; }
 
         // لا حاجة لسؤال مرتبط هنا لأن السؤال محفوظ في جدول رمضان
-        public string RamadanAnswerText { get; set; }
+        public string? RamadanAnswerText { get; set; }
 
     }
 

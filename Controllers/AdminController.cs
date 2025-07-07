@@ -21,7 +21,6 @@ public class AdminController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Dashboard()
     {
-
         var model = new DashboardViewModel
         {
             Questions = await _context.Questions.ToListAsync(),
@@ -29,9 +28,46 @@ public class AdminController : Controller
             Users = await _context.Users.ToListAsync(),
         };
 
+        // تحميل جميع التعيينات المكتملة للمسابقات الخاصة مع المستخدم والمحاولات والإجابات
+        var specialAssignments = await _context.SpecialQuizAssignments
+            .Include(a => a.User)
+            .Include(a => a.SpecialQuiz)
+            .Include(a => a.Attempts)
+                .ThenInclude(attempt => attempt.Answers)
+                    .ThenInclude(answer => answer.Question)
+            .ToListAsync();
+
+        // تحويلها إلى ViewModel
+        model.SpecialQuizAssignments = specialAssignments.Select(a => new SpecialQuizAssignmentViewModel
+        {
+            AssignmentId = a.Id,
+            SpecialQuizId = a.SpecialQuizId, // ✅ Add this
+
+            UserName = a.User.UserName,
+            SpecialQuizTitle = a.SpecialQuiz.Title,
+            CompletedAt = a.CompletedAt,
+            Score = a.Score,
+            Attempts = a.Attempts.Select(attempt => new UserQuizAttemptViewModel
+            {
+                AttemptId = attempt.Id,
+                CategoryName = attempt.Category?.Name ?? "بدون تصنيف",
+                Level = attempt.Level ?? "",
+                AttemptDate = attempt.AttemptDate,
+                Score = attempt.Score,
+                Answers = attempt.Answers.Select(ans => new UserAnswerViewModel
+                {
+                    QuestionId = ans.QuestionId,
+                    QuestionText = ans.Question?.Text ?? "",
+                    CorrectAnswer = ans.Question?.CorrectWord ?? "",
+                    QuestionType = ans.QuestionType,
+                    UserResponse = ans.UserResponse,
+                    IsCorrect = ans.IsCorrect
+                }).ToList()
+            }).ToList()
+        }).ToList();
+
         return View(model);
     }
-    public IActionResult ManageQuestions() => View();
 
     public async Task<IActionResult> AddQuestion()
     {

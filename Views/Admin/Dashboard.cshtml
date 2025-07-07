@@ -1,7 +1,10 @@
+@using CompetitionsWebsite.ViewModels
 @model CompetitionsWebsite.ViewModels.DashboardViewModel
 @{
+
     ViewData["Title"] = "لوحة التحكم - مسابقات تعليمية إسلامية";
-  
+
+    Layout = null;
 }
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -12,219 +15,785 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/dashboard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-   
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .admin-container {
+            display: flex;
+            flex-direction: row-reverse;
+            min-height: 100vh;
+            background: transparent;
+        }
+
+        /* Enhanced Sidebar */
+        .admin-sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px 0 0 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 20px 20px 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .admin-sidebar::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 4px;
+                height: 100%;
+                background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+                border-radius: 2px;
+            }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+        }
+
+            .sidebar-header h2 {
+                color: #667eea;
+                font-size: 1.8rem;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+
+            .sidebar-header p {
+                color: #666;
+                font-size: 0.9rem;
+                opacity: 0.8;
+            }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .sidebar-nav li {
+                margin-bottom: 15px;
+                border-radius: 15px;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+                .sidebar-nav li::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    right: -100%;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    transition: right 0.3s ease;
+                    z-index: 1;
+                }
+
+                .sidebar-nav li:hover::before,
+                .sidebar-nav li.active::before {
+                    right: 0;
+                }
+
+                .sidebar-nav li a {
+                    display: flex;
+                    align-items: center;
+                    padding: 15px 20px;
+                    color: #555;
+                    text-decoration: none;
+                    font-weight: 500;
+                    font-size: 1rem;
+                    position: relative;
+                    z-index: 2;
+                    transition: all 0.3s ease;
+                }
+
+                .sidebar-nav li:hover a,
+                .sidebar-nav li.active a {
+                    color: white;
+                    transform: translateX(-5px);
+                }
+
+                .sidebar-nav li i {
+                    margin-left: 15px;
+                    width: 25px;
+                    text-align: center;
+                    font-size: 1.2rem;
+                }
+
+                .sidebar-nav li .nav-text {
+                    flex: 1;
+                }
+
+                .sidebar-nav li .nav-badge {
+                    background: rgba(255, 255, 255, 0.2);
+                    color: inherit;
+                    padding: 2px 8px;
+                    border-radius: 10px;
+                    font-size: 0.8rem;
+                    margin-right: 10px;
+                }
+
+        /* Main Content Area */
+        .admin-main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+            .admin-header h2 {
+                color: #333;
+                font-size: 2rem;
+                font-weight: 700;
+                margin: 0;
+            }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+                transition: left 0.5s ease;
+            }
+
+            .btn:hover::before {
+                left: 100%;
+            }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+        }
+
+        /* Content Area */
+        .admin-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            flex: 1;
+        }
+
+        /* Elements Grid */
+        .elements-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .elements-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+            .elements-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+            }
+
+        .element-info h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .element-info p {
+            color: #666;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .element-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: flex-end;
+        }
+
+        .action-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+            .action-btn:hover {
+                transform: scale(1.05);
+            }
+
+        .show-btn {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .edit-btn {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .delete-btn {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        /* Form Styles */
+        .question-form {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #333;
+                font-weight: 600;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                width: 100%;
+                padding: 12px 15px;
+                border: 2px solid #e0e0e0;
+                border-radius: 10px;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+            }
+
+                .form-group input:focus,
+                .form-group select:focus,
+                .form-group textarea:focus {
+                    outline: none;
+                    border-color: #667eea;
+                    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 20px 20px 0 0;
+            color: #666;
+        }
+
+        /* Responsive Design */
+        @@media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+            }
+
+            .admin-sidebar {
+                width: 100%;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header-actions {
+                justify-content: center;
+            }
+
+            .elements-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Special animations */
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .elements-card {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+            .elements-card:nth-child(even) {
+                animation-delay: 0.1s;
+            }
+
+            .elements-card:nth-child(odd) {
+                animation-delay: 0.2s;
+            }
+    </style>
 </head>
 <body>
     <main>
         <div class="admin-container">
-            <div class="admin-header">
-                <h2>لوحة التحكم</h2>
-                <button class="btn" id="addQuestionBtn" asp-action="AddQuestion" asp-controller="Admin">إضافة سؤال جديد</button>
-                <button class="btn" id="addCategoryBtn" asp-action="AddCategory" asp-controller="Category" style="display:none;">إضافة قسم جديد</button>
-                <button class="btn" id="startSpecialQuizBtn" style="background-color: #007bff; color: white;">
-                    إنشاء مسابقة خاصة
-                </button>
-                <button class="btn" id="createRamadanQuizBtn" style="background-color: #28a745; color: white;">
-                    إنشاء مسابقة رمضان
-                </button>
-
+            <!-- Enhanced Sidebar -->
+            <div class="admin-sidebar">
+                <div class="sidebar-header">
+                    <h2>🕌 لوحة التحكم</h2>
+                    <p>إدارة المسابقات الإسلامية</p>
+                </div>
+                
+                <ul class="sidebar-nav">
+                    <li data-tab="questions" class="admin-tab active">
+                        <a href="#questions">
+                            <i class="fas fa-brain"></i>
+                            <span class="nav-text">إدارة الأسئلة</span>
+                            <span class="nav-badge">@Model.Questions.Count()</span>
+                        </a>
+                    </li>
+                    <li data-tab="categories" class="admin-tab">
+                        <a href="#categories">
+                            <i class="fas fa-folder-open"></i>
+                            <span class="nav-text">إدارة الأقسام</span>
+                            <span class="nav-badge">@Model.Categories.Count()</span>
+                        </a>
+                    </li>
+                    <li data-tab="users" class="admin-tab">
+                        <a href="#users">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-text">المستخدمين</span>
+                            <span class="nav-badge">@Model.Users.Count()</span>
+                        </a>
+                    </li>
+                    <li data-tab="special-quiz" class="admin-tab">
+                        <a href="#special-quiz">
+                            <i class="fas fa-flask"></i>
+                            <span class="nav-text">المسابقات الخاصة</span>
+                        </a>
+                    </li>
+                    <li data-tab="ramadan-quiz" class="admin-tab">
+                        <a href="#ramadan-quiz">
+                            <i class="fas fa-moon"></i>
+                            <span class="nav-text">مسابقة رمضان</span>
+                            <span class="nav-badge">🌙</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
 
-
-            <div class="admin-tabs">
-                <button class="admin-tab" data-tab="questions">الأسئلة</button>
-                <button class="admin-tab" data-tab="categories">الأقسام</button>
-                <button class="admin-tab" data-tab="users">المستخدمين</button>
-            </div>
-
-            <div class="admin-content">
-                <!-- Questions List -->
-                <div class="elements-list" id="questionsList">
-                    @foreach (var question in Model.Questions)
-                    {
-                        <div class="elements-card m-2" data-id="@question.Id">
-                            <div class="element-info">
-                                <h4>@question.Text</h4>
-                                <p>نوع السؤال: @question.Type</p>
-                                <p>القسم: @(Model.Categories.FirstOrDefault(c => c.Id == question.CategoryId)?.Name ?? "غير محدد")</p>
-
-                               
-                            </div>
-                            <div class="element-actions">
-                                <button class="action-btn edit-btn" id="editQues-btn">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn delete-btn">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    }
-                </div>
-
-
-                <!-- Categories List -->
-                <div class="elements-list" id="categoriesList" style="display:none">
-                    @foreach (var category in Model.Categories)
-                    {
-                        <div class="elements-card m-2" data-id="@category.Id">
-                            <div class="element-info">
-                                <h4>@category.Name</h4>
-                                <p>الوصف: @category.Description</p>
-                                <p>عدد الأسئلة: @(Model.Questions.Count(q => q.CategoryId == category.Id))</p>
-                            </div>
-                            <div class="element-actions">
-                                <button class="action-btn show-btn"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        title="انقر لعرض الأسئلة">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="action-btn edit-btn">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn delete-btn">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    }
-                </div>
-
-                <!-- Users List -->
-                <div class="elements-list" id="usersList" style="display:none">
-                    @foreach (var user in Model.Users)
-                    {
-                        <div class="elements-card m-2" data-id="@user.Id">
-                            <div class="element-info">
-                                <h4>اسم المستخدم: @user.UserName</h4>
-                                <p>البريد الإلكتروني: @user.Email</p>
-                                <p>تاريخ التسجيل: @user.JoinedAt.ToString("yyyy-MM-dd")</p>
-                                <!-- يمكنك إضافة دور المستخدم لو كنت تملكين هذه البيانات -->
-                            </div>
-                            <div class="element-actions">
-                                <button class="action-btn show-btn"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        title="عرض تفاصيل المستخدم">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="action-btn edit-btn"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        title="تعديل المستخدم">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn delete-btn"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        title="حذف المستخدم">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    }
-                </div>
-
-
-                <!-- Add/Edit Question Form -->
-                <form asp-action="SaveQuestion" asp-controller="Admin" method="post" class="question-form" id="questionForm" style="display: none">
-                    <input type="hidden" id="questionId" value="0">
-
-                    <div class="form-group">
-                        <label for="questionType">نوع السؤال</label>
-                        <select id="questionType" required>
-                            <option value="multipleChoice">اختيار من متعدد</option>
-                            <option value="matching">توصيل</option>
-                            <option value="wordBuilding">تركيب كلمات</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="questionText">نص السؤال</label>
-                        <textarea id="questionText" required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="questionCategory">القسم</label>
-                        <select id="questionCategory" required>
-                            <option value="القرآن الكريم">القرآن الكريم</option>
-                            <option value="السنة النبوية">السنة النبوية</option>
-                            <option value="العقيدة">العقيدة</option>
-                            <option value="الثقافة الإسلامية">الثقافة الإسلامية</option>
-                            <option value="الفقه">الفقه</option>
-                            <option value="الألغاز">الألغاز</option>
-                        </select>
-                    </div>
-
-                    <!-- Multiple Choice Options -->
-                    <div id="multipleChoiceOptions" class="form-group">
-                        <label>الخيارات</label>
-                        <div class="options-list" id="optionsContainer">
-                            <div class="option-item">
-                                <input type="text" placeholder="الخيار الأول" required>
-                                <input type="radio" name="correctAnswer" value="0" required>
-                                <button type="button" class="remove-option">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <button type="button" class="add-option" id="addOptionBtn">
-                            <i class="fas fa-plus"></i>
-                            إضافة خيار
+            <!-- Main Content -->
+            <div class="admin-main">
+                <!-- Header -->
+                <div class="admin-header">
+                    <h2>لوحة التحكم الرئيسية</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="addQuestionBtn" asp-action="AddQuestion" asp-controller="Admin">
+                            <i class="fas fa-plus"></i> إضافة سؤال جديد
+                        </button>
+                        <button class="btn btn-success" id="addCategoryBtn" asp-action="AddCategory" asp-controller="Category" style="display:none;">
+                            <i class="fas fa-plus"></i> إضافة قسم جديد
+                        </button>
+                        <button class="btn btn-warning" id="startSpecialQuizBtn">
+                            <i class="fas fa-magic"></i> إنشاء مسابقة خاصة
+                        </button>
+                        <button class="btn btn-success" id="createRamadanQuizBtn">
+                            <i class="fas fa-crescent-moon"></i> إنشاء مسابقة رمضان
                         </button>
                     </div>
+                </div>
 
-                    <!-- Matching Pairs -->
-                    <div id="matchingPairs" class="form-group" style="display: none">
-                        <label>أزواج التوصيل</label>
-                        <div class="matching-pairs">
-                            <div class="matching-column">
-                                <h4>العناصر</h4>
-                                <div class="matching-items" id="matchingItemsContainer">
-                                    <input type="text" placeholder="العنصر الأول" required>
+                <!-- Content Area -->
+                <div class="admin-content">
+                    <!-- Questions List -->
+                    <div class="elements-list" id="questionsList">
+                        @foreach (var question in Model.Questions)
+                        {
+                            <div class="elements-card m-2" data-id="@question.Id">
+                                <div class="element-info">
+                                    <h4>@question.Text</h4>
+                                    <p><i class="fas fa-tag"></i> نوع السؤال: @question.Type</p>
+                                    <p><i class="fas fa-folder"></i> القسم: @(Model.Categories.FirstOrDefault(c => c.Id == question.CategoryId)?.Name ?? "غير محدد")</p>
                                 </div>
-                                <button type="button" class="add-option" id="addMatchingItemBtn">
-                                    <i class="fas fa-plus"></i>
-                                    إضافة عنصر
-                                </button>
-                            </div>
-                            <div class="matching-column">
-                                <h4>الإجابات</h4>
-                                <div class="matching-answers" id="matchingAnswersContainer">
-                                    <input type="text" placeholder="الإجابة الأولى" required>
+                                <div class="element-actions">
+                                    <button class="action-btn edit-btn" id="editQues-btn" data-bs-toggle="tooltip" title="تعديل السؤال">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete-btn" data-bs-toggle="tooltip" title="حذف السؤال">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
-                                <button type="button" class="add-option" id="addMatchingAnswerBtn">
-                                    <i class="fas fa-plus"></i>
-                                    إضافة إجابة
-                                </button>
                             </div>
-                        </div>
+                        }
                     </div>
 
-                    <!-- Word Building -->
-                    <div id="wordBuildingLetters" class="form-group" style="display: none">
-                        <label>الحروف</label>
-                        <div class="word-building-letters">
-                            <input type="text" class="letter-input" maxlength="1" required>
-                            <input type="text" class="letter-input" maxlength="1" required>
-                            <input type="text" class="letter-input" maxlength="1" required>
-                            <input type="text" class="letter-input" maxlength="1" required>
-                            <input type="text" class="letter-input" maxlength="1" required>
+                    <!-- Categories List -->
+                    <div class="elements-list" id="categoriesList" style="display:none">
+                        @foreach (var category in Model.Categories)
+                        {
+                            <div class="elements-card m-2" data-id="@category.Id">
+                                <div class="element-info">
+                                    <h4>@category.Name</h4>
+                                    <p><i class="fas fa-info-circle"></i> الوصف: @category.Description</p>
+                                    <p><i class="fas fa-question-circle"></i> عدد الأسئلة: @(Model.Questions.Count(q => q.CategoryId == category.Id))</p>
+                                </div>
+                                <div class="element-actions">
+                                    <button class="action-btn show-btn" data-bs-toggle="tooltip" title="عرض الأسئلة">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn edit-btn" data-bs-toggle="tooltip" title="تعديل القسم">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete-btn" data-bs-toggle="tooltip" title="حذف القسم">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Users List -->
+                    <div class="elements-list" id="usersList" style="display:none">
+                        @foreach (var user in Model.Users)
+                        {
+                            <div class="elements-card m-2" data-id="@user.Id">
+                                <div class="element-info">
+                                    <h4><i class="fas fa-user"></i> @user.UserName</h4>
+                                    <p><i class="fas fa-envelope"></i> البريد الإلكتروني: @user.Email</p>
+                                    <p><i class="fas fa-calendar"></i> تاريخ التسجيل: @user.JoinedAt.ToString("yyyy-MM-dd")</p>
+                                </div>
+                                <div class="element-actions">
+                                    <button class="action-btn show-btn" data-bs-toggle="tooltip" title="عرض تفاصيل المستخدم">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn edit-btn" data-bs-toggle="tooltip" title="تعديل المستخدم">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete-btn" data-bs-toggle="tooltip" title="حذف المستخدم">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    @functions {
+                        string GetQuizColor(List<SpecialQuizAssignmentViewModel> users)
+
+                        {
+
+                            var totalUsers = users.Count;
+
+                            var totalCompleted = users.Count(u => u.Attempts != null && u.Attempts.Any());
+
+
+
+                            if (totalCompleted == 0) return "#f8d7da"; // Red: no one answered
+
+                            if (totalCompleted < totalUsers) return "#fff3cd"; // Yellow: some answered
+
+                            return "#d4edda"; // Green: all answered
+
+                        }
+                    }
+                    <!-- Special Quiz Results -->
+                    <div class="elements-list" id="special-quizList">
+                        <!-- Legend -->
+                        <div class="legend mb-3" style="display: flex; gap: 15px; align-items: center;">
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 20px; height: 20px; background: #f8d7da; border-radius: 4px; margin-left: 5px;"></div>
+                                <span>لا أحد شارك</span>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 20px; height: 20px; background: #fff3cd; border-radius: 4px; margin-left: 5px;"></div>
+                                <span>بعض المستخدمين شاركوا</span>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 20px; height: 20px; background: #d4edda; border-radius: 4px; margin-left: 5px;"></div>
+                                <span>جميع المستخدمين أكملوا</span>
+                            </div>
                         </div>
+
+                        @foreach (var quizGroup in Model.SpecialQuizAssignments.GroupBy(a => new { a.SpecialQuizId, a.SpecialQuizTitle }))
+
+                        {
+
+                            var quizTitle = quizGroup.Key.SpecialQuizTitle;
+
+                            var quizId = quizGroup.Key.SpecialQuizId;
+
+                            var assignments = quizGroup.ToList();
+
+                            var bgColor = GetQuizColor(assignments);
+
+                            <div class="elements-card m-2" style="background: @bgColor;">
+                                <div class="element-info">
+                                    <h4><i class="fas fa-clipboard-list"></i> المسابقة: @quizTitle</h4>
+                                    <p><i class="fas fa-users"></i> عدد المدعوين: @assignments.Count</p>
+                                    <p><i class="fas fa-check-circle"></i> عدد الذين أجابوا: @assignments.Count(a => a.Attempts != null && a.Attempts.Any())</p>
+
+                                    <button type="button" class="btn btn-primary mt-2 toggle-users" data-target="quiz-users-@quizId">
+                                        عرض المستخدمين
+                                    </button>
+
+                                    <div id="quiz-users-@quizId" class="user-list mt-3" style="display:none;">
+                                        @foreach (var assignment in assignments)
+
+                                        {
+                                            <div style="background: #fff; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                                                <p><strong><i class="fas fa-user"></i> المستخدم:</strong> @assignment.UserName</p>
+                                                <p>
+                                                    <strong>الحالة:</strong>
+                                                    @if (assignment.Attempts != null && assignment.Attempts.Any())
+
+                                                    {
+                                                        <span style="color: green;">✔️ شارك</span>
+                                                    }
+
+                                                    else
+
+                                                    {
+                                                        <span style="color: gray;">⏳ لم يشارك بعد</span>
+                                                    }
+
+                                                </p>
+                                                <p><strong>الدرجة:</strong> @assignment.Score</p>
+
+                                                @if (assignment.Attempts != null && assignment.Attempts.Any())
+
+                                                {
+                                                    <button class="btn btn-secondary show-answers" type="button" data-target="answers-@assignment.AssignmentId">
+                                                        عرض الإجابات
+                                                    </button>
+
+
+                                                    <div id="answers-@assignment.AssignmentId" style="display:none; margin-top:10px;">
+                                                        @foreach (var attempt in assignment.Attempts)
+
+                                                        {
+                                                            <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                                                                <strong>محاولة بتاريخ:</strong> @attempt.AttemptDate.ToString("yyyy-MM-dd HH:mm")<br />
+                                                                
+                                                                <strong>النتيجة:</strong> @attempt.Score
+
+                                                                <ul class="mt-2">
+                                                                    @foreach (var ans in attempt.Answers)
+
+                                                                    {
+                                                                        <li style="margin-bottom: 5px;">
+                                                                            <strong>السؤال:</strong> @ans.QuestionText <br />
+                                                                            <strong>إجابة المستخدم:</strong> @ans.UserResponse <br />
+                                                                            <strong>الحالة:</strong>
+                                                                            @if (ans.IsCorrect)
+
+                                                                            {
+                                                                                <span style="color: green;">✔️ صحيحة</span>
+                                                                            }
+
+                                                                            else
+
+                                                                            {
+                                                                                <span style="color: red;">❌ خاطئة</span>
+                                                                            }
+                                                                        </li>
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Add/Edit Question Form -->
+                    <form asp-action="SaveQuestion" asp-controller="Admin" method="post" class="question-form" id="questionForm" style="display: none">
+                        <input type="hidden" id="questionId" value="0">
+
                         <div class="form-group">
-                            <label for="correctWord">الكلمة الصحيحة</label>
-                            <input type="text" id="correctWord" required>
+                            <label for="questionType">نوع السؤال</label>
+                            <select id="questionType" required>
+                                <option value="multipleChoice">اختيار من متعدد</option>
+                                <option value="matching">توصيل</option>
+                                <option value="wordBuilding">تركيب كلمات</option>
+                            </select>
                         </div>
-                    </div>
 
-                    <div class="form-actions">
-                        <button type="submit" class="btn">حفظ السؤال</button>
-                        <button type="button" class="btn" id="cancelBtn" style="background: #ff4444">
-                            إلغاء
-                        </button>
-                    </div>
-                </form>
+                        <div class="form-group">
+                            <label for="questionText">نص السؤال</label>
+                            <textarea id="questionText" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="questionCategory">القسم</label>
+                            <select id="questionCategory" required>
+                                <option value="القرآن الكريم">القرآن الكريم</option>
+                                <option value="السنة النبوية">السنة النبوية</option>
+                                <option value="العقيدة">العقيدة</option>
+                                <option value="الثقافة الإسلامية">الثقافة الإسلامية</option>
+                                <option value="الفقه">الفقه</option>
+                                <option value="الألغاز">الألغاز</option>
+                            </select>
+                        </div>
+
+                        <!-- Multiple Choice Options -->
+                        <div id="multipleChoiceOptions" class="form-group">
+                            <label>الخيارات</label>
+                            <div class="options-list" id="optionsContainer">
+                                <div class="option-item">
+                                    <input type="text" placeholder="الخيار الأول" required>
+                                    <input type="radio" name="correctAnswer" value="0" required>
+                                    <button type="button" class="remove-option">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="add-option" id="addOptionBtn">
+                                <i class="fas fa-plus"></i>
+                                إضافة خيار
+                            </button>
+                        </div>
+
+                        <!-- Matching Pairs -->
+                        <div id="matchingPairs" class="form-group" style="display: none">
+                            <label>أزواج التوصيل</label>
+                            <div class="matching-pairs">
+                                <div class="matching-column">
+                                    <h4>العناصر</h4>
+                                    <div class="matching-items" id="matchingItemsContainer">
+                                        <input type="text" placeholder="العنصر الأول" required>
+                                    </div>
+                                    <button type="button" class="add-option" id="addMatchingItemBtn">
+                                        <i class="fas fa-plus"></i>
+                                        إضافة عنصر
+                                    </button>
+                                </div>
+                                <div class="matching-column">
+                                    <h4>الإجابات</h4>
+                                    <div class="matching-answers" id="matchingAnswersContainer">
+                                        <input type="text" placeholder="الإجابة الأولى" required>
+                                    </div>
+                                    <button type="button" class="add-option" id="addMatchingAnswerBtn">
+                                        <i class="fas fa-plus"></i>
+                                        إضافة إجابة
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Word Building -->
+                        <div id="wordBuildingLetters" class="form-group" style="display: none">
+                            <label>الحروف</label>
+                            <div class="word-building-letters">
+                                <input type="text" class="letter-input" maxlength="1" required>
+                                <input type="text" class="letter-input" maxlength="1" required>
+                                <input type="text" class="letter-input" maxlength="1" required>
+                                <input type="text" class="letter-input" maxlength="1" required>
+                                <input type="text" class="letter-input" maxlength="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="correctWord">الكلمة الصحيحة</label>
+                                <input type="text" id="correctWord" required>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">حفظ السؤال</button>
+                            <button type="button" class="btn btn-danger" id="cancelBtn">
+                                إلغاء
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </main>
@@ -248,7 +817,34 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+   
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".toggle-users").forEach(button => {
+                button.addEventListener("click", function () {
+                    const targetId = this.getAttribute("data-target");
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        target.style.display = target.style.display === "none" ? "block" : "none";
+                    }
+                });
+            });
+
+            document.querySelectorAll(".show-answers").forEach(button => {
+                button.addEventListener("click", function () {
+                    const targetId = this.getAttribute("data-target");
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        target.style.display = target.style.display === "none" ? "block" : "none";
+                    }
+                });
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
             const tabs = document.querySelectorAll('.admin-tab');
             const addCatBtn = document.getElementById('addCategoryBtn');
@@ -257,6 +853,7 @@
                 questions: document.getElementById('questionsList'),
                 categories: document.getElementById('categoriesList'),
                 users: document.getElementById('usersList'),
+                "special-quiz": document.getElementById('special-quizList')
             };
 
             tabs.forEach(tab => {
@@ -706,6 +1303,8 @@
                     });
                 });
         }
+
+
     </script>
 </body>
 </html>

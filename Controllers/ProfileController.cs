@@ -28,7 +28,8 @@ public class ProfileController : Controller
             .Include(a => a.Answers)
             .ThenInclude(a => a.Question)
             .ToList();
-
+        RamadanUserAnswer todayUserAnswer = null;
+        bool hasAnsweredToday = false;
         var now = DateTime.Now;
         var todayRamadanQuestion = await _context.RamadanCompetitionQuestions
             .FirstOrDefaultAsync(q => q.ShowFrom <= now && q.ShowTo > now);
@@ -61,11 +62,14 @@ public class ProfileController : Controller
                 QuestionsCount = usq.SpecialQuiz.Questions.Count
             }).ToListAsync();
 
-        var todayUserAnswer = await _context.RamadanCompetitionAnswers
-    .Where(a => a.UserId == userId && a.QuestionId == todayRamadanQuestion.Id)
-    .FirstOrDefaultAsync();
+      
+        if (todayRamadanQuestion != null)
+        {
+            todayUserAnswer = await _context.RamadanCompetitionAnswers
+                .FirstOrDefaultAsync(a => a.UserId == userId && a.QuestionId == todayRamadanQuestion.Id);
 
-        bool hasAnsweredToday = todayUserAnswer != null;
+            hasAnsweredToday = todayUserAnswer != null;
+        }
 
         var viewModel = new ProfileViewModel
         {

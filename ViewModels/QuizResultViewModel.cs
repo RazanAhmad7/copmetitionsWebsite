@@ -6,6 +6,7 @@
         public string? Level { get; set; }
         public int Score { get; set; }
         public int? QuizId { get; set; }  // 👈 للمسابقات الخاصة
+        public int? AssignmentId { get; set; } // ربط بمحاولة مسابقة خاصة (إذا كانت الإجابة داخل SpecialQuiz)
 
         public List<UserAnswerViewModel> UserResponses { get; set; }
     }

@@ -22,7 +22,6 @@
         public int? SpecialQuizAssignmentId { get; set; }
         public SpecialQuizAssignment SpecialQuizAssignment { get; set; }
 
-
         public int? RamadanCompetitionQuestionId { get; set; }
         public RamadanCompetitionQuestion RamadanCompetitionQuestion { get; set; }
 

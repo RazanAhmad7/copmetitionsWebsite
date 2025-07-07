@@ -11,7 +11,7 @@ namespace CompetitionsWebsite.ViewModels
         public double AverageScore { get; set; }
         public int BestScore { get; set; }
 
-        public List<UserQuizAttemptViewModel> Attempts { get; set; }
+        public List<UserQuizAttemptViewModel>? Attempts { get; set; }
         public List<SpecialQuizViewModel> SpecialQuizzes { get; set; }
 
         public RamadanCompetitionQuestion? TodayRamadanQuestion { get; set; }
