@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "dbTH60f2l4tiSUqiFnFI6XyKFoF6GiafETFMeYQlAn8=",
+  "Hash": "VABNJNJ8e1h/bmcoy+q+afCKNaB5axQgnsi2/n+vHdM=",
   "Source": "CompetitionsWebsite",
   "BasePath": "_content/CompetitionsWebsite",
   "Mode": "Default",
@@ -53,6 +53,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\CompetitionsWebsite.bundle.scp.css"
+    },
+    {
+      "Identity": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\css\\addQuestion.css",
+      "SourceId": "CompetitionsWebsite",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\",
+      "BasePath": "_content/CompetitionsWebsite",
+      "RelativePath": "css/addQuestion.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\addQuestion.css"
     },
     {
       "Identity": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\css\\dashboard.css",

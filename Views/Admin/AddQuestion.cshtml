@@ -1,351 +1,180 @@
 @model CompetitionsWebsite.ViewModels.QuestionInputViewModel
-
 @{
     ViewData["Title"] = "لوحة التحكم - مسابقات تعليمية إسلامية";
-  
+    Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="~/css/addQuestion.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <style>
-        /* All your previous CSS styles remain the same */
-        .admin-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 2rem;
-        }
-
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .admin-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .admin-tab {
-            padding: 1rem 2rem;
-            background: var(--light-bg);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-            .admin-tab.active {
-                background: var(--primary-color);
-                color: var(--white);
-            }
-
-        .admin-content {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-        }
-
-        .question-form {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .form-group {
-            display: grid;
-            gap: 0.5rem;
-        }
-
-            .form-group label {
-                font-weight: bold;
-                color: var(--text-color);
-            }
-
-            .form-group input,
-            .form-group textarea,
-            .form-group select {
-                padding: 0.8rem;
-                border: 2px solid var(--primary-color);
-                border-radius: 4px;
-                font-size: 1rem;
-            }
-
-            .form-group textarea {
-                min-height: 100px;
-                resize: vertical;
-            }
-
-        .options-list {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .option-item {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-            .option-item input {
-                flex: 1;
-            }
-
-            .option-item button {
-                padding: 0.5rem;
-                background: #ff4444;
-                color: var(--white);
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-
-        .add-option {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--secondary-color);
-            color: var(--white);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .elements-list {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .elements-card {
-            background: var(--light-bg);
-            padding: 1.5rem;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .element-info {
-            flex: 1;
-        }
-
-        .element-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .action-btn {
-            padding: 0.5rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            color: var(--white);
-        }
-        .show-btn {
-            background-color: #17a2b8; /* أزرق معلوماتي */
-        }
-        .edit-btn {
-            background: var(--primary-color);
-        }
-
-        .delete-btn {
-            background: #ff4444;
-        }
-
-        .matching-pairs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        .matching-column {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .word-building-letters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .letter-input {
-            width: 50px;
-            height: 50px;
-            text-align: center;
-            font-size: 1.5rem;
-            border: 2px solid var(--primary-color);
-            border-radius: 4px;
-        }
-
-        .toast {
-            visibility: hidden;
-            min-width: 200px;
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-            border-radius: 8px;
-            padding: 16px;
-            position: fixed;
-            z-index: 9999;
-            top: 30px;
-            right: 30px;
-            font-size: 16px;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out, visibility 0.5s;
-        }
-
-            .toast.show {
-                visibility: visible;
-                opacity: 1;
-            }
-    </style>
 </head>
+
 <body>
-  
     <main>
         <div class="admin-container">
-            <div class="admin-header">
-                <h2>إضافة سؤال جديد </h2>
-                <button asp-action="Dashboard" asp-controller="Admin" class="btn" id="backToHome">عودة إلى الرئيسية</button>
+            <!-- Sidebar (copied from Dashboard) -->
+            <div class="admin-sidebar">
+                <div class="sidebar-header">
+                    <h2>🕌 لوحة التحكم</h2>
+                    <p>إدارة المسابقات الإسلامية</p>
+                </div>
+                <ul class="sidebar-nav">
+                    <li class="admin-tab">
+                        <a href="@Url.Action("Dashboard", "Admin")">
+                            <i class="fas fa-brain"></i>
+                            <span class="nav-text">إدارة الأسئلة</span>
+                        </a>
+                    </li>
+                    <li class="admin-tab">
+                        <a href="@Url.Action("AddCategory", "Category")">
+                            <i class="fas fa-folder-open"></i>
+                            <span class="nav-text">إدارة الأقسام</span>
+                        </a>
+                    </li>
+                    <li class="admin-tab">
+                        <a href="@Url.Action("Dashboard", "Admin", new { tab = "users" })">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-text">المستخدمين</span>
+                        </a>
+                    </li>
+                    <li class="admin-tab">
+                        <a href="@Url.Action("Dashboard", "Admin", new { tab = "special-quiz" })">
+                            <i class="fas fa-flask"></i>
+                            <span class="nav-text">المسابقات الخاصة</span>
+                        </a>
+                    </li>
+                    <li class="admin-tab">
+                        <a href="@Url.Action("CreateRamadanQuestions", "Admin")">
+                            <i class="fas fa-moon"></i>
+                            <span class="nav-text">مسابقة رمضان</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
-
-            <div class="admin-tabs">
-             <p> حدد نوع السؤال المراد إضافته واملأ جميع الأقسام ثم اضغط حفظ السؤال</p>
-            </div>
-
-
-            <div class="admin-content">
-
-                <form asp-action="SaveQuestion" asp-controller="Admin" method="post" class="question-form" id="questionForm" >
-                    <input type="hidden" id="questionId" name="Id" value="0">
-
-                    <div class="form-group">
-                        <label for="questionType">نوع السؤال</label>
-                        <select id="questionType" name="Type" required>
-                            <option value="multipleChoice">اختيار من متعدد</option>
-                            <option value="matching">توصيل</option>
-                            <option value="wordBuilding">تركيب كلمات</option>
-                        </select>
+            <!-- Main Content -->
+            <div class="admin-main">
+                <!-- Header -->
+                <div class="admin-header">
+                    <h2>إضافة سؤال جديد</h2>
+                    <button class="btn btn-primary" id="backToHome">
+                        <i class="fas fa-arrow-right"></i> عودة إلى الرئيسية
+                    </button>
+                </div>
+                <!-- Content Area -->
+                <div class="admin-content">
+                    <div class="admin-tabs">
+                        <p>حدد نوع السؤال المراد إضافته واملأ جميع الأقسام ثم اضغط حفظ السؤال</p>
                     </div>
-
-                    <div class="form-group">
-                        <label for="questionText">نص السؤال</label>
-                        <textarea id="questionText" name="Text" required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="questionCategory">القسم</label>
-                        <select id="questionCategory" name="Category" required>
-                            @foreach (var category in (List<CompetitionsWebsite.Models.Category>)ViewBag.Categories)
-                            {
-                                <option value="@category.Name">@category.Name</option>
-                            }
-                        </select>
-
-                    </div>
-                  
-                    <div class="form-group">
-                        <label for="questionLevel">مستوى السؤال</label>
-                        <select id="questionLevel" name="Level" required>
-                            <option value="">اختر المستوى</option>
-                            <option value="easy">سهل</option>
-                            <option value="medium">متوسط</option>
-                            <option value="hard">صعب</option>
-                        </select>
-                    </div>
-
-                    <!-- Multiple Choice Options -->
-                    <div id="multipleChoiceOptions" class="form-group">
-                        <label>الخيارات</label>
-                        <p class="hint-text" style="color: gray; font-size: 14px; margin-bottom: 10px;">
-                            يمكنك إضافة من ثلاثة إلى أربعة خيارات.
-                        </p>
-                        <div class="options-list" id="optionsContainer">
-                            <div class="option-item">
-                                <input type="text" name="Options" placeholder="الخيار الأول" required>
-                                <input type="radio" name="correctAnswer" value="0" required>
-                                <button type="button" class="remove-option">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <button type="button" class="add-option" id="addOptionBtn">
-                            <i class="fas fa-plus"></i>
-                            إضافة خيار
-                        </button>
-                    </div>
-
-                    <!-- Matching Pairs -->
-                    <div id="matchingPairs" class="form-group" style="display: none">
-                        <label>أزواج التوصيل</label>
-                        <p class="hint-text" style="color: gray; font-size: 14px; margin-bottom: 10px;">
-                            يمكنك إضافة من زوجين إلى أربعة أزواج.
-                        </p>
-                        <div id="matchingPairsContainer" class="matching-pairs">
-                            <!-- زوجان افتراضيان -->
-                            <div class="matching-pair option-item">
-                                <input type="text" name="MatchingItems" placeholder="العنصر الأول" >
-                                <input type="text" name="MatchingAnswers" placeholder="الإجابة الأولى" >
-                                <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
-                            </div>
-                            <div class="matching-pair option-item">
-                                <input type="text" name="MatchingItems" placeholder="العنصر الثاني" >
-                                <input type="text" name="MatchingAnswers" placeholder="الإجابة الثانية" >
-                                <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
-                            </div>
-                        </div>
-
-                        <button type="button" class="add-option" id="addPairBtn">
-                            <i class="fas fa-plus"></i>
-                            إضافة زوج جديد
-                        </button>
-                    </div>
-
-                    <!-- Word Building -->
-                    <div id="wordBuildingLetters" class="form-group" style="display: none">
-                        <label>الحروف</label>
-                        <div class="word-building-letters">
-                            <input type="text" class="letter-input" name="Letters" maxlength="1" >
-                            <input type="text" class="letter-input" name="Letters" maxlength="1" >
-                            <input type="text" class="letter-input" name="Letters" maxlength="1" >
-                            <input type="text" class="letter-input" name="Letters" maxlength="1" >
-                            <input type="text" class="letter-input" name="Letters" maxlength="1" >
+                    <form asp-action="SaveQuestion" asp-controller="Admin" method="post" class="question-form"
+                        id="questionForm">
+                        <input type="hidden" id="questionId" name="Id" value="0">
+                        <div class="form-group">
+                            <label for="questionType">نوع السؤال</label>
+                            <select id="questionType" name="Type" required>
+                                <option value="multipleChoice">اختيار من متعدد</option>
+                                <option value="matching">توصيل</option>
+                                <option value="wordBuilding">تركيب كلمات</option>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="correctWord">الكلمة الصحيحة</label>
-                            <input type="text" id="correctWord" name="CorrectWord" >
+                            <label for="questionText">نص السؤال</label>
+                            <textarea id="questionText" name="Text" required></textarea>
                         </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" class="btn">حفظ السؤال</button>
-                        <button type="button" class="btn" id="cancelBtn" style="background: #ff4444">
-                            إلغاء
-                        </button>
-                    </div>
-                </form>
-
+                        <div class="form-group">
+                            <label for="questionCategory">القسم</label>
+                            <select id="questionCategory" name="Category" required>
+                                @foreach (var category in (List<CompetitionsWebsite.Models.Category>)ViewBag.Categories)
+                                {
+                                    <option value="@category.Name">@category.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="questionLevel">مستوى السؤال</label>
+                            <select id="questionLevel" name="Level" required>
+                                <option value="">اختر المستوى</option>
+                                <option value="easy">سهل</option>
+                                <option value="medium">متوسط</option>
+                                <option value="hard">صعب</option>
+                            </select>
+                        </div>
+                        <!-- Multiple Choice Options -->
+                        <div id="multipleChoiceOptions" class="form-group">
+                            <label>الخيارات</label>
+                            <p class="hint-text">يمكنك إضافة من ثلاثة إلى أربعة خيارات.</p>
+                            <div class="options-list" id="optionsContainer">
+                                <div class="option-item">
+                                    <input type="text" name="Options" placeholder="الخيار الأول" required>
+                                    <input type="radio" name="correctAnswer" value="0" required>
+                                    <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                            <button type="button" class="add-option" id="addOptionBtn">
+                                <i class="fas fa-plus"></i> إضافة خيار
+                            </button>
+                        </div>
+                        <!-- Matching Pairs -->
+                        <div id="matchingPairs" class="form-group" style="display: none">
+                            <label>أزواج التوصيل</label>
+                            <p class="hint-text">يمكنك إضافة من زوجين إلى أربعة أزواج.</p>
+                            <div id="matchingPairsContainer" class="matching-pairs">
+                                <div class="matching-pair option-item">
+                                    <input type="text" name="MatchingItems" placeholder="العنصر الأول">
+                                    <input type="text" name="MatchingAnswers" placeholder="الإجابة الأولى">
+                                    <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                                </div>
+                                <div class="matching-pair option-item">
+                                    <input type="text" name="MatchingItems" placeholder="العنصر الثاني">
+                                    <input type="text" name="MatchingAnswers" placeholder="الإجابة الثانية">
+                                    <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                            <button type="button" class="add-option" id="addPairBtn">
+                                <i class="fas fa-plus"></i> إضافة زوج جديد
+                            </button>
+                        </div>
+                        <!-- Word Building -->
+                        <div id="wordBuildingLetters" class="form-group" style="display: none">
+                            <label>الحروف</label>
+                            <div class="word-building-letters">
+                                <input type="text" class="letter-input" name="Letters" maxlength="1">
+                                <input type="text" class="letter-input" name="Letters" maxlength="1">
+                                <input type="text" class="letter-input" name="Letters" maxlength="1">
+                                <input type="text" class="letter-input" name="Letters" maxlength="1">
+                                <input type="text" class="letter-input" name="Letters" maxlength="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="correctWord">الكلمة الصحيحة</label>
+                                <input type="text" id="correctWord" name="CorrectWord">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> حفظ السؤال
+                            </button>
+                            <button type="button" class="btn btn-danger" id="cancelBtn">
+                                <i class="fas fa-times"></i> إلغاء
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </main>
-
     <footer>
         <p>جميع الحقوق محفوظة © @DateTime.Now.Year</p>
     </footer>
     <div id="toast" class="toast">تم حفظ السؤال بنجاح!</div>
-
     <script>
-      
+        document.getElementById('backToHome').addEventListener('click', function () {
+            window.location.href = '@Url.Action("Dashboard", "Admin")';
+        });
         // Admin Panel State
         let isEditing = false;
         let currentQuestionId = null;
@@ -358,14 +187,10 @@
         const multipleChoiceOptions = document.getElementById("multipleChoiceOptions");
         const matchingPairs = document.getElementById("matchingPairs");
         const wordBuildingLetters = document.getElementById("wordBuildingLetters");
-        // Add question button
-        document.getElementById('backToHome').addEventListener('click', function () {
-            window.location.href = '@Url.Action("Dashboard", "Admin")';
-        });
 
         // Event Listeners
         document.addEventListener("DOMContentLoaded", () => {
-       
+
             // Question type change
             questionTypeSelect.addEventListener("change", handleQuestionTypeChange);
 
@@ -382,7 +207,7 @@
                 btn.addEventListener("click", () => removeOption(btn));
             });
 
-          
+
 
             // Cancel button
             document.getElementById("cancelBtn").addEventListener("click", () => {
@@ -391,7 +216,7 @@
             });
         });
 
-      
+
 
         // Show question form
         function showQuestionForm() {
@@ -600,4 +425,5 @@
 
     </script>
 </body>
+
 </html>

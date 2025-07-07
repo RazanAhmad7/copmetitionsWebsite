@@ -12,7 +12,7 @@ public class AdminController : Controller
     private readonly AppDbContext _context;
     private readonly UserManager<User> _userManager;
 
-    public AdminController(AppDbContext context , UserManager<User> userManager)
+    public AdminController(AppDbContext context, UserManager<User> userManager)
     {
         _context = context;
         _userManager = userManager;
@@ -26,7 +26,33 @@ public class AdminController : Controller
             Questions = await _context.Questions.ToListAsync(),
             Categories = await _context.Categories.ToListAsync(),
             Users = await _context.Users.ToListAsync(),
+            RamadanQuestions = await _context.RamadanCompetitionQuestions.OrderBy(q => q.ShowFrom).ToListAsync(),
         };
+
+        // Load Ramadan question answers with user information
+        var ramadanAnswers = await _context.RamadanCompetitionAnswers
+            .Include(a => a.Question)
+            .OrderBy(a => a.Question.ShowFrom)
+            .ThenBy(a => a.AnsweredAt)
+            .ToListAsync();
+
+        // Get all users for joining
+        var allUsers = await _context.Users.ToListAsync();
+
+        model.RamadanQuestionAnswers = ramadanAnswers
+            .GroupBy(a => a.QuestionId)
+            .Select(g => new RamadanQuestionAnswersViewModel
+            {
+                QuestionId = g.Key,
+                QuestionText = g.First().Question.QuestionText,
+                UserAnswers = g.Select(a => new RamadanUserAnswerViewModel
+                {
+                    UserName = allUsers.FirstOrDefault(u => u.Id == a.UserId)?.UserName ?? "مستخدم غير معروف",
+                    UserEmail = allUsers.FirstOrDefault(u => u.Id == a.UserId)?.Email ?? "",
+                    Answer = a.Answer,
+                    AnsweredAt = a.AnsweredAt
+                }).ToList()
+            }).ToList();
 
         // تحميل جميع التعيينات المكتملة للمسابقات الخاصة مع المستخدم والمحاولات والإجابات
         var specialAssignments = await _context.SpecialQuizAssignments
@@ -88,7 +114,7 @@ public class AdminController : Controller
 
         // Resolve the category ID
         int categoryId = await GetCategoryIdAsync(model.Category);
-      
+
         Category currentCategory = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
         switch (model.Type)
         {
@@ -149,7 +175,7 @@ public class AdminController : Controller
 
         return Ok(new { success = true, questionId = question.Id });
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> EditQuestion(int id)
     {
@@ -423,22 +449,59 @@ public class AdminController : Controller
         return View(model);
     }
 
-    // حفظ السؤال
     [HttpPost]
     public IActionResult CreateRamadanQuestions(RamadanQuestionInputViewModel model)
     {
-        int questionNumber = HttpContext.Session.GetInt32("RamadanQuestionNumber") ?? 1;
+        int questionNumber;
 
-        // أول مرة؟ نحفظ التاريخ الأساسي
+        // محاولة استرجاع رقم السؤال من الجلسة
+        var sessionQuestionNumber = HttpContext.Session.GetInt32("RamadanQuestionNumber");
+
+        if (sessionQuestionNumber == null)
+        {
+            // إذا انتهت الجلسة، نرجع نحصي عدد الأسئلة الموجودة
+            questionNumber = _context.RamadanCompetitionQuestions.Count() + 1;
+            HttpContext.Session.SetInt32("RamadanQuestionNumber", questionNumber);
+        }
+        else
+        {
+            questionNumber = sessionQuestionNumber.Value;
+        }
+
+        // التحقق من التاريخ الأساسي (StartDate)
         DateTime startDate;
+        var sessionStartDate = HttpContext.Session.GetString("RamadanStartDate");
+
         if (questionNumber == 1)
         {
+            if (model.StartDate == null)
+            {
+                ModelState.AddModelError("StartDate", "يرجى تحديد تاريخ بدء رمضان.");
+                model.QuestionNumber = 1;
+                return View(model); // إعادة عرض النموذج مع رسالة الخطأ
+            }
+
             startDate = model.StartDate.Value.Date;
             HttpContext.Session.SetString("RamadanStartDate", startDate.ToString("yyyy-MM-dd"));
         }
         else
         {
-            startDate = DateTime.Parse(HttpContext.Session.GetString("RamadanStartDate"));
+            if (string.IsNullOrEmpty(sessionStartDate) || !DateTime.TryParse(sessionStartDate, out startDate))
+            {
+                // في حالة فشل استرجاع التاريخ من الجلسة، نحاول إعادة بناءه من أول سؤال في قاعدة البيانات
+                var firstQuestion = _context.RamadanCompetitionQuestions
+                    .OrderBy(q => q.ShowFrom)
+                    .FirstOrDefault();
+
+                if (firstQuestion == null)
+                {
+                    // لا يوجد أسئلة، نعيد التوجيه إلى الصفحة الأولى لإعادة البدء
+                    return RedirectToAction("CreateRamadanQuestions");
+                }
+
+                startDate = firstQuestion.ShowFrom.Date;
+                HttpContext.Session.SetString("RamadanStartDate", startDate.ToString("yyyy-MM-dd"));
+            }
         }
 
         DateTime showFrom = startDate.AddDays(questionNumber - 1).AddHours(21); // 9 PM
@@ -454,7 +517,7 @@ public class AdminController : Controller
         _context.RamadanCompetitionQuestions.Add(question);
         _context.SaveChanges();
 
-        // Update Session
+        // تحديث الجلسة
         HttpContext.Session.SetInt32("RamadanQuestionNumber", questionNumber + 1);
 
         if (questionNumber == 30)
@@ -476,7 +539,7 @@ public class AdminController : Controller
         if (alreadyAnswered)
         {
             TempData["Message"] = "لقد أجبت على هذا السؤال بالفعل.";
-            return RedirectToAction("Profile","Profile");
+            return RedirectToAction("Profile", "Profile");
         }
 
         var newAnswer = new RamadanUserAnswer
@@ -491,8 +554,60 @@ public class AdminController : Controller
         await _context.SaveChangesAsync();
 
         TempData["Message"] = "تم إرسال إجابتك بنجاح، شكراً لمشاركتك!";
-        return RedirectToAction("Profile","Profile");
+        return RedirectToAction("Profile", "Profile");
     }
 
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> EditRamadanQuestion(int id)
+    {
+        var question = await _context.RamadanCompetitionQuestions.FindAsync(id);
+        if (question == null)
+        {
+            TempData["ErrorMessage"] = "لم يتم العثور على السؤال.";
+            return RedirectToAction("Dashboard");
+        }
+
+        // Calculate the day number based on the question's position
+        var allQuestions = await _context.RamadanCompetitionQuestions
+            .OrderBy(q => q.ShowFrom)
+            .ToListAsync();
+
+        var dayNumber = allQuestions.IndexOf(question) + 1;
+
+        var model = new RamadanQuestionInputViewModel
+        {
+            Id = question.Id,
+            QuestionText = question.QuestionText,
+            QuestionNumber = dayNumber
+        };
+
+        return View("CreateRamadanQuestions", model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> EditRamadanQuestion(RamadanQuestionInputViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View("CreateRamadanQuestions", model);
+        }
+
+        var question = await _context.RamadanCompetitionQuestions.FindAsync(model.Id);
+        if (question == null)
+        {
+            TempData["ErrorMessage"] = "لم يتم العثور على السؤال.";
+            return RedirectToAction("Dashboard");
+        }
+
+        // Update the question text only (keep the original dates)
+        question.QuestionText = model.QuestionText;
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Dashboard", new { tab = "ramadan-quiz" });
+    }
 
 }

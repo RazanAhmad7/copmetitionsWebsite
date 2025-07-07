@@ -4,6 +4,7 @@ namespace CompetitionsWebsite.ViewModels
 {
     public class RamadanQuestionInputViewModel
     {
+        public int? Id { get; set; } // For editing existing questions
         public int QuestionNumber { get; set; }
 
         [Required(ErrorMessage = "يرجى إدخال نص السؤال")]

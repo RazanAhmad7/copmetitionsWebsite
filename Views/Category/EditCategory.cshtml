@@ -1,88 +1,310 @@
 ﻿@model CompetitionsWebsite.ViewModels.CategoryViewModel
 
 @{
-    ViewData["Title"] = "لوحة التحكم - إضافة قسم جديد";
+    ViewData["Title"] = "لوحة التحكم - تعديل القسم";
+    Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/dashboard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
-        /* نفس تصميم صفحة الأسئلة */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
         .admin-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 2rem;
+            display: flex;
+            flex-direction: row-reverse;
+            min-height: 100vh;
+            background: transparent;
+        }
+
+        /* Enhanced Sidebar */
+        .admin-sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px 0 0 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 20px 20px 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .sidebar-header h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-header p {
+            color: #666;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 15px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-nav li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: right 0.3s ease;
+            z-index: 1;
+        }
+
+        .sidebar-nav li:hover::before,
+        .sidebar-nav li.active::before {
+            right: 0;
+        }
+
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-nav li:hover a,
+        .sidebar-nav li.active a {
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        .sidebar-nav li i {
+            margin-left: 15px;
+            width: 25px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-nav li .nav-text {
+            flex: 1;
+        }
+
+        .sidebar-nav li .nav-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: inherit;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-right: 10px;
+        }
+
+        /* Main Content Area */
+        .admin-main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
         .admin-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
-        .admin-content {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
+        .admin-header h2 {
+            color: #333;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
         }
 
-        .form-group {
-            display: grid;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-            .form-group label {
-                font-weight: bold;
-                color: var(--text-color);
-            }
-
-            .form-group input,
-            .form-group textarea {
-                padding: 0.8rem;
-                border: 2px solid var(--primary-color);
-                border-radius: 4px;
-                font-size: 1rem;
-            }
-
-            .form-group textarea {
-                min-height: 100px;
-                resize: vertical;
-            }
-
-        .form-actions {
+        .header-actions {
             display: flex;
-            gap: 1rem;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 0.75rem 1.5rem;
-            background: var(--primary-color);
-            color: var(--white);
+            padding: 12px 25px;
             border: none;
-            border-radius: 4px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
             cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-cancel {
-            background: #ff4444;
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
         }
 
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+        }
+
+        /* Content Area */
+        .admin-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            flex: 1;
+        }
+
+        /* Form Styles */
+        .category-form {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: flex-end;
+        }
+
+        /* Toast */
         .toast {
             visibility: hidden;
             min-width: 200px;
-            background-color: #4CAF50;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
             text-align: center;
-            border-radius: 8px;
+            border-radius: 15px;
             padding: 16px;
             position: fixed;
             z-index: 9999;
@@ -91,40 +313,136 @@
             font-size: 16px;
             opacity: 0;
             transition: opacity 0.5s ease-in-out, visibility 0.5s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-            .toast.show {
-                visibility: visible;
-                opacity: 1;
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 20px 20px 0 0;
+            color: #666;
+        }
+
+        /* Responsive Design */
+        @@media
+        (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
             }
+
+            .admin-sidebar {
+                width: 100%;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header-actions {
+                justify-content: center;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
+
 <body>
     <main>
         <div class="admin-container">
-            <div class="admin-header">
-                <h2>تعديل القسم</h2>
-                <button asp-action="Dashboard" asp-controller="Admin" class="btn">عودة إلى الرئيسية</button>
+            <!-- Enhanced Sidebar -->
+            <div class="admin-sidebar">
+                <div class="sidebar-header">
+                    <h2>🕌 لوحة التحكم</h2>
+                    <p>إدارة المسابقات الإسلامية</p>
+                </div>
+
+                <ul class="sidebar-nav">
+                    <li>
+                        <a href="@Url.Action("Dashboard", "Admin")">
+                            <i class="fas fa-brain"></i>
+                            <span class="nav-text">إدارة الأسئلة</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="@Url.Action("Dashboard", "Admin")?tab=categories">
+                            <i class="fas fa-folder-open"></i>
+                            <span class="nav-text">إدارة الأقسام</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Dashboard", "Admin")?tab=users">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-text">المستخدمين</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Dashboard", "Admin")?tab=special-quiz">
+                            <i class="fas fa-flask"></i>
+                            <span class="nav-text">المسابقات الخاصة</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Dashboard", "Admin")?tab=ramadan-quiz">
+                            <i class="fas fa-moon"></i>
+                            <span class="nav-text">مسابقة رمضان</span>
+                            <span class="nav-badge">🌙</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
 
-            <div class="admin-content">
-                <form id="myform" method="post">
-
-                    <div class="form-group">
-                        <label for="Name">اسم القسم</label>
-                        <input type="text" id="Name" asp-for="Name" required />
+            <!-- Main Content -->
+            <div class="admin-main">
+                <!-- Header -->
+                <div class="admin-header">
+                    <h2>تعديل القسم</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="backToHome">
+                            <i class="fas fa-arrow-right"></i> عودة إلى الرئيسية
+                        </button>
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="Description">وصف القسم</label>
-                        <textarea id="Description" asp-for="Description" required></textarea>
-                    </div>
+                <!-- Content Area -->
+                <div class="admin-content">
+                    <div class="category-form">
+                        <form id="myform" method="post">
+                            <div class="form-group">
+                                <label for="Name">اسم القسم</label>
+                                <input type="text" id="Name" asp-for="Name" required />
+                            </div>
 
-                    <div class="form-actions">
-                        <button type="submit" class="btn">حفظ القسم</button>
-                        <button type="button" class="btn btn-cancel" onclick="history.back();">إلغاء</button>
+                            <div class="form-group">
+                                <label for="Description">وصف القسم</label>
+                                <textarea id="Description" asp-for="Description" required></textarea>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save"></i> حفظ التغييرات
+                                </button>
+                                <button type="button" class="btn btn-danger" onclick="history.back();">
+                                    <i class="fas fa-times"></i> إلغاء
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </main>
@@ -133,7 +451,12 @@
         <p>جميع الحقوق محفوظة © @DateTime.Now.Year</p>
     </footer>
     <div id="toast" class="toast">تم حفظ القسم بنجاح!</div>
+
     <script>
+        document.getElementById('backToHome').addEventListener('click', function () {
+            window.location.href = '@Url.Action("Dashboard", "Admin")?tab=categories';
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('myform');
             const toast = document.getElementById('toast');
@@ -178,7 +501,6 @@
             }
         });
     </script>
-
-
 </body>
+
 </html>

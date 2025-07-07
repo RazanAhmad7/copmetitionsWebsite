@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\CompetitionsWebsite.bundle.scp.css"
     },
     {
+      "Id": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\css\\addQuestion.css",
+      "PackagePath": "staticwebassets\\css\\addQuestion.css"
+    },
+    {
       "Id": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\css\\dashboard.css",
       "PackagePath": "staticwebassets\\css\\dashboard.css"
     },
