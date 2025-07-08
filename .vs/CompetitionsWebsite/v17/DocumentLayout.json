@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\wwwroot\\css\\home.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:wwwroot\\css\\home.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\viewmodels\\quizresultviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:viewmodels\\quizresultviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\controllers\\questionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:controllers\\questionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\views\\questions\\quiz.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:views\\questions\\quiz.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\views\\category\\editcategory.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -39,20 +51,8 @@
       "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\controllers\\questionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:controllers\\questionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\models\\specialquizassignment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:models\\specialquizassignment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\views\\questions\\quiz.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:views\\questions\\quiz.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\viewmodels\\quizresultviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:viewmodels\\quizresultviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\models\\userquizattempt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -143,10 +143,6 @@
       "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:models\\participant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|c:\\mostaql jobs\\my second job - competitions website\\competitionswebsite\\competitionswebsite\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5DB9D3F2-2FC0-362E-9D90-B3F0558D3767}|CompetitionsWebsite.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -195,34 +191,86 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Dashboard.cshtml",
-              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Admin\\Dashboard.cshtml",
-              "RelativeDocumentMoniker": "Views\\Admin\\Dashboard.cshtml",
-              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Admin\\Dashboard.cshtml",
-              "RelativeToolTip": "Views\\Admin\\Dashboard.cshtml",
-              "ViewState": "AgIAACMBAAAAAAAAAAAhwEsBAAB4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T14:57:02.551Z",
+              "Title": "home.css",
+              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\css\\home.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\home.css",
+              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\css\\home.css",
+              "RelativeToolTip": "wwwroot\\css\\home.css",
+              "ViewState": "AgIAAMkAAAAAAAAAAAAwwNoAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-07-08T09:29:17.904Z",
               "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AdminController.cs",
-              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Controllers\\AdminController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AdminController.cs",
-              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Controllers\\AdminController.cs",
-              "RelativeToolTip": "Controllers\\AdminController.cs",
-              "ViewState": "AgIAAMwBAAAAAAAAAAAAwA8CAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T15:47:30.469Z",
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAAAEYAAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-03T14:40:14.056Z",
               "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AddQuestion.cshtml",
+              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Admin\\AddQuestion.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\AddQuestion.cshtml",
+              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Admin\\AddQuestion.cshtml",
+              "RelativeToolTip": "Views\\Admin\\AddQuestion.cshtml",
+              "ViewState": "AgIAAKkBAAAAAAAAAIBJwA4AAABuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-04T22:02:17.261Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "QuestionsController.cs",
+              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Controllers\\QuestionsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\QuestionsController.cs",
+              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Controllers\\QuestionsController.cs",
+              "RelativeToolTip": "Controllers\\QuestionsController.cs",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAuwFgAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-03T11:05:44.392Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Quiz.cshtml",
+              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Questions\\Quiz.cshtml",
+              "RelativeDocumentMoniker": "Views\\Questions\\Quiz.cshtml",
+              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Questions\\Quiz.cshtml",
+              "RelativeToolTip": "Views\\Questions\\Quiz.cshtml",
+              "ViewState": "AgIAAPEBAAAAAAAAAAAIwAoCAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-03T12:30:19.286Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "QuizResultViewModel.cs",
+              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\ViewModels\\QuizResultViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\QuizResultViewModel.cs",
+              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\ViewModels\\QuizResultViewModel.cs",
+              "RelativeToolTip": "ViewModels\\QuizResultViewModel.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwAoAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-04T17:52:26.416Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "EditCategory.cshtml",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Category\\EditCategory.cshtml",
               "RelativeDocumentMoniker": "Views\\Category\\EditCategory.cshtml",
@@ -235,7 +283,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
+              "Title": "EditQuestion.cshtml",
+              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Admin\\EditQuestion.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\EditQuestion.cshtml",
+              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Admin\\EditQuestion.cshtml",
+              "RelativeToolTip": "Views\\Admin\\EditQuestion.cshtml",
+              "ViewState": "AgIAAGcBAAAAAAAAAADgv6oBAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-07T21:46:26.515Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "AddCategory.cshtml",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Category\\AddCategory.cshtml",
               "RelativeDocumentMoniker": "Views\\Category\\AddCategory.cshtml",
@@ -248,31 +309,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "EditQuestion.cshtml",
-              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Admin\\EditQuestion.cshtml",
-              "RelativeDocumentMoniker": "Views\\Admin\\EditQuestion.cshtml",
-              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Admin\\EditQuestion.cshtml",
-              "RelativeToolTip": "Views\\Admin\\EditQuestion.cshtml",
-              "ViewState": "AgIAAGcBAAAAAAAAAADgv6oBAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-07T21:46:26.515Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "AddQuestion.cshtml",
-              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Admin\\AddQuestion.cshtml",
-              "RelativeDocumentMoniker": "Views\\Admin\\AddQuestion.cshtml",
-              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Admin\\AddQuestion.cshtml",
-              "RelativeToolTip": "Views\\Admin\\AddQuestion.cshtml",
-              "ViewState": "AgIAAKwBAAAAAAAAAAAAAA4AAABuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T22:02:17.261Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "addQuestion.css",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\css\\addQuestion.css",
               "RelativeDocumentMoniker": "wwwroot\\css\\addQuestion.css",
@@ -280,68 +317,47 @@
               "RelativeToolTip": "wwwroot\\css\\addQuestion.css",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-07-07T21:47:46.119Z"
+              "WhenOpened": "2025-07-07T21:47:46.119Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 10,
               "Title": "dashboard.css",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\css\\dashboard.css",
               "RelativeDocumentMoniker": "wwwroot\\css\\dashboard.css",
               "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\css\\dashboard.css",
               "RelativeToolTip": "wwwroot\\css\\dashboard.css",
-              "ViewState": "AgIAAGkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAGYAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-07-07T21:43:53.095Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "QuestionsController.cs",
-              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Controllers\\QuestionsController.cs",
-              "RelativeDocumentMoniker": "Controllers\\QuestionsController.cs",
-              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Controllers\\QuestionsController.cs",
-              "RelativeToolTip": "Controllers\\QuestionsController.cs",
-              "ViewState": "AgIAAGEAAAAAAAAAAAAjwFoAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-03T11:05:44.392Z",
+              "WhenOpened": "2025-07-07T21:43:53.095Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 11,
               "Title": "site.css",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\css\\site.css",
               "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
               "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\css\\site.css",
               "RelativeToolTip": "wwwroot\\css\\site.css",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAD8AAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-07-07T21:20:41.549Z"
+              "WhenOpened": "2025-07-07T21:20:41.549Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "SpecialQuizAssignment.cs",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Models\\SpecialQuizAssignment.cs",
               "RelativeDocumentMoniker": "Models\\SpecialQuizAssignment.cs",
               "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Models\\SpecialQuizAssignment.cs",
               "RelativeToolTip": "Models\\SpecialQuizAssignment.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAgwBUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAcAAAAAAAAAAAA1wBUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T15:35:46.24Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Quiz.cshtml",
-              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Questions\\Quiz.cshtml",
-              "RelativeDocumentMoniker": "Views\\Questions\\Quiz.cshtml",
-              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Questions\\Quiz.cshtml",
-              "RelativeToolTip": "Views\\Questions\\Quiz.cshtml",
-              "ViewState": "AgIAAAACAAAAAAAAAAAIwAwCAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T12:30:19.286Z"
+              "WhenOpened": "2025-07-04T15:35:46.24Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -353,19 +369,8 @@
               "RelativeToolTip": "Models\\UserQuizAttempt.cs",
               "ViewState": "AgIAAA0AAAAAAAAAAAAcwBgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T17:55:33.31Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "QuizResultViewModel.cs",
-              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\ViewModels\\QuizResultViewModel.cs",
-              "RelativeDocumentMoniker": "ViewModels\\QuizResultViewModel.cs",
-              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\ViewModels\\QuizResultViewModel.cs",
-              "RelativeToolTip": "ViewModels\\QuizResultViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T17:52:26.416Z"
+              "WhenOpened": "2025-07-04T17:55:33.31Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -375,9 +380,10 @@
               "RelativeDocumentMoniker": "ViewModels\\QuizQuestionViewModel.cs",
               "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\ViewModels\\QuizQuestionViewModel.cs",
               "RelativeToolTip": "ViewModels\\QuizQuestionViewModel.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAYwBUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAAzwBUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-06T15:49:56.668Z"
+              "WhenOpened": "2025-07-06T15:49:56.668Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -387,9 +393,10 @@
               "RelativeDocumentMoniker": "ViewModels\\DashboardViewModel.cs",
               "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\ViewModels\\DashboardViewModel.cs",
               "RelativeToolTip": "ViewModels\\DashboardViewModel.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAoAAAAyAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAABQwAoAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-06T15:49:16.804Z"
+              "WhenOpened": "2025-07-06T15:49:16.804Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -401,7 +408,8 @@
               "RelativeToolTip": "Views\\Questions\\ChooseDifficulty.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-06T18:43:51.34Z"
+              "WhenOpened": "2025-07-06T18:43:51.34Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -411,9 +419,10 @@
               "RelativeDocumentMoniker": "Models\\UserAnswer.cs",
               "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Models\\UserAnswer.cs",
               "RelativeToolTip": "Models\\UserAnswer.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAowBcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA5wBcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T15:38:03.348Z"
+              "WhenOpened": "2025-07-04T15:38:03.348Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -423,13 +432,14 @@
               "RelativeDocumentMoniker": "Controllers\\ProfileController.cs",
               "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Controllers\\ProfileController.cs",
               "RelativeToolTip": "Controllers\\ProfileController.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAIAwwBQAAAAEAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAIA9wBQAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T16:05:32.483Z"
+              "WhenOpened": "2025-07-04T16:05:32.483Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 44,
+              "DocumentIndex": 43,
               "Title": "20250706163610_updateUserAnswers.cs",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Migrations\\20250706163610_updateUserAnswers.cs",
               "RelativeDocumentMoniker": "Migrations\\20250706163610_updateUserAnswers.cs",
@@ -437,7 +447,8 @@
               "RelativeToolTip": "Migrations\\20250706163610_updateUserAnswers.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-06T16:36:10.807Z"
+              "WhenOpened": "2025-07-06T16:36:10.807Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -449,7 +460,8 @@
               "RelativeToolTip": "Models\\AppDbContext.cs",
               "ViewState": "AgIAAAQAAAAAAAAAAAAewAsAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T15:40:18.331Z"
+              "WhenOpened": "2025-07-04T15:40:18.331Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -459,9 +471,10 @@
               "RelativeDocumentMoniker": "ViewModels\\ProfileViewModel.cs",
               "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\ViewModels\\ProfileViewModel.cs",
               "RelativeToolTip": "ViewModels\\ProfileViewModel.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA0AAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAABQwA0AAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-03T11:30:47.116Z"
+              "WhenOpened": "2025-07-03T11:30:47.116Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -473,7 +486,8 @@
               "RelativeToolTip": "Models\\RamadanUserAnswer.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T23:51:06.287Z"
+              "WhenOpened": "2025-07-04T23:51:06.287Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -485,7 +499,8 @@
               "RelativeToolTip": "Models\\RamadanCompetitionQuestion.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T21:47:06.392Z"
+              "WhenOpened": "2025-07-04T21:47:06.392Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -497,7 +512,8 @@
               "RelativeToolTip": "Models\\User.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T14:54:26.87Z"
+              "WhenOpened": "2025-07-04T14:54:26.87Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -522,7 +538,8 @@
               "RelativeToolTip": "ViewModels\\SpecialQuizDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T15:48:16.632Z"
+              "WhenOpened": "2025-07-04T15:48:16.632Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -532,9 +549,10 @@
               "RelativeDocumentMoniker": "Models\\SpecialQuizQuestion.cs",
               "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Models\\SpecialQuizQuestion.cs",
               "RelativeToolTip": "Models\\SpecialQuizQuestion.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAywA0AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAADwvw0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T15:35:19.197Z"
+              "WhenOpened": "2025-07-04T15:35:19.197Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -546,7 +564,8 @@
               "RelativeToolTip": "Models\\SpellingQuestion.cs",
               "ViewState": "AgIAAAIAAAAAAAAAAAAxwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-06T15:09:35.07Z"
+              "WhenOpened": "2025-07-06T15:09:35.07Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -558,11 +577,12 @@
               "RelativeToolTip": "Views\\Profile\\Profile.cshtml",
               "ViewState": "AgIAAEMBAAAAAAAAAAAgwFIBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T08:42:54.701Z"
+              "WhenOpened": "2025-07-03T08:42:54.701Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 41,
               "Title": "20250705000226_addRamadanAnswers.cs",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Migrations\\20250705000226_addRamadanAnswers.cs",
               "RelativeDocumentMoniker": "Migrations\\20250705000226_addRamadanAnswers.cs",
@@ -570,7 +590,8 @@
               "RelativeToolTip": "Migrations\\20250705000226_addRamadanAnswers.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-05T00:02:26.881Z"
+              "WhenOpened": "2025-07-05T00:02:26.881Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -580,9 +601,10 @@
               "RelativeDocumentMoniker": "Views\\Admin\\CreateRamadanQuestions.cshtml",
               "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Admin\\CreateRamadanQuestions.cshtml",
               "RelativeToolTip": "Views\\Admin\\CreateRamadanQuestions.cshtml",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAIBJwAUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-04T22:02:05.7Z"
+              "WhenOpened": "2025-07-04T22:02:05.7Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -594,7 +616,8 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAACcAAAAAAAAAAAAgwDMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T16:31:17.317Z"
+              "WhenOpened": "2025-07-04T16:31:17.317Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -604,13 +627,14 @@
               "RelativeDocumentMoniker": "ViewModels\\RamadanQuestionInputViewModel.cs",
               "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\ViewModels\\RamadanQuestionInputViewModel.cs",
               "RelativeToolTip": "ViewModels\\RamadanQuestionInputViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwA0AAAAwAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwA0AAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T22:10:57.112Z"
+              "WhenOpened": "2025-07-04T22:10:57.112Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 43,
+              "DocumentIndex": 42,
               "Title": "20250704221525_addRamadanQuestions.cs",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Migrations\\20250704221525_addRamadanQuestions.cs",
               "RelativeDocumentMoniker": "Migrations\\20250704221525_addRamadanQuestions.cs",
@@ -618,23 +642,25 @@
               "RelativeToolTip": "Migrations\\20250704221525_addRamadanQuestions.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T22:15:25.748Z"
+              "WhenOpened": "2025-07-04T22:15:25.748Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 39,
               "Title": "20250704180546_updateLevel.cs",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Migrations\\20250704180546_updateLevel.cs",
               "RelativeDocumentMoniker": "Migrations\\20250704180546_updateLevel.cs",
               "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Migrations\\20250704180546_updateLevel.cs",
               "RelativeToolTip": "Migrations\\20250704180546_updateLevel.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T18:05:47.062Z"
+              "WhenOpened": "2025-07-04T18:05:47.062Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 40,
               "Title": "20250704180324_updateCategoryId.cs",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Migrations\\20250704180324_updateCategoryId.cs",
               "RelativeDocumentMoniker": "Migrations\\20250704180324_updateCategoryId.cs",
@@ -642,7 +668,8 @@
               "RelativeToolTip": "Migrations\\20250704180324_updateCategoryId.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T18:03:24.599Z"
+              "WhenOpened": "2025-07-04T18:03:24.599Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -654,7 +681,8 @@
               "RelativeToolTip": "Views\\Home\\QuraanTest.cshtml",
               "ViewState": "AgIAAIEAAAAAAAAAAAAvwIwAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T14:42:26.295Z"
+              "WhenOpened": "2025-07-03T14:42:26.295Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -666,7 +694,8 @@
               "RelativeToolTip": "Models\\Question.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T14:55:01.748Z"
+              "WhenOpened": "2025-07-04T14:55:01.748Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -678,23 +707,12 @@
               "RelativeToolTip": "Models\\Participant.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T14:54:35.797Z"
+              "WhenOpened": "2025-07-04T14:54:35.797Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 35,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
-              "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAACEAAAAAAAAAAAAAAC4AAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-03T14:40:14.056Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 36,
               "Title": "HomeController.cs",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
@@ -702,23 +720,25 @@
               "RelativeToolTip": "Controllers\\HomeController.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAADwvxoAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-03T14:42:35.351Z"
+              "WhenOpened": "2025-07-03T14:42:35.351Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 36,
               "Title": "UserRegisterViewModel.cs",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\ViewModels\\UserRegisterViewModel.cs",
               "RelativeDocumentMoniker": "ViewModels\\UserRegisterViewModel.cs",
               "ToolTip": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\ViewModels\\UserRegisterViewModel.cs",
               "RelativeToolTip": "ViewModels\\UserRegisterViewModel.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAA0AAAAAAAAAAAA1wAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-03T11:01:47.51Z"
+              "WhenOpened": "2025-07-03T11:01:47.51Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 37,
               "Title": "profile.css",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\css\\profile.css",
               "RelativeDocumentMoniker": "wwwroot\\css\\profile.css",
@@ -726,11 +746,12 @@
               "RelativeToolTip": "wwwroot\\css\\profile.css",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACoBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-07-03T09:21:33.12Z"
+              "WhenOpened": "2025-07-03T09:21:33.12Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 38,
               "Title": "Category.cs",
               "DocumentMoniker": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\Models\\Category.cs",
               "RelativeDocumentMoniker": "Models\\Category.cs",
@@ -738,7 +759,8 @@
               "RelativeToolTip": "Models\\Category.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-02T20:31:14.307Z"
+              "WhenOpened": "2025-07-02T20:31:14.307Z",
+              "EditorCaption": ""
             }
           ]
         },

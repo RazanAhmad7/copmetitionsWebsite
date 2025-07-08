@@ -1,6 +1,7 @@
 ﻿@model List<CompetitionsWebsite.Models.Category>
 @{
-    ViewData["Title"] = "مسابقات تعليمية إسلامية";
+    ViewData["Title"] = "جمعتكم - مسابقات تعليمية إسلامية";
+
     Layout = null;
 }
 
@@ -10,51 +11,129 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/home.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav class="main-nav">
-            <div class="logo">
-                <h1>مسابقات تعليمية</h1>
-            </div>
-            <div class="nav-links">
-                <a href="@Url.Action("Index", "Home")" class="active">الرئيسية</a>
-                <a href="@Url.Action("Login", "Auth")">تسجيل الدخول</a>
-                <a href="@Url.Action("Profile", "Profile")">الملف الشخصي</a>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <h1 class="logo">جمعتكم</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="@Url.Action("Index", "Home")" class="nav-link active">الرئيسية</a></li>
+                    <li><a href="@Url.Action("Login", "Auth")" class="nav-link">تسجيل الدخول</a></li>
+                    <li><a href="@Url.Action("Profile", "Profile")" class="nav-link">الملف الشخصي</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         </nav>
     </header>
 
-    <main>
-        <section class="hero">
-            <h2>مرحباً بك في منصة المسابقات التعليمية</h2>
-            <p>اختبر معرفتك الإسلامية من خلال مجموعة متنوعة من المسابقات</p>
-        </section>
-
-        <section class="competitions-grid">
-            <div class="competition-card">
-                <i class="fas fa-landmark"></i> <!-- You can customize the icon based on the category -->
-                <h3> نماذج اختبار من القران الكريم</h3>
-                <p>توليد نماذج اختبار من القران الكريم لاختبار حفظك</p>
-                <a href="@Url.Action("QuraanTest", "Home")" class="btn">ابدأ </a>
-            </div>
-            @foreach (var category in Model)
-            {
-                <div class="competition-card">
-                    <i class="fas fa-landmark"></i> <!-- You can customize the icon based on the category -->
-                    <h3>@category.Name</h3>
-                    <p>@category.Description</p>
-                    <a href="@Url.Action("ChooseDifficulty", "Questions", new { categoryId = category.Id })" class="btn">ابدأ المسابقة</a>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">اكتشف جمال القرآن الكريم</h1>
+                    <p class="hero-subtitle">منصة تعليمية متكاملة لاختبار معرفتك الإسلامية وتطوير فهمك للقرآن الكريم</p>
+                    <div class="hero-buttons">
+                        <a href="@Url.Action("QuraanTest", "Home")" class="btn btn-primary">
+                            <i class="fas fa-book-open"></i>
+                            مولد اختبار القرآن
+                        </a>
+                        <a href="#categories" class="btn btn-secondary">
+                            <i class="fas fa-trophy"></i>
+                            المسابقات العامة
+                        </a>
+                    </div>
                 </div>
-            }
-        </section>
+                <div class="hero-image">
+                    <img src="~/images/A person reading a holy quran in black and white islamic ramadan kareem greeting background _ Premium Photo.jpeg" alt="القرآن الكريم" class="hero-img">
+                </div>
+            </div>
+        </div>
+    </section>
 
-    </main>
+    <!-- Feature Section -->
+    <section class="feature-section">
+        <div class="container">
+            <div class="feature-content">
+                <div class="feature-image">
+                    <img src="~/images/download (2).jpeg" alt="القرآن الكريم" class="feature-img">
+                </div>
+                <div class="feature-text">
+                    <h2 class="feature-title">مولد اختبار القرآن الكريم</h2>
+                    <p class="feature-description">
+                        أداة متقدمة لتوليد اختبارات مخصصة من القرآن الكريم، تساعدك على تقييم حفظك ومراجعة الآيات بطريقة تفاعلية وممتعة.
+                        يمكنك اختيار السور والمستوى المناسب لك لتحصل على تجربة تعليمية مثالية.
+                    </p>
+                    <a href="@Url.Action("QuraanTest", "Home")" class="btn btn-primary">
+                        <i class="fas fa-play"></i>
+                        ابدأ الاختبار الآن
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <footer>
-        <p>جميع الحقوق محفوظة © @DateTime.Now.Year</p>
+    <!-- Categories Section -->
+    <section class="categories-section" id="categories">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">فئات المسابقات</h2>
+                <p class="section-subtitle">اختر المجال الذي تريد اختبار معرفتك فيه</p>
+            </div>
+            <div class="categories-grid">
+                @foreach (var category in Model)
+
+                {
+                    <div class="category-card">
+                        <div class="card-icon">
+                            <i class="fas fa-mosque"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">@category.Name</h3>
+                            <p class="card-description">@category.Description</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="@Url.Action("ChooseDifficulty", "Questions", new { categoryId = category.Id })" class="btn btn-outline">
+                                <i class="fas fa-arrow-left"></i>
+                                ابدأ المسابقة
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>جمعتكم</h3>
+                    <p>منصة تعليمية إسلامية متكاملة</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">الرئيسية</a>
+                    <a href="#" class="footer-link">من نحن</a>
+                    <a href="#" class="footer-link">اتصل بنا</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; @DateTime.Now.Year جميع الحقوق محفوظة - جمعتكم</p>
+            </div>
+        </div>
     </footer>
 
     <script src="~/js/main.js"></script>

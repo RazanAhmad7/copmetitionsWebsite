@@ -68,50 +68,50 @@
                 </div>
                 <!-- Content Area -->
                 <div class="admin-content">
-                    <div class="admin-tabs">
+            <div class="admin-tabs">
                         <p>حدد نوع السؤال المراد إضافته واملأ جميع الأقسام ثم اضغط حفظ السؤال</p>
-                    </div>
+            </div>
                     <form asp-action="SaveQuestion" asp-controller="Admin" method="post" class="question-form"
                         id="questionForm">
-                        <input type="hidden" id="questionId" name="Id" value="0">
-                        <div class="form-group">
-                            <label for="questionType">نوع السؤال</label>
-                            <select id="questionType" name="Type" required>
-                                <option value="multipleChoice">اختيار من متعدد</option>
-                                <option value="matching">توصيل</option>
-                                <option value="wordBuilding">تركيب كلمات</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="questionText">نص السؤال</label>
-                            <textarea id="questionText" name="Text" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="questionCategory">القسم</label>
-                            <select id="questionCategory" name="Category" required>
-                                @foreach (var category in (List<CompetitionsWebsite.Models.Category>)ViewBag.Categories)
-                                {
-                                    <option value="@category.Name">@category.Name</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="questionLevel">مستوى السؤال</label>
-                            <select id="questionLevel" name="Level" required>
-                                <option value="">اختر المستوى</option>
-                                <option value="easy">سهل</option>
-                                <option value="medium">متوسط</option>
-                                <option value="hard">صعب</option>
-                            </select>
-                        </div>
-                        <!-- Multiple Choice Options -->
-                        <div id="multipleChoiceOptions" class="form-group">
-                            <label>الخيارات</label>
+                    <input type="hidden" id="questionId" name="Id" value="0">
+                    <div class="form-group">
+                        <label for="questionType">نوع السؤال</label>
+                        <select id="questionType" name="Type" required>
+                            <option value="multipleChoice">اختيار من متعدد</option>
+                            <option value="matching">توصيل</option>
+                            <option value="wordBuilding">تركيب كلمات</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="questionText">نص السؤال</label>
+                        <textarea id="questionText" name="Text" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="questionCategory">القسم</label>
+                        <select id="questionCategory" name="Category" required>
+                            @foreach (var category in (List<CompetitionsWebsite.Models.Category>)ViewBag.Categories)
+                            {
+                                <option value="@category.Name">@category.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="questionLevel">مستوى السؤال</label>
+                        <select id="questionLevel" name="Level" required>
+                            <option value="">اختر المستوى</option>
+                            <option value="easy">سهل</option>
+                            <option value="medium">متوسط</option>
+                            <option value="hard">صعب</option>
+                        </select>
+                    </div>
+                    <!-- Multiple Choice Options -->
+                    <div id="multipleChoiceOptions" class="form-group">
+                        <label>الخيارات</label>
                             <p class="hint-text">يمكنك إضافة من ثلاثة إلى أربعة خيارات.</p>
-                            <div class="options-list" id="optionsContainer">
-                                <div class="option-item">
-                                    <input type="text" name="Options" placeholder="الخيار الأول" required>
-                                    <input type="radio" name="correctAnswer" value="0" required>
+                        <div class="options-list" id="optionsContainer">
+                            <div class="option-item">
+                                <input type="text" name="Options" placeholder="الخيار الأول" required>
+                                <input type="radio" name="correctAnswer" value="0" required>
                                     <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
                                 </div>
                             </div>
@@ -119,50 +119,50 @@
                                 <i class="fas fa-plus"></i> إضافة خيار
                             </button>
                         </div>
-                        <!-- Matching Pairs -->
-                        <div id="matchingPairs" class="form-group" style="display: none">
-                            <label>أزواج التوصيل</label>
+                    <!-- Matching Pairs -->
+                    <div id="matchingPairs" class="form-group" style="display: none">
+                        <label>أزواج التوصيل</label>
                             <p class="hint-text">يمكنك إضافة من زوجين إلى أربعة أزواج.</p>
-                            <div id="matchingPairsContainer" class="matching-pairs">
-                                <div class="matching-pair option-item">
+                        <div id="matchingPairsContainer" class="matching-pairs">
+                            <div class="matching-pair option-item">
                                     <input type="text" name="MatchingItems" placeholder="العنصر الأول">
                                     <input type="text" name="MatchingAnswers" placeholder="الإجابة الأولى">
-                                    <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
-                                </div>
-                                <div class="matching-pair option-item">
+                                <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                            </div>
+                            <div class="matching-pair option-item">
                                     <input type="text" name="MatchingItems" placeholder="العنصر الثاني">
                                     <input type="text" name="MatchingAnswers" placeholder="الإجابة الثانية">
-                                    <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                                <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
                                 </div>
                             </div>
                             <button type="button" class="add-option" id="addPairBtn">
                                 <i class="fas fa-plus"></i> إضافة زوج جديد
                             </button>
                         </div>
-                        <!-- Word Building -->
-                        <div id="wordBuildingLetters" class="form-group" style="display: none">
-                            <label>الحروف</label>
-                            <div class="word-building-letters">
+                    <!-- Word Building -->
+                    <div id="wordBuildingLetters" class="form-group" style="display: none">
+                        <label>الحروف</label>
+                        <div class="word-building-letters">
                                 <input type="text" class="letter-input" name="Letters" maxlength="1">
                                 <input type="text" class="letter-input" name="Letters" maxlength="1">
                                 <input type="text" class="letter-input" name="Letters" maxlength="1">
                                 <input type="text" class="letter-input" name="Letters" maxlength="1">
                                 <input type="text" class="letter-input" name="Letters" maxlength="1">
-                            </div>
-                            <div class="form-group">
-                                <label for="correctWord">الكلمة الصحيحة</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="correctWord">الكلمة الصحيحة</label>
                                 <input type="text" id="correctWord" name="CorrectWord">
                             </div>
                         </div>
-                        <div class="form-actions">
+                    <div class="form-actions">
                             <button type="submit" class="btn btn-success">
                                 <i class="fas fa-save"></i> حفظ السؤال
                             </button>
                             <button type="button" class="btn btn-danger" id="cancelBtn">
                                 <i class="fas fa-times"></i> إلغاء
-                            </button>
-                        </div>
-                    </form>
+                        </button>
+                    </div>
+                </form>
                 </div>
             </div>
         </div>
@@ -190,7 +190,7 @@
 
         // Event Listeners
         document.addEventListener("DOMContentLoaded", () => {
-
+       
             // Question type change
             questionTypeSelect.addEventListener("change", handleQuestionTypeChange);
 
@@ -207,7 +207,7 @@
                 btn.addEventListener("click", () => removeOption(btn));
             });
 
-
+          
 
             // Cancel button
             document.getElementById("cancelBtn").addEventListener("click", () => {
@@ -216,7 +216,7 @@
             });
         });
 
-
+      
 
         // Show question form
         function showQuestionForm() {
