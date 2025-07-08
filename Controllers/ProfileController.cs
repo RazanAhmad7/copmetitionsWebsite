@@ -55,11 +55,12 @@ public class ProfileController : Controller
         var specialQuizzes = await _context.SpecialQuizAssignments
             .Include(usq => usq.SpecialQuiz)
                 .ThenInclude(sq => sq.Questions)
-            .Where(usq => usq.UserId == userId && !usq.IsCompleted)
+            .Where(usq => usq.UserId == userId)
             .Select(usq => new SpecialQuizViewModel
             {
                 QuizId = usq.SpecialQuizId,
-                QuestionsCount = usq.SpecialQuiz.Questions.Count
+                QuestionsCount = usq.SpecialQuiz.Questions.Count,
+                IsCompleted = _context.UserQuizAttempts.Any(a => a.SpecialQuizAssignmentId == usq.Id)
             }).ToListAsync();
 
       

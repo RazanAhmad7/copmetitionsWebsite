@@ -1,216 +1,67 @@
 ﻿@{
     ViewData["Title"] = "اختر مستوى الصعوبة - مسابقات تعليمية إسلامية";
-    Layout = null;
     int categoryId = (int)ViewBag.CategoryId;
     string categoryName = ViewBag.CategoryName as string;
-
 }
 
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <style>
-        .level-selection-container {
-            max-width: 1150px;
-            margin: 2rem auto;
-            padding: 2rem;
-        }
-
-        .level-selection-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .level-selection-header h2 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-
-        .level-selection-header p {
-            color: var(--text-color);
-            font-size: 1.1rem;
-        }
-
-        .levels-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .level-card {
-            background: var(--white);
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
-            cursor: pointer;
-            border: 3px solid transparent;
-        }
-
-        .level-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .level-card.selected {
-            border-color: var(--primary-color);
-        }
-
-        .level-card.easy {
-            border-top: 5px solid #4CAF50;
-        }
-
-        .level-card.medium {
-            border-top: 5px solid #FFC107;
-        }
-
-        .level-card.hard {
-            border-top: 5px solid #F44336;
-        }
-
-        .level-icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .level-card.easy .level-icon {
-            color: #4CAF50;
-        }
-
-        .level-card.medium .level-icon {
-            color: #FFC107;
-        }
-
-        .level-card.hard .level-icon {
-            color: #F44336;
-        }
-
-        .level-card h3 {
-            margin-bottom: 1rem;
-            color: var(--text-color);
-        }
-
-        .level-card p {
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-        }
-
-        .start-quiz-btn {
-            display: block;
-            width: 200px;
-            margin: 3rem auto 0;
-            padding: 1rem;
-            background: var(--primary-color);
-            color: var(--white);
-            border: none;
-            border-radius: 4px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .start-quiz-btn:hover {
-            background: var(--secondary-color);
-        }
-
-        .start-quiz-btn:disabled {
-            background: var(--light-bg);
-            cursor: not-allowed;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <nav class="main-nav">
-            <div class="logo">
-                <h1>مسابقات تعليمية</h1>
+<div class="container" style="min-height:60vh; padding-top: 100px; padding-bottom: 40px;">
+    <div class="section-header" style="margin-bottom:2.5rem;">
+        <h2 class="section-title">اختر مستوى الصعوبة</h2>
+        <p class="section-subtitle">اختر المستوى المناسب لك لتحصل على أسئلة تلائم معرفتك</p>
+    </div>
+    <div class="categories-grid" style="margin-bottom:2.5rem;">
+        <!-- Easy Level Card -->
+        <div class="category-card level-card easy" data-level="easy" style="--level-border-color: #43a047;">
+            <div class="card-icon" style="background: linear-gradient(45deg, #43a047, #aee571);">
+                <i class="fas fa-seedling"></i>
             </div>
-            <div class="nav-links">
-                <a href="@Url.Action("Index", "Home")" class="active">الرئيسية</a>
-                <a href="@Url.Action("Login", "Auth")">تسجيل الدخول</a>
-                <a href="@Url.Action("Profile", "Profile")">الملف الشخصي</a>
-            </div>
-        </nav>
-    </header>
-
-    <main>
-        <div class="level-selection-container">
-            <div class="level-selection-header">
-                <h2>اختر مستوى الصعوبة</h2>
-                <p>اختر المستوى المناسب لك لتحصل على أسئلة تلائم معرفتك</p>
-            </div>
-
-            <div class="levels-grid">
-                <!-- Easy Level Card -->
-                <div class="level-card easy" data-level="easy">
-                    <div class="level-icon">
-                        <i class="fas fa-seedling"></i>
-                    </div>
-                    <h3>مبتدئ</h3>
-                    <p>مناسبة للأطفال والمبتدئين في العلوم الإسلامية</p>
-                   
-                </div>
-
-                <!-- Medium Level Card -->
-                <div class="level-card medium" data-level="medium">
-                    <div class="level-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h3>متوسط</h3>
-                    <p>أسئلة متوسطة الصعوبة تحتاج لبعض المعرفة الإسلامية</p>
-                  
-                </div>
-
-                <!-- Hard Level Card -->
-                <div class="level-card hard" data-level="hard">
-                    <div class="level-icon">
-                        <i class="fas fa-fire-alt"></i>
-                    </div>
-                    <h3>متقدم</h3>
-                    <p>أسئلة صعبة تختبر عمق معرفتك الإسلامية</p>
-                  
-                </div>
-            </div>
-
-            <button class="start-quiz-btn" id="startQuizBtn" disabled>
-                ابدأ المسابقة
-            </button>
+            <div class="card-title">مبتدئ</div>
+            <div class="card-description">مناسبة للأطفال والمبتدئين في العلوم الإسلامية</div>
         </div>
-    </main>
+        <!-- Medium Level Card -->
+        <div class="category-card level-card medium" data-level="medium" style="--level-border-color: #f4a261;">
+            <div class="card-icon" style="background: linear-gradient(45deg, #f4a261, #e76f51);">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div class="card-title">متوسط</div>
+            <div class="card-description">أسئلة متوسطة الصعوبة تحتاج لبعض المعرفة الإسلامية</div>
+        </div>
+        <!-- Hard Level Card -->
+        <div class="category-card level-card hard" data-level="hard" style="--level-border-color: #d7263d;">
+            <div class="card-icon" style="background: linear-gradient(45deg, #d7263d, #f46036);">
+                <i class="fas fa-fire-alt"></i>
+            </div>
+            <div class="card-title">متقدم</div>
+            <div class="card-description">أسئلة صعبة تختبر عمق معرفتك الإسلامية</div>
+        </div>
+    </div>
+    <div style="text-align:center;">
+        <button class="btn btn-primary" id="startQuizBtn" disabled style="min-width:200px; font-size:1.1rem;">
+            ابدأ المسابقة
+        </button>
+    </div>
+</div>
 
-    <footer>
-        <p>جميع الحقوق محفوظة © @DateTime.Now.Year</p>
-    </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const levelCards = document.querySelectorAll('.level-card');
+        const startQuizBtn = document.getElementById('startQuizBtn');
+        let selectedLevel = null;
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const levelCards = document.querySelectorAll('.level-card');
-            const startQuizBtn = document.getElementById('startQuizBtn');
-            let selectedLevel = null;
-
-            levelCards.forEach(card => {
-                card.addEventListener('click', function () {
-                    levelCards.forEach(c => c.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedLevel = this.dataset.level;
-                    startQuizBtn.disabled = false;
-                });
-            });
-
-            startQuizBtn.addEventListener('click', function () {
-                if (selectedLevel) {
-                    const categoryId = @categoryId;
-                    window.location.href = `@Url.Action("Quiz", "Questions")?categoryId=${categoryId}&level=${selectedLevel}`;
-                }
+        levelCards.forEach(card => {
+            card.addEventListener('click', function () {
+                levelCards.forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedLevel = this.dataset.level;
+                startQuizBtn.disabled = false;
             });
         });
-    </script>
 
-</body>
-</html>
+        startQuizBtn.addEventListener('click', function () {
+            if (selectedLevel) {
+                const categoryId = @categoryId;
+                window.location.href = `@Url.Action("Quiz", "Questions")?categoryId=${categoryId}&level=${selectedLevel}`;
+            }
+        });
+    });
+</script>

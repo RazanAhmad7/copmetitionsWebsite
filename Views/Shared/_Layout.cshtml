@@ -9,26 +9,56 @@
     <!-- داخل _Layout.cshtml أو أي ملف رئيسي -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/home.css" />
 </head>
 
 <body>
-    <header>
-        <nav class="main-nav">
-            <div class="logo">
-                <h1>مسابقات تعليمية</h1>
-            </div>
-            <div class="nav-links">
-                <a href="@Url.Action("Index", "Home")" class="active">الرئيسية</a>
-                <a href="@Url.Action("Login", "Auth")">تسجيل الدخول</a>
-                <a href="@Url.Action("Profile", "Profile")">الملف الشخصي</a>
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <h1 class="logo">جمعتكم</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="@Url.Action("Index", "Home")" class="nav-link active">الرئيسية</a></li>
+                    <li><a href="@Url.Action("Login", "Auth")" class="nav-link">تسجيل الدخول</a></li>
+                    <li><a href="@Url.Action("Profile", "Profile")" class="nav-link">الملف الشخصي</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         </nav>
     </header>
+
     <div>
         @RenderBody()
     </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>جمعتكم</h3>
+                    <p>منصة تعليمية إسلامية متكاملة</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">الرئيسية</a>
+                    <a href="#" class="footer-link">من نحن</a>
+                    <a href="#" class="footer-link">اتصل بنا</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; @DateTime.Now.Year جميع الحقوق محفوظة - جمعتكم</p>
+            </div>
+        </div>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>

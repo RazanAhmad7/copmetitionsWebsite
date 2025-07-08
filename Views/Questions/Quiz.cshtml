@@ -1,549 +1,871 @@
 ﻿@model List<CompetitionsWebsite.ViewModels.QuizQuestionViewModel>
-
 @{
     ViewData["Title"] = "المسابقة - مسابقات تعليمية إسلامية";
-    Layout = null;
 }
 @using System.Text.Json
 
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="../css/site.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <style>
-        .timer-container {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-            background: var(--white);
-            border: 2px solid var(--primary-color);
-            border-radius: 8px;
-            padding: 15px 20px;
-            box-shadow: var(--shadow);
-            color: var(--text-primary);
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: pulse 2s infinite;
-        }
+<link rel="stylesheet" href="~/css/home.css" />
+<style>
+    .quiz-container {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px rgba(44, 90, 39, 0.08);
+        padding: 2.5rem 2rem 2rem 2rem;
+        max-width: 700px;
+        margin: 40px auto 0 auto;
+        min-height: 400px;
+    }
 
-        .timer-icon {
-            font-size: 1.2em;
-            color: var(--primary-color);
-        }
+    .quiz-header {
+        margin-bottom: 2rem;
+    }
 
-        .timer-text {
-            font-size: 1.1em;
-            color: var(--text-primary);
-        }
+    #quizTitle {
+        font-size: 2rem;
+        font-family: 'Amiri', serif;
+        color: #2d5a27;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
 
-        .timer-warning {
-            background: var(--white);
-            border-color: var(--error-color);
-            color: var(--error-color);
-            animation: shake 0.5s infinite;
-        }
+    .progress-bar {
+        width: 100%;
+        height: 12px;
+        background: #e8f5e8;
+        border-radius: 8px;
+        overflow: hidden;
+        margin: 0.5rem 0 0 0;
+    }
 
-        .timer-warning .timer-icon {
-            color: var(--error-color);
-        }
+    .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #f4a261, #e76f51);
+        border-radius: 8px;
+        transition: width 0.4s cubic-bezier(.4, 2, .6, 1);
+    }
+
+    .timer-container {
+        position: fixed;
+        top: 30px;
+        left: 30px;
+        z-index: 1000;
+        background: #fff;
+        border: 2px solid #2d5a27;
+        border-radius: 12px;
+        padding: 12px 20px;
+        box-shadow: 0 4px 16px rgba(44, 90, 39, 0.10);
+        color: #2d5a27;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: pulse 2s infinite;
+    }
+
+    .timer-icon {
+        font-size: 1.3em;
+        color: #2d5a27;
+    }
+
+    .timer-circle {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: conic-gradient(#f4a261 0deg, #e8f5e8 0deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1em;
+        font-weight: bold;
+        color: #fff;
+        border: 2px solid #f4a261;
+        transition: background 0.1s ease;
+    }
+
+    .timer-warning {
+        border-color: #d7263d;
+        color: #d7263d;
+        animation: shake 0.5s infinite;
+    }
+
+    .timer-warning .timer-icon {
+        color: #d7263d;
+    }
+
+    .timer-warning .timer-circle {
+        background: conic-gradient(#d7263d 0deg, #ffebee 0deg);
+        border-color: #d7263d;
+    }
 
         @@keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
+        0% {
+            transform: scale(1);
         }
+
+        50% {
+            transform: scale(1.05);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
 
         @@keyframes shake {
-            0%, 100% {
-                transform: translateX(0);
-            }
-            25% {
-                transform: translateX(-2px);
-            }
-            75% {
-                transform: translateX(2px);
-            }
+
+        0%,
+        100% {
+            transform: translateX(0);
         }
 
-        .timer-circle {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: conic-gradient(var(--primary-color) 0deg, var(--primary-color) 0deg, var(--primary-light) 0deg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9em;
-            font-weight: bold;
-            color: var(--white);
-            border: 2px solid var(--primary-color);
-            transition: background 0.1s ease;
+        25% {
+            transform: translateX(-2px);
         }
 
-        .timer-warning .timer-circle {
-            background: conic-gradient(var(--error-color) 0deg, var(--error-color) 0deg, #ffebee 0deg);
-            border-color: var(--error-color);
+        75% {
+            transform: translateX(2px);
         }
-    </style>
-</head>
-<body>
-    <header>
-        <nav class="main-nav" style="background:#4caf50; padding:10px 30px;">
-            <div class="logo" style="color:white; font-weight:bold; font-size:1.5em;">
-                مسابقات تعليمية
-            </div>
-            <div class="nav-links" style="margin-top:5px;">
-                <a href="@Url.Action("Index", "Home")" style="color:white; margin-left:15px; text-decoration:none;">الرئيسية</a>
-                <a href="@Url.Action("Login", "Auth")" style="color:white; margin-left:15px; text-decoration:none;">تسجيل الدخول</a>
-                <a href="@Url.Action("Profile", "Profile")" style="color:white; text-decoration:none;">الملف الشخصي</a>
-            </div>
-        </nav>
-    </header>
+    }
 
-    <!-- Timer -->
-    <div class="timer-container" id="timerContainer">
-        <i class="fas fa-clock timer-icon"></i>
-        <div class="timer-circle" id="timerCircle">
-            <span id="timerText">60</span>
-        </div>
-        <div class="timer-text">ثانية</div>
-    </div>
+    .question-type {
+        margin: 2rem 0 1.5rem 0;
+        padding: 1.5rem 1rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(44, 90, 39, 0.04);
+    }
 
-    <main>
-        <div class="quiz-container">
-            <div class="quiz-header">
-                <h2 id="quizTitle">المسابقة: @ViewBag.CategoryName - المستوى: @ViewBag.Level</h2>
+    .question-text {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2d5a27;
+        margin-bottom: 1.2rem;
+        text-align: center;
+        font-family: 'Cairo', 'Amiri', serif;
+    }
+
+    .options-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1.2rem;
+    }
+
+    .option {
+        background: #fff;
+        border: 2px solid #e8f5e8;
+        border-radius: 8px;
+        padding: 1rem 1.5rem;
+        font-size: 1.1rem;
+        color: #2d5a27;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: right;
+        font-family: 'Cairo', 'Amiri', serif;
+    }
+
+    .option.selected,
+    .option:hover {
+        background: linear-gradient(90deg, #f4a261 60%, #e76f51 100%);
+        color: #fff;
+        border-color: #f4a261;
+    }
+
+    .matching-container {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+
+    .matching-column {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .matching-item {
+        background: #fff;
+        border: 2px solid #e8f5e8;
+        border-radius: 8px;
+        padding: 0.8rem 1.2rem;
+        font-size: 1.1rem;
+        color: #2d5a27;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: 'Cairo', 'Amiri', serif;
+    }
+
+    .matching-item.selected,
+    .matching-item:hover {
+        background: linear-gradient(90deg, #f4a261 60%, #e76f51 100%);
+        color: #fff;
+        border-color: #f4a261;
+    }
+
+    .matching-item.matched {
+        opacity: 0.7;
+        pointer-events: none;
+    }
+
+    .word-building-container {
+        display: flex;
+        gap: 0.7rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+
+    .letter-box {
+        background: #fff;
+        border: 2px solid #e8f5e8;
+        border-radius: 8px;
+        padding: 0.7rem 1.1rem;
+        font-size: 1.2rem;
+        color: #2d5a27;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: 'Cairo', 'Amiri', serif;
+    }
+
+    .letter-box:hover {
+        background: linear-gradient(90deg, #f4a261 60%, #e76f51 100%);
+        color: #fff;
+        border-color: #f4a261;
+    }
+
+    .word-preview {
+        margin-top: 1.5rem;
+        font-size: 1.3rem;
+        color: #2d5a27;
+        text-align: center;
+        font-family: 'Cairo', 'Amiri', serif;
+    }
+
+    .quiz-controls {
+        display: flex;
+        justify-content: center;
+        margin-top: 2.5rem;
+    }
+
+        @@media (max-width: 900px) {
+        .quiz-container {
+            padding: 1.5rem 0.5rem;
+        }
+    }
+
+        @@media (max-width: 600px) {
+        .quiz-container {
+            padding: 0.5rem 0.2rem;
+        }
+
+        .question-type {
+            padding: 1rem 0.2rem;
+        }
+
+        .matching-container {
+            gap: 0.5rem;
+        }
+    }
+
+    /* Modern Circular Timer */
+    .quiz-timer-outer {
+        position: fixed;
+        top: 40px;
+        left: 40px;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .quiz-timer-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: conic-gradient(#f4a261 var(--timer-progress, 0%), #e8f5e8 0%);
+        box-shadow: 0 4px 24px rgba(244, 162, 97, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: background 0.2s;
+        border: 4px solid #fff;
+    }
+
+    .quiz-timer-circle.warning {
+        background: conic-gradient(#d7263d var(--timer-progress, 0%), #ffebee 0%);
+        box-shadow: 0 0 24px 2px #d7263d33;
+    }
+
+    .quiz-timer-inner {
+        position: absolute;
+        width: 62px;
+        height: 62px;
+        background: #fff;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(44, 90, 39, 0.04);
+    }
+
+    .quiz-timer-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #2d5a27;
+        font-family: 'Cairo', 'Amiri', serif;
+    }
+
+    .quiz-timer-label {
+        font-size: 0.9rem;
+        color: #888;
+    }
+
+    /* Result Circle */
+    .result-circle {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f4a261 60%, #e76f51 100%);
+        box-shadow: 0 8px 32px rgba(244, 162, 97, 0.18);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem auto;
+        color: #fff;
+        font-family: 'Cairo', 'Amiri', serif;
+        font-size: 2.5rem;
+        font-weight: bold;
+        position: relative;
+    }
+
+    .result-circle .result-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .result-message {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #2d5a27;
+        margin-bottom: 1.5rem;
+        font-family: 'Cairo', 'Amiri', serif;
+    }
+
+    .result-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .no-questions-state {
+        text-align: center;
+        padding: 4rem 1rem;
+        color: #2d5a27;
+        font-family: 'Cairo', 'Amiri', serif;
+    }
+
+    .no-questions-state .icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #f4a261;
+    }
+</style>
+
+<div class="container" style="min-height:60vh; padding-top: 100px; padding-bottom: 40px;">
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h2 id="quizTitle"></h2>
+            <div id="quizInfoWrapper">
+                <div class="quiz-info-message"
+                    style="text-align:center; color:#666; font-size:1.1rem; margin-bottom:1.2rem; font-family:'Cairo','Amiri',serif;">
+                    لديك دقيقة واحدة للإجابة على 10 أسئلة في هذه الفئة. حاول تحقيق أفضل نتيجة!
+                </div>
                 <div class="progress-bar">
                     <div class="progress-bar-fill" style="width: 0%"></div>
                 </div>
             </div>
-
-            <div id="questionContainer">
-                <!-- سيتم عرض السؤال هنا -->
-            </div>
-
-            <div class="quiz-controls">
-                <button class="btn" id="nextQuestion">التالي</button>
+        </div>
+        <div class="quiz-timer-outer" id="quizTimerOuter" style="display:none;">
+            <div class="quiz-timer-circle" id="quizTimerCircle">
+                <div class="quiz-timer-inner">
+                    <span class="quiz-timer-value" id="quizTimerValue">60</span>
+                    <span class="quiz-timer-label">ثانية</span>
+                </div>
             </div>
         </div>
-    </main>
+        <div id="questionContainer">
+            <!-- سيتم عرض السؤال هنا -->
+        </div>
+        <div class="quiz-controls">
+            <button class="btn btn-primary" id="nextQuestion">التالي</button>
+        </div>
+    </div>
+</div>
 
-    <footer>
-        <p>جميع الحقوق محفوظة © 2024</p>
-    </footer>
+<script>
+    // بيانات الأسئلة من السيرفر
+    window.questionsFromServer = @Html.Raw(Json.Serialize(Model));
 
-    <script>
-        // بيانات الأسئلة من السيرفر
-        window.questionsFromServer = @Html.Raw(Json.Serialize(Model));
+    let currentQuestion = 0;
+    let score = 0;
+    let userResponses = []; // ✅ هنا التعديل
 
-        let currentQuestion = 0;
-        let score = 0;
-        let userResponses = []; // ✅ هنا التعديل
+    // متغيرات المؤقت
+    let timeLeft = 60; // 60 ثانية
+    let timerInterval;
+    let quizEnded = false;
 
-        // متغيرات المؤقت
-        let timeLeft = 60; // 60 ثانية
-        let timerInterval;
-        let quizEnded = false;
+    // تعريف درجات الألوان المختلفة
+    const colorShades = [
+        { bg: "#FFF3E0", border: "#FF9800" }, // برتقالي فاتح
+        { bg: "#F3E5F5", border: "#9C27B0" }, // بنفسجي فاتح
+        { bg: "#FFEBEE", border: "#F44336" }, // أحمر فاتح
+        { bg: "#E0F7FA", border: "#00BCD4" }, // سماوي فاتح
+        { bg: "#F1F8E9", border: "#8BC34A" }, // أخضر مصفر
+        { bg: "#FFF8E1", border: "#FFC107" }, // أصفر فاتح
+        { bg: "#E8EAF6", border: "#3F51B5" }, // نيلي فاتح
+        { bg: "#FCE4EC", border: "#E91E63" }, // وردي فاتح
+    ];
 
-        // تعريف درجات الألوان المختلفة
-        const colorShades = [
-            { bg: "#FFF3E0", border: "#FF9800" }, // برتقالي فاتح
-            { bg: "#F3E5F5", border: "#9C27B0" }, // بنفسجي فاتح
-            { bg: "#FFEBEE", border: "#F44336" }, // أحمر فاتح
-            { bg: "#E0F7FA", border: "#00BCD4" }, // سماوي فاتح
-            { bg: "#F1F8E9", border: "#8BC34A" }, // أخضر مصفر
-            { bg: "#FFF8E1", border: "#FFC107" }, // أصفر فاتح
-            { bg: "#E8EAF6", border: "#3F51B5" }, // نيلي فاتح
-            { bg: "#FCE4EC", border: "#E91E63" }, // وردي فاتح
-        ];
+    const questions = window.questionsFromServer;
 
-        const questions = window.questionsFromServer;
+    // Level name mapping
+    const levelNames = {
+        'easy': 'سهل',
+        'medium': 'متوسط',
+        'hard': 'متقدم'
+    };
 
-        // بدء المؤقت
-        function startTimer() {
-            timerInterval = setInterval(() => {
-                if (quizEnded) {
-                    clearInterval(timerInterval);
-                    return;
-                }
+    // Set dynamic quiz title
+    function setQuizTitle() {
+        const category = '@ViewBag.CategoryName' || '';
+        const level = '@ViewBag.Level' || '';
+        let levelAr = levelNames[level.toLowerCase()] || level;
+        document.getElementById('quizTitle').textContent = `مسابقة في ${category} - مستوى ${levelAr}`;
+    }
+    setQuizTitle();
 
-                timeLeft--;
-                updateTimerDisplay();
-
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    timeUp();
-                }
-            }, 1000);
+    // Timer logic (modern circular)
+    function updateCircularTimer() {
+        const timerOuter = document.getElementById('quizTimerOuter');
+        const timerCircle = document.getElementById('quizTimerCircle');
+        const timerValue = document.getElementById('quizTimerValue');
+        timerOuter.style.display = 'flex';
+        timerValue.textContent = timeLeft;
+        let progress = ((60 - timeLeft) / 60) * 360;
+        timerCircle.style.setProperty('--timer-progress', progress + 'deg');
+        if (timeLeft <= 10) {
+            timerCircle.classList.add('warning');
+        } else {
+            timerCircle.classList.remove('warning');
         }
+    }
 
-        // تحديث عرض المؤقت
-        function updateTimerDisplay() {
-            const timerText = document.getElementById('timerText');
-            const timerCircle = document.getElementById('timerCircle');
-            const timerContainer = document.getElementById('timerContainer');
-            
-            timerText.textContent = timeLeft;
-            
-            // تحديث الدائرة التقدمية
-            const progress = ((60 - timeLeft) / 60) * 360;
-            if (timeLeft <= 10) {
-                timerCircle.style.background = `conic-gradient(var(--error-color) ${progress}deg, #ffebee ${progress}deg)`;
-            } else {
-                timerCircle.style.background = `conic-gradient(var(--primary-color) ${progress}deg, var(--primary-light) ${progress}deg)`;
-            }
-            
-            // تحذير عند وصول 10 ثواني
-            if (timeLeft <= 10) {
-                timerContainer.classList.add('timer-warning');
-            }
-        }
-
-        // عند انتهاء الوقت
-        function timeUp() {
-            quizEnded = true;
-            showResults();
-        }
-
-        // دالة خلط مصفوفة (Fisher-Yates)
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        // عرض السؤال الحالي حسب النوع
-        function showQuestion() {
-            const container = document.getElementById("questionContainer");
-            container.innerHTML = "";
-
-            if (currentQuestion >= questions.length) {
-                showResults();
+    // بدء المؤقت
+    function startTimer() {
+        updateCircularTimer();
+        timerInterval = setInterval(() => {
+            if (quizEnded) {
+                clearInterval(timerInterval);
                 return;
             }
 
-            const question = questions[currentQuestion];
+            timeLeft--;
+            updateCircularTimer();
 
-            // بناء هيكل السؤال حسب النوع
-            const questionBox = document.createElement("div");
-            questionBox.className = "question-type";
-
-            // عنوان السؤال
-            const questionText = document.createElement("div");
-            questionText.className = "question-text";
-            questionText.textContent = question.text;
-            questionBox.appendChild(questionText);
-
-            if (question.type.toLowerCase() === "mcq") {
-                const optionsContainer = document.createElement("div");
-                optionsContainer.className = "options-container";
-
-                question.options.forEach((opt, idx) => {
-                    const option = document.createElement("div");
-                    option.className = "option";
-                    option.textContent = opt;
-                    option.dataset.index = idx;
-                    option.addEventListener("click", () => selectOption(option));
-                    optionsContainer.appendChild(option);
-                });
-
-                questionBox.appendChild(optionsContainer);
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timeUp();
             }
-            else if (question.type.toLowerCase() === "matching") {
-                const matchingContainer = document.createElement("div");
-                matchingContainer.className = "matching-container";
+        }, 1000);
+    }
 
-                // عمود الكلمات
-                const rightColumn = document.createElement("div");
-                rightColumn.className = "matching-column fixed-column";
+    // تحديث عرض المؤقت
+    function updateTimerDisplay() {
+        const timerText = document.getElementById('timerText');
+        const timerCircle = document.getElementById('timerCircle');
+        const timerContainer = document.getElementById('timerContainer');
 
-                // عمود التعريفات (مختلط)
-                const leftColumn = document.createElement("div");
-                leftColumn.className = "matching-column movable-column";
+        timerText.textContent = timeLeft;
 
-                let selectedWord = null;
-                let selectedDefinition = null;
-                let matchCount = 0;
-
-                // الكلمات (items)
-                question.items.forEach(item => {
-                    const wordDiv = document.createElement("div");
-                    wordDiv.className = "matching-item word-item";
-                    wordDiv.textContent = item.text;
-                    wordDiv.dataset.word = item.text;
-
-                    wordDiv.addEventListener("click", () => {
-                        if (wordDiv.classList.contains("matched")) return;
-
-                        // إزالة التحديد من غيره
-                        [...rightColumn.querySelectorAll(".selected")].forEach(el => {
-                            if (el !== wordDiv) el.classList.remove("selected");
-                        });
-
-                        if (wordDiv.classList.contains("selected")) {
-                            wordDiv.classList.remove("selected");
-                            selectedWord = null;
-                        } else {
-                            wordDiv.classList.add("selected");
-                            selectedWord = wordDiv;
-                        }
-
-                        checkMatch();
-                    });
-
-                    rightColumn.appendChild(wordDiv);
-                });
-
-                // تعريفات (matches) مخلوطة
-                const shuffledMatches = shuffleArray([...question.matches]);
-
-                shuffledMatches.forEach(match => {
-                    const defDiv = document.createElement("div");
-                    defDiv.className = "matching-item definition-item";
-                    defDiv.textContent = match.text;
-                    defDiv.dataset.definition = match.text;
-
-                    defDiv.addEventListener("click", () => {
-                        if (defDiv.classList.contains("matched")) return;
-
-                        // إزالة التحديد من غيره
-                        [...leftColumn.querySelectorAll(".selected")].forEach(el => {
-                            if (el !== defDiv) el.classList.remove("selected");
-                        });
-
-                        if (defDiv.classList.contains("selected")) {
-                            defDiv.classList.remove("selected");
-                            selectedDefinition = null;
-                        } else {
-                            defDiv.classList.add("selected");
-                            selectedDefinition = defDiv;
-                        }
-
-                        checkMatch();
-                    });
-
-                    leftColumn.appendChild(defDiv);
-                });
-
-                function checkMatch() {
-                    if (!selectedWord || !selectedDefinition) return;
-
-                    const randomColor = colorShades[Math.floor(Math.random() * colorShades.length)];
-
-                    selectedWord.classList.add("matched");
-                    selectedDefinition.classList.add("matched");
-
-                    selectedWord.style.backgroundColor = randomColor.bg;
-                    selectedWord.style.border = `2px solid ${randomColor.border}`;
-                    selectedDefinition.style.backgroundColor = randomColor.bg;
-                    selectedDefinition.style.border = `2px solid ${randomColor.border}`;
-
-                    // حفظ الكلمة والتعريف في خصائص data لتقييمهم لاحقًا
-                    selectedWord.dataset.matchedWith = selectedDefinition.dataset.definition;
-
-                    selectedWord.classList.remove("selected");
-                    selectedDefinition.classList.remove("selected");
-
-                    selectedWord = null;
-                    selectedDefinition = null;
-                }
-
-
-                matchingContainer.appendChild(leftColumn);
-                matchingContainer.appendChild(rightColumn);
-                questionBox.appendChild(matchingContainer);
-            }
-            else if (question.type.toLowerCase() === "spelling") {
-                const wordBuildingContainer = document.createElement("div");
-                wordBuildingContainer.className = "word-building-container";
-
-                const wordPreview = document.createElement("div");
-                wordPreview.className = "word-preview";
-                wordPreview.id = "wordPreview"; // أفضل لإمكانية الوصول لاحقًا
-
-                const shuffledLetters = shuffleArray([...question.letters]);
-
-                shuffledLetters.forEach(letter => {
-                    const letterBox = document.createElement("div");
-                    letterBox.className = "letter-box";
-                    letterBox.textContent = letter;
-
-                    letterBox.addEventListener("click", () => {
-                        wordPreview.textContent += letterBox.textContent;
-                        letterBox.style.visibility = "hidden";
-                    });
-
-                    wordBuildingContainer.appendChild(letterBox);
-                });
-
-                questionBox.appendChild(wordBuildingContainer);
-                questionBox.appendChild(wordPreview);
-            }
-
-            else {
-                // نوع سؤال غير معروف
-                questionBox.innerHTML += "<p>نوع السؤال غير مدعوم</p>";
-            }
-
-            container.appendChild(questionBox);
-
-            // تحديث شريط التقدم
-            const progress = ((currentQuestion + 1) / questions.length) * 100;
-            document.querySelector(".progress-bar-fill").style.width = progress + "%";
+        // تحديث الدائرة التقدمية
+        const progress = ((60 - timeLeft) / 60) * 360;
+        if (timeLeft <= 10) {
+            timerCircle.style.background = `conic-gradient(var(--error-color) ${progress}deg, #ffebee ${progress}deg)`;
+        } else {
+            timerCircle.style.background = `conic-gradient(var(--primary-color) ${progress}deg, var(--primary-light) ${progress}deg)`;
         }
 
-        // التعامل مع اختيار خيار في mcq
-        function selectOption(option) {
-            // إزالة تحديد من كل الخيارات
-            document.querySelectorAll(".option").forEach(opt => opt.classList.remove("selected"));
-            option.classList.add("selected");
+        // تحذير عند وصول 10 ثواني
+        if (timeLeft <= 10) {
+            timerContainer.classList.add('timer-warning');
+        }
+    }
+
+    // عند انتهاء الوقت
+    function timeUp() {
+        quizEnded = true;
+        showResults();
+    }
+
+    // دالة خلط مصفوفة (Fisher-Yates)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // عرض السؤال الحالي حسب النوع
+    function showQuestion() {
+        const container = document.getElementById("questionContainer");
+        container.innerHTML = "";
+
+        if (currentQuestion >= questions.length) {
+            showResults();
+            return;
         }
 
-        function nextQuestion() {
-            if (quizEnded) return;
+        const question = questions[currentQuestion];
 
-            const question = questions[currentQuestion];
+        // بناء هيكل السؤال حسب النوع
+        const questionBox = document.createElement("div");
+        questionBox.className = "question-type";
 
-            if (question.type.toLowerCase() === "mcq") {
-                const selectedOption = document.querySelector(".option.selected");
-                let isCorrect = false;
-                let answerText = "";
+        // عنوان السؤال
+        const questionText = document.createElement("div");
+        questionText.className = "question-text";
+        questionText.textContent = question.text;
+        questionBox.appendChild(questionText);
 
-                if (selectedOption) {
-                    const selectedIndex = parseInt(selectedOption.dataset.index);
-                    answerText = selectedOption.textContent;
-                    isCorrect = selectedIndex === question.correctOptionIndex;
+        if (question.type.toLowerCase() === "mcq") {
+            const optionsContainer = document.createElement("div");
+            optionsContainer.className = "options-container";
 
-                    if (isCorrect) score++;
-                }
+            question.options.forEach((opt, idx) => {
+                const option = document.createElement("div");
+                option.className = "option";
+                option.textContent = opt;
+                option.dataset.index = idx;
+                option.addEventListener("click", () => selectOption(option));
+                optionsContainer.appendChild(option);
+            });
 
-                userResponses.push({
-                    questionId: question.id,
-                    userResponse: answerText,
-                    isCorrect: isCorrect,
-                    questionType: "mcq"
+            questionBox.appendChild(optionsContainer);
+        }
+        else if (question.type.toLowerCase() === "matching") {
+            const matchingContainer = document.createElement("div");
+            matchingContainer.className = "matching-container";
+
+            // عمود الكلمات
+            const rightColumn = document.createElement("div");
+            rightColumn.className = "matching-column fixed-column";
+
+            // عمود التعريفات (مختلط)
+            const leftColumn = document.createElement("div");
+            leftColumn.className = "matching-column movable-column";
+
+            let selectedWord = null;
+            let selectedDefinition = null;
+            let matchCount = 0;
+
+            // الكلمات (items)
+            question.items.forEach(item => {
+                const wordDiv = document.createElement("div");
+                wordDiv.className = "matching-item word-item";
+                wordDiv.textContent = item.text;
+                wordDiv.dataset.word = item.text;
+
+                wordDiv.addEventListener("click", () => {
+                    if (wordDiv.classList.contains("matched")) return;
+
+                    // إزالة التحديد من غيره
+                    [...rightColumn.querySelectorAll(".selected")].forEach(el => {
+                        if (el !== wordDiv) el.classList.remove("selected");
+                    });
+
+                    if (wordDiv.classList.contains("selected")) {
+                        wordDiv.classList.remove("selected");
+                        selectedWord = null;
+                    } else {
+                        wordDiv.classList.add("selected");
+                        selectedWord = wordDiv;
+                    }
+
+                    checkMatch();
                 });
+
+                rightColumn.appendChild(wordDiv);
+            });
+
+            // تعريفات (matches) مخلوطة
+            const shuffledMatches = shuffleArray([...question.matches]);
+
+            shuffledMatches.forEach(match => {
+                const defDiv = document.createElement("div");
+                defDiv.className = "matching-item definition-item";
+                defDiv.textContent = match.text;
+                defDiv.dataset.definition = match.text;
+
+                defDiv.addEventListener("click", () => {
+                    if (defDiv.classList.contains("matched")) return;
+
+                    // إزالة التحديد من غيره
+                    [...leftColumn.querySelectorAll(".selected")].forEach(el => {
+                        if (el !== defDiv) el.classList.remove("selected");
+                    });
+
+                    if (defDiv.classList.contains("selected")) {
+                        defDiv.classList.remove("selected");
+                        selectedDefinition = null;
+                    } else {
+                        defDiv.classList.add("selected");
+                        selectedDefinition = defDiv;
+                    }
+
+                    checkMatch();
+                });
+
+                leftColumn.appendChild(defDiv);
+            });
+
+            function checkMatch() {
+                if (!selectedWord || !selectedDefinition) return;
+
+                const randomColor = colorShades[Math.floor(Math.random() * colorShades.length)];
+
+                selectedWord.classList.add("matched");
+                selectedDefinition.classList.add("matched");
+
+                selectedWord.style.backgroundColor = randomColor.bg;
+                selectedWord.style.border = `2px solid ${randomColor.border}`;
+                selectedDefinition.style.backgroundColor = randomColor.bg;
+                selectedDefinition.style.border = `2px solid ${randomColor.border}`;
+
+                // حفظ الكلمة والتعريف في خصائص data لتقييمهم لاحقًا
+                selectedWord.dataset.matchedWith = selectedDefinition.dataset.definition;
+
+                selectedWord.classList.remove("selected");
+                selectedDefinition.classList.remove("selected");
+
+                selectedWord = null;
+                selectedDefinition = null;
             }
-            else if (question.type.toLowerCase() === "matching") {
-                let correctMatches = 0;
-                const matches = [];
 
-                question.items.forEach((item, index) => {
-                    const wordEl = [...document.querySelectorAll(".word-item")].find(el => el.dataset.word === item.text);
-                    const matchedDef = wordEl?.dataset.matchedWith;
-                    const correctDef = question.matches[index]?.text;
 
-                    matches.push(`${item.text} => ${matchedDef}`);
-                    if (matchedDef === correctDef) correctMatches++;
+            matchingContainer.appendChild(leftColumn);
+            matchingContainer.appendChild(rightColumn);
+            questionBox.appendChild(matchingContainer);
+        }
+        else if (question.type.toLowerCase() === "spelling") {
+            const wordBuildingContainer = document.createElement("div");
+            wordBuildingContainer.className = "word-building-container";
+
+            const wordPreview = document.createElement("div");
+            wordPreview.className = "word-preview";
+            wordPreview.id = "wordPreview"; // أفضل لإمكانية الوصول لاحقًا
+
+            const shuffledLetters = shuffleArray([...question.letters]);
+
+            shuffledLetters.forEach(letter => {
+                const letterBox = document.createElement("div");
+                letterBox.className = "letter-box";
+                letterBox.textContent = letter;
+
+                letterBox.addEventListener("click", () => {
+                    wordPreview.textContent += letterBox.textContent;
+                    letterBox.style.visibility = "hidden";
                 });
 
-                const isCorrect = correctMatches === question.items.length;
+                wordBuildingContainer.appendChild(letterBox);
+            });
+
+            questionBox.appendChild(wordBuildingContainer);
+            questionBox.appendChild(wordPreview);
+        }
+
+        else {
+            // نوع سؤال غير معروف
+            questionBox.innerHTML += "<p>نوع السؤال غير مدعوم</p>";
+        }
+
+        container.appendChild(questionBox);
+
+        // تحديث شريط التقدم
+        const progress = ((currentQuestion + 1) / questions.length) * 100;
+        document.querySelector(".progress-bar-fill").style.width = progress + "%";
+    }
+
+    // التعامل مع اختيار خيار في mcq
+    function selectOption(option) {
+        // إزالة تحديد من كل الخيارات
+        document.querySelectorAll(".option").forEach(opt => opt.classList.remove("selected"));
+        option.classList.add("selected");
+    }
+
+    function nextQuestion() {
+        if (quizEnded) return;
+
+        const question = questions[currentQuestion];
+
+        if (question.type.toLowerCase() === "mcq") {
+            const selectedOption = document.querySelector(".option.selected");
+            let isCorrect = false;
+            let answerText = "";
+
+            if (selectedOption) {
+                const selectedIndex = parseInt(selectedOption.dataset.index);
+                answerText = selectedOption.textContent;
+                isCorrect = selectedIndex === question.correctOptionIndex;
+
                 if (isCorrect) score++;
-
-                userResponses.push({
-                    questionId: question.id,
-                    userResponse: matches.join(", "),
-                    isCorrect: isCorrect,
-                    questionType: "matching"
-                });
-            }
-            else if (question.type.toLowerCase() === "spelling") {
-                const userAnswer = document.getElementById("wordPreview")?.textContent.trim().toLowerCase();
-                const correctAnswer = question.correctWord?.trim().toLowerCase();
-                const isCorrect = userAnswer === correctAnswer;
-                if (isCorrect) score++;
-
-                userResponses.push({
-                    questionId: question.id,
-                    userResponse: userAnswer,
-                    isCorrect: isCorrect,
-                    questionType: "spelling"
-                });
             }
 
-            currentQuestion++;
-            if (currentQuestion < questions.length) {
-                showQuestion();
-            } else {
-                showResults();
-            }
+            userResponses.push({
+                QuestionId: question.id,
+                UserResponse: answerText,
+                IsCorrect: isCorrect,
+                QuestionType: "mcq"
+            });
+
+        }
+        else if (question.type.toLowerCase() === "matching") {
+            let correctMatches = 0;
+            const matches = [];
+
+            question.items.forEach((item, index) => {
+                const wordEl = [...document.querySelectorAll(".word-item")].find(el => el.dataset.word === item.text);
+                const matchedDef = wordEl?.dataset.matchedWith;
+                const correctDef = question.matches[index]?.text;
+
+                matches.push(`${item.text} => ${matchedDef}`);
+                if (matchedDef === correctDef) correctMatches++;
+            });
+
+            const isCorrect = correctMatches === question.items.length;
+            if (isCorrect) score++;
+
+            userResponses.push({
+                QuestionId: question.id,
+                UserResponse: matches.join(", "),
+                IsCorrect: isCorrect,
+                QuestionType: "matching"
+            });
+        }
+        else if (question.type.toLowerCase() === "spelling") {
+            const userAnswer = document.getElementById("wordPreview")?.textContent.trim().toLowerCase();
+            const correctAnswer = question.correctWord?.trim().toLowerCase();
+            const isCorrect = userAnswer === correctAnswer;
+            if (isCorrect) score++;
+
+            userResponses.push({
+                QuestionId: question.id,
+                UserResponse: userAnswer,
+                IsCorrect: isCorrect,
+                QuestionType: "spelling"
+            });
         }
 
-        // عرض النتيجة النهائية
-        function showResults() {
-            quizEnded = true;
-            clearInterval(timerInterval);
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            showQuestion();
+        } else {
+            showResults();
+        }
+    }
 
-            const container = document.getElementById("questionContainer");
-            container.innerHTML = `
-                <h2>انتهت المسابقة!</h2>
-                <p>النتيجة النهائية: ${score} من ${questions.length}</p>
-                <button class="btn" onclick="location.reload()">إعادة المسابقة</button>
+    // عرض النتيجة النهائية
+    function showResults() {
+        quizEnded = true;
+        clearInterval(timerInterval);
+        document.getElementById('quizTimerOuter').style.display = 'none';
+
+        const container = document.getElementById("questionContainer");
+        let percent = Math.round((score / questions.length) * 100);
+        let message = percent >= 80 ? 'ممتاز! أداء رائع 🎉' : percent >= 50 ? 'جيد جداً! استمر في التعلم 👏' : 'لا بأس! حاول مرة أخرى 💪';
+        container.innerHTML = `
+                <div class="result-circle">
+                    <div class="result-icon"><i class="fas fa-trophy"></i></div>
+                    <div>${score} / ${questions.length}</div>
+                </div>
+                <div class="result-message">${message}</div>
+                <div class="result-actions">
+                    <button class="btn btn-primary" onclick="location.reload()">إعادة المسابقة</button>
+                    <button class="btn btn-outline" onclick="window.location.href='@Url.Action("Index", "Home")'">العودة للرئيسية</button>
+                </div>
             `;
 
-            document.querySelector(".progress-bar-fill").style.width = "100%";
-            document.getElementById("nextQuestion").style.display = "none";
-            document.getElementById("timerContainer").style.display = "none";
+        document.querySelector(".progress-bar-fill").style.width = "100%";
+        document.getElementById("nextQuestion").style.display = "none";
+        document.getElementById("quizTimerOuter").style.display = "none";
 
-            const isSpecialQuiz = '@ViewBag.QuizType' === 'special';
-            const quizId = parseInt('@ViewBag.QuizId');
-            const assignmentId=  ('@ViewBag.AssignmentId');
+        const isSpecialQuiz = '@ViewBag.QuizType' === 'special';
+        const quizId = parseInt('@ViewBag.QuizId');
+        const assignmentId = ('@ViewBag.AssignmentId');
 
-                console.log("البيانات المرسلة:", {
-                quizId: isSpecialQuiz ? quizId : null,
-                assignmentId: assignmentId,
-                categoryId: isSpecialQuiz ? null : questions[currentQuestion - 1].categoryId,
-                level: isSpecialQuiz ? null : questions[currentQuestion - 1].level,
-                score: score,
-                userResponses: userResponses
-            });
-
-            // إرسال البيانات
-            fetch('/Questions/SaveResult', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
-                },
-                body: JSON.stringify({
-                    quizId: isSpecialQuiz ? quizId : null,
-                    assignmentId: assignmentId,
-                    categoryId: isSpecialQuiz ? null : questions[currentQuestion - 1].categoryId,
-                    level: isSpecialQuiz ? null : questions[currentQuestion - 1].level,
-                    score: score,
-                    userResponses: userResponses
-                })
-            }).then(response => {
-                if (!response.ok) throw new Error("خطأ أثناء الحفظ");
-                return response.json();
-            }).then(data => {
-                console.log("تم حفظ محاولة المستخدم بنجاح");
-            }).catch(error => {
-                console.error("خطأ:", error);
-            });
-        }
-
-        // تشغيل أول سؤال عند تحميل الصفحة
-        document.addEventListener("DOMContentLoaded", () => {
-            showQuestion();
-            startTimer(); // بدء المؤقت
-            document.getElementById("nextQuestion").addEventListener("click", nextQuestion);
+        console.log("البيانات المرسلة:", {
+            quizId: isSpecialQuiz ? quizId : null,
+            assignmentId: isSpecialQuiz ? assignmentId : null,
+            categoryId: isSpecialQuiz ? null : questions[currentQuestion - 1].categoryId,
+            level: isSpecialQuiz ? null : questions[currentQuestion - 1].level,
+            score: score,
+            userResponses: userResponses
         });
-    </script>
-</body>
-</html>
+
+        // إرسال البيانات
+        fetch('/Questions/SaveResult', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                QuizId: isSpecialQuiz ? quizId : null,
+                AssignmentId: isSpecialQuiz ? assignmentId : null,
+                CategoryId: isSpecialQuiz ? null : questions[currentQuestion - 1].categoryId,
+                Level: isSpecialQuiz ? null : questions[currentQuestion - 1].level,
+                Score: score,
+                UserResponses: userResponses
+            })
+
+        }).then(response => {
+            if (!response.ok) throw new Error("خطأ أثناء الحفظ");
+            return response.json();
+        }).then(data => {
+            console.log("تم حفظ محاولة المستخدم بنجاح");
+        }).catch(error => {
+            console.error("خطأ:", error);
+        });
+    }
+
+    // Show no questions state
+    function showNoQuestions() {
+        document.getElementById('quizTimerOuter').style.display = 'none';
+        document.querySelector('.progress-bar-fill').style.width = '0%';
+        document.getElementById('quizInfoWrapper').style.display = 'none';
+        document.getElementById('questionContainer').innerHTML = `
+            <div class="no-questions-state">
+                <div class="icon"><i class="fas fa-info-circle"></i></div>
+                <h3>لا توجد أسئلة متاحة لهذه المسابقة حالياً.</h3>
+                <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Index", "Home")'">العودة للرئيسية</button>
+            </div>
+        `;
+        document.getElementById('nextQuestion').style.display = 'none';
+    }
+
+    // On page load
+    window.addEventListener("DOMContentLoaded", () => {
+        setQuizTitle();
+        if (!questions || questions.length === 0) {
+            showNoQuestions();
+            return;
+        }
+        showQuestion();
+        startTimer();
+        document.getElementById("nextQuestion").addEventListener("click", nextQuestion);
+    });
+</script>

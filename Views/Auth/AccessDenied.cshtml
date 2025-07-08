@@ -1,14 +1,51 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @{
     ViewData["Title"] = "Access Denied";
-    Layout = null;
 }
+<link rel="stylesheet" href="~/css/home.css" />
+<style>
+    .access-denied-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px rgba(44, 90, 39, 0.08);
+        padding: 2.5rem 2rem 2rem 2rem;
+        max-width: 400px;
+        margin: 80px auto 0 auto;
+        text-align: center;
+    }
 
-<div class="text-center" style="margin-top: 50px;">
-    <h2 class="text-danger">🚫 ليس لديك صلاحية للوصول إلى هذه الصفحة</h2>
-    <p>يرجى تسجيل الخروج ثم تسجيل الدخول بحساب إداري إذا كنت تملك الصلاحية.</p>
+    .access-denied-icon {
+        font-size: 3rem;
+        color: #d7263d;
+        margin-bottom: 1rem;
+    }
 
-    <form asp-action="Logout" asp-controller="Auth" method="post" style="margin-top: 20px;">
-        <button type="submit" class="btn btn-danger">تسجيل الخروج</button>
-    </form>
+    .access-denied-title {
+        color: #d7263d;
+        font-size: 1.5rem;
+        font-family: 'Amiri', serif;
+        margin-bottom: 0.7rem;
+    }
+
+    .access-denied-desc {
+        color: #444;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        font-family: 'Cairo', 'Amiri', serif;
+    }
+
+    .access-denied-btn {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+</style>
+<div class="container" style="min-height:60vh; padding-top: 100px; padding-bottom: 40px;">
+    <div class="access-denied-card">
+        <div class="access-denied-icon"><i class="fas fa-ban"></i></div>
+        <div class="access-denied-title">ليس لديك صلاحية للوصول إلى هذه الصفحة</div>
+        <div class="access-denied-desc">يرجى تسجيل الخروج ثم تسجيل الدخول بحساب إداري إذا كنت تملك الصلاحية.</div>
+        <form asp-action="Logout" asp-controller="Auth" method="post">
+            <button type="submit" class="btn btn-primary access-denied-btn">تسجيل الخروج</button>
+        </form>
+    </div>
 </div>

@@ -141,14 +141,7 @@
                         </div>
                     <!-- Word Building -->
                     <div id="wordBuildingLetters" class="form-group" style="display: none">
-                        <label>الحروف</label>
-                        <div class="word-building-letters">
-                                <input type="text" class="letter-input" name="Letters" maxlength="1">
-                                <input type="text" class="letter-input" name="Letters" maxlength="1">
-                                <input type="text" class="letter-input" name="Letters" maxlength="1">
-                                <input type="text" class="letter-input" name="Letters" maxlength="1">
-                                <input type="text" class="letter-input" name="Letters" maxlength="1">
-                        </div>
+                       
                         <div class="form-group">
                             <label for="correctWord">الكلمة الصحيحة</label>
                                 <input type="text" id="correctWord" name="CorrectWord">
@@ -373,15 +366,15 @@
                     break;
 
 
-
                 case "wordBuilding":
-                    const letterInputs = document.querySelectorAll('input[name="Letters"]');
-                    letterInputs.forEach(input => {
-                        questionData.letters.push(input.value);
-                    });
+                    questionData.correctWord = document.getElementById("correctWord").value.trim();
 
-                    questionData.correctWord = document.getElementById("correctWord").value;
+                    // NEW: توليد الحروف من الكلمة الصحيحة
+                    if (questionData.correctWord) {
+                        questionData.letters = questionData.correctWord.split("");
+                    }
                     break;
+
             }
 
             // ✅ إرسال الطلب

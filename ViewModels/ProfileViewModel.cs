@@ -28,6 +28,8 @@ namespace CompetitionsWebsite.ViewModels
         public string CategoryName { get; set; }
         public DateTime AssignedDate { get; set; }
         public int QuestionsCount { get; set; }
+        public bool IsCompleted { get; set; } // 👈 أضيفي هذا
+
     }
 
 }

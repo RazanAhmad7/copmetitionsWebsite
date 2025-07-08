@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "جمعتكم - مسابقات تعليمية إسلامية";
 
-    Layout = null;
 }
 
 <!DOCTYPE html>
@@ -17,34 +16,21 @@
 </head>
 <body>
     <!-- Header -->
-    <header class="header">
-        <nav class="navbar">
-            <div class="container">
-                <div class="nav-brand">
-                    <h1 class="logo">جمعتكم</h1>
-                </div>
-                <ul class="nav-menu">
-                    <li><a href="@Url.Action("Index", "Home")" class="nav-link active">الرئيسية</a></li>
-                    <li><a href="@Url.Action("Login", "Auth")" class="nav-link">تسجيل الدخول</a></li>
-                    <li><a href="@Url.Action("Profile", "Profile")" class="nav-link">الملف الشخصي</a></li>
-                </ul>
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        </nav>
-    </header>
-
+   
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-background"></div>
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <h1 class="hero-title">اكتشف جمال القرآن الكريم</h1>
-                    <p class="hero-subtitle">منصة تعليمية متكاملة لاختبار معرفتك الإسلامية وتطوير فهمك للقرآن الكريم</p>
+                    <h1 class="hero-title">
+                        جمعتكم.. المعرفة بأسلوب ممتع
+
+                    </h1>
+                    <p class="hero-subtitle">
+                        من القرآن الكريم إلى الثقافة العامة، اكتشف عالمًا من التحديات التعليمية المصممة لك.
+
+                    </p>
                     <div class="hero-buttons">
                         <a href="@Url.Action("QuraanTest", "Home")" class="btn btn-primary">
                             <i class="fas fa-book-open"></i>
@@ -117,24 +103,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <h3>جمعتكم</h3>
-                    <p>منصة تعليمية إسلامية متكاملة</p>
-                </div>
-                <div class="footer-links">
-                    <a href="#" class="footer-link">الرئيسية</a>
-                    <a href="#" class="footer-link">من نحن</a>
-                    <a href="#" class="footer-link">اتصل بنا</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; @DateTime.Now.Year جميع الحقوق محفوظة - جمعتكم</p>
-            </div>
-        </div>
-    </footer>
+   
 
     <script src="~/js/main.js"></script>
 </body>
