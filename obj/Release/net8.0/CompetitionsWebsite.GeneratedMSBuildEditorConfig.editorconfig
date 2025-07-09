@@ -1,0 +1,95 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = CompetitionsWebsite
+build_property.RootNamespace = CompetitionsWebsite
+build_property.ProjectDir = C:\Mostaql Jobs\My Second Job - Competitions Website\CompetitionsWebsite\CompetitionsWebsite\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Mostaql Jobs\My Second Job - Competitions Website\CompetitionsWebsite\CompetitionsWebsite
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Admin/AddQuestion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWRkUXVlc3Rpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Admin/CreateRamadanQuestions.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQ3JlYXRlUmFtYWRhblF1ZXN0aW9ucy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Admin/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGFzaGJvYXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Admin/EditQuestion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFF1ZXN0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Auth/AccessDenied.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxBY2Nlc3NEZW5pZWQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Auth/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Auth/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Category/AddCategory.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcQWRkQ2F0ZWdvcnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Category/EditCategory.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcRWRpdENhdGVnb3J5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Home/QuraanTest.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxRdXJhYW5UZXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Profile/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZmlsZVxQcm9maWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Questions/ChooseDifficulty.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVlc3Rpb25zXENob29zZURpZmZpY3VsdHkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Questions/Quiz.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVlc3Rpb25zXFF1aXouY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Mostaql Jobs/My Second Job - Competitions Website/CompetitionsWebsite/CompetitionsWebsite/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-y2cbjwjdhd

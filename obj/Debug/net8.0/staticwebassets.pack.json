@@ -29,14 +29,6 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
-      "Id": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\images\\A person reading a holy quran in black and white islamic ramadan kareem greeting background _ Premium Photo.jpeg",
-      "PackagePath": "staticwebassets\\images\\A person reading a holy quran in black and white islamic ramadan kareem greeting background _ Premium Photo.jpeg"
-    },
-    {
-      "Id": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\images\\download (2).jpeg",
-      "PackagePath": "staticwebassets\\images\\download (2).jpeg"
-    },
-    {
       "Id": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\js\\admin.js",
       "PackagePath": "staticwebassets\\js\\admin.js"
     },
@@ -51,6 +43,10 @@
     {
       "Id": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\js\\quiz.js",
       "PackagePath": "staticwebassets\\js\\quiz.js"
+    },
+    {
+      "Id": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\js\\shared.js",
+      "PackagePath": "staticwebassets\\js\\shared.js"
     },
     {
       "Id": "C:\\Mostaql Jobs\\My Second Job - Competitions Website\\CompetitionsWebsite\\CompetitionsWebsite\\wwwroot\\lib\\bootstrap\\LICENSE",

@@ -1,0 +1,612 @@
+@model CompetitionsWebsite.ViewModels.ProfileViewModel
+@{
+    ViewData["Title"] = "الملف الشخصي - مسابقات تعليمية إسلامية";
+    // Difficulty level mapping for Arabic and color
+    Func<string, string> getLevelAr = level =>
+    {
+        switch ((level ?? "").ToLower())
+        {
+            case "easy": return "سهل";
+            case "medium": return "متوسط";
+            case "hard": return "متقدم";
+            default: return level;
+        }
+    };
+    Func<string, string> getLevelColor = level =>
+    {
+        switch ((level ?? "").ToLower())
+        {
+            case "easy": return "#43a047";
+            case "medium": return "#f4a261";
+            case "hard": return "#d7263d";
+            default: return "#e8f5e8";
+        }
+    };
+}
+<link rel="stylesheet" href="~/css/home.css" />
+<style>
+    .profile-dashboard {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 0 40px 0;
+    }
+
+    .profile-header-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px rgba(44, 90, 39, 0.08);
+        padding: 2rem 2rem 1.5rem 2rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        margin-top: 5rem;
+    }
+
+    .profile-user-info {
+        flex: 1 1 220px;
+    }
+
+    .profile-user-info h1 {
+        font-size: 2rem;
+        color: #2d5a27;
+        font-family: 'Amiri', serif;
+        margin-bottom: 0.3rem;
+    }
+
+    .profile-user-info .member-since {
+        color: #888;
+        font-size: 1rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .profile-user-info .welcome-message {
+        color: #f4a261;
+        font-size: 1.1rem;
+        font-family: 'Cairo', 'Amiri', serif;
+    }
+
+    .profile-stats {
+        display: flex;
+        gap: 1.5rem;
+        flex: 1 1 300px;
+        justify-content: flex-end;
+    }
+
+    .stat-card {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+        text-align: center;
+        min-width: 90px;
+        box-shadow: 0 2px 8px rgba(44, 90, 39, 0.04);
+    }
+
+    .stat-card i {
+        font-size: 1.3rem;
+        color: #f4a261;
+        margin-bottom: 0.2rem;
+    }
+
+    .stat-number {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #2d5a27;
+    }
+
+    .stat-label {
+        color: #888;
+        font-size: 0.95rem;
+    }
+
+    .quick-actions {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        justify-content: flex-end;
+    }
+
+    .btn-action {
+        background: linear-gradient(45deg, #f4a261, #e76f51);
+        color: #fff;
+        border-radius: 50px;
+        padding: 0.7rem 1.7rem;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: box-shadow 0.2s;
+        box-shadow: 0 2px 8px rgba(244, 162, 97, 0.10);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-action:hover {
+        box-shadow: 0 8px 24px rgba(244, 162, 97, 0.18);
+        color: #fff;
+    }
+
+    .ramadan-card {
+        background: #fffbe6;
+        border: 2px solid #f5c518;
+        border-radius: 14px;
+        padding: 1.5rem 1.2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 8px #f5c51822;
+    }
+
+    .ramadan-card h2 {
+        color: #d9822b;
+        font-size: 1.3rem;
+        margin-bottom: 0.7rem;
+    }
+
+    .ramadan-card .ramadan-answered {
+        color: #43a047;
+        font-weight: bold;
+        margin-top: 1rem;
+    }
+
+    .ramadan-card .ramadan-btn {
+        margin-top: 1rem;
+        background: #f4a261;
+        color: #fff;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .ramadan-card .ramadan-btn.answered {
+        background: #6c757d;
+        cursor: not-allowed;
+    }
+
+    .ramadan-card .ramadan-answer {
+        background: #f1f1f1;
+        border-radius: 8px;
+        padding: 0.7rem 1rem;
+        margin-top: 0.7rem;
+        color: #2d5a27;
+    }
+
+    .quiz-history-section {
+        margin-bottom: 2rem;
+    }
+
+    .quiz-history-title {
+        font-size: 1.2rem;
+        color: #2d5a27;
+        margin-bottom: 1rem;
+        font-family: 'Amiri', serif;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .quiz-history-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+
+    .quiz-item-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(44, 90, 39, 0.04);
+        padding: 1.2rem 1rem;
+        border: 1px solid #e8f5e8;
+        position: relative;
+    }
+
+    .quiz-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.7rem;
+    }
+
+    .quiz-name {
+        font-weight: 600;
+        color: #2d5a27;
+        font-size: 1.1rem;
+    }
+
+    .difficulty-indicator {
+        background: #f4a261;
+        color: #fff;
+        border-radius: 8px;
+        padding: 0.2rem 0.7rem;
+        font-size: 0.95rem;
+        margin-right: 0.5rem;
+    }
+
+    .quiz-date {
+        color: #888;
+        font-size: 0.95rem;
+    }
+
+    .quiz-metric {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .quiz-metric-value {
+        font-size: 1.2rem;
+        color: #2d5a27;
+        font-weight: bold;
+    }
+
+    .quiz-metric-label {
+        color: #888;
+        font-size: 0.95rem;
+    }
+
+    .quiz-actions {
+        text-align: left;
+    }
+
+    .btn-details {
+        background: #e8f5e8;
+        color: #2d5a27;
+        border-radius: 8px;
+        padding: 0.3rem 1rem;
+        font-size: 0.95rem;
+        text-decoration: none;
+        font-weight: 600;
+        margin-top: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-details:hover {
+        background: #f4a261;
+        color: #fff;
+    }
+
+    .details-panel {
+        display: none;
+        background-color: #f8f9fa;
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 8px;
+        border: 1px solid #e8f5e8;
+    }
+
+    .question-compare {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .question-box {
+        flex: 1;
+        background: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        border: 2px solid #e8f5e8;
+        box-shadow: 0 1px 4px rgba(44, 90, 39, 0.03);
+    }
+
+    .question-box.correct {
+        border-color: #43a047;
+        background: #e8f5e9;
+    }
+
+    .question-box.incorrect {
+        border-color: #d7263d;
+        background: #ffebee;
+    }
+
+    .question-text {
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #2d5a27;
+    }
+
+    .pair-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        gap: 10px;
+    }
+
+    .pair-box {
+        flex: 1;
+        background-color: #f1f1f1;
+        padding: 10px;
+        border-radius: 6px;
+        text-align: center;
+    }
+
+    .special-quizzes-section {
+        margin-bottom: 2rem;
+    }
+
+    .special-quizzes-title {
+        font-size: 1.2rem;
+        color: #2d5a27;
+        margin-bottom: 1rem;
+        font-family: 'Amiri', serif;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .special-quiz-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(44, 90, 39, 0.04);
+        padding: 1.2rem 1rem;
+        border: 1px solid #e8f5e8;
+        margin-bottom: 1rem;
+    }
+
+    .btn-special {
+        background: linear-gradient(45deg, #f4a261, #e76f51);
+        color: #fff;
+        border-radius: 50px;
+        padding: 0.5rem 1.3rem;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: box-shadow 0.2s;
+        box-shadow: 0 2px 8px rgba(244, 162, 97, 0.10);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-special:hover {
+        box-shadow: 0 8px 24px rgba(244, 162, 97, 0.18);
+        color: #fff;
+    }
+
+    .special-quizzes-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+    }
+
+    @@media
+    (max-width: 700px) {
+        .special-quizzes-list {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media(max - width: 900px) {
+            .profile-header-card {
+                flex-direction: column;
+                gap: 1.2rem;
+            }
+
+            .profile-stats {
+                justify-content: center;
+            }
+
+            .quick-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+    <div class="container profile-dashboard">
+        <div class="profile-header-card">
+            <div class="profile-user-info">
+                <h1>@Model.UserName</h1>
+                <div class="member-since">عضو منذ: @Model.JoinDate.ToString("MMMM yyyy")</div>
+                <div class="welcome-message">مرحباً بك في رحلتك التعليمية الإسلامية!</div>
+            </div>
+            <div class="profile-stats">
+                <div class="stat-card completed">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="stat-number">@Model.TotalAttempts</div>
+                    <div class="stat-label">المسابقات المكتملة</div>
+                </div>
+                <div class="stat-card best">
+                    <i class="fas fa-star"></i>
+                    <div class="stat-number">@Model.BestScore/10</div>
+                    <div class="stat-label">أفضل نتيجة</div>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.TodayRamadanQuestion != null)
+        {
+            <div class="ramadan-card">
+                <h2>🌙 سؤال رمضان لليوم</h2>
+                <div style="font-size: 1.1rem; margin-bottom: 0.7rem;">@Model.TodayRamadanQuestion.QuestionText</div>
+                @if (Model.HasAnsweredToday == true)
+                {
+                    <div class="ramadan-answered">لقد أجبت على سؤال اليوم، شكراً لمشاركتك! يمكنك العودة غداً للسؤال التالي.</div>
+                    <button onclick="toggleTodayAnswer()" class="ramadan-btn" style="margin-top:10px;">
+                        عرض إجابتي اليوم
+                    </button>
+                    <div id="todayAnswerContainer" class="ramadan-answer" style="display:none;">
+                        <strong>إجابتك:</strong>
+                        @Model.TodayRamadanUserAnswer?.Answer
+                    </div>
+                }
+                else
+                {
+                    <button id="btnStartAnswer" onclick="showAnswerForm()" class="ramadan-btn" style="background:#43a047;">
+                        حل سؤال اليوم
+                    </button>
+                    <form id="answerForm" method="post" asp-controller="Admin" asp-action="SubmitRamadanAnswer"
+                        style="display:none; margin-top:15px;">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="QuestionId" value="@Model.TodayRamadanQuestion.Id" />
+                        <div>
+                            <label for="Answer">إجابتك:</label>
+                            <textarea name="Answer" id="Answer" rows="4" required
+                                style="width:100%; padding:8px; margin-top:5px;"></textarea>
+                        </div>
+                        <button type="submit" class="ramadan-btn" style="margin-top:10px; background:#43a047;">إرسال
+                            الإجابة</button>
+                    </form>
+                }
+            </div>
+        }
+        <div class="quiz-history-section">
+            <div class="quiz-history-title"><i class="fas fa-history"></i> سجل المسابقات</div>
+            <div class="quiz-history-list">
+                @foreach (var attempt in Model.Attempts)
+                {
+                    if (attempt.Level != null && attempt.CategoryName != null)
+                    {
+                        var levelColor = getLevelColor(attempt.Level);
+                        <div class="quiz-item-card" style="border:2.5px solid @levelColor;">
+                            <div class="quiz-item-header">
+                                <div class="quiz-name" style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span class="difficulty-indicator"
+                                        style="background:@levelColor;">@getLevelAr(attempt.Level)</span>
+                                    <span>مسابقة في @attempt.CategoryName</span>
+                                </div>
+                                <div class="quiz-date">@attempt.AttemptDate.ToString("dd/MM/yyyy")</div>
+                            </div>
+                            <div class="quiz-metric">
+                                <div class="quiz-metric-value">@attempt.Score</div>
+                                <div class="quiz-metric-label">النتيجة</div>
+                            </div>
+                            <div class="quiz-actions">
+                                <button onclick="toggleDetails(@attempt.AttemptId)" class="btn-details">
+                                    <i class="fas fa-eye"></i> عرض التفاصيل
+                                </button>
+                            </div>
+                            <div class="details-panel" id="details-@attempt.AttemptId">
+                                @foreach (var answer in attempt.Answers ??
+                                                    Enumerable.Empty<CompetitionsWebsite.ViewModels.UserAnswerViewModel>())
+                                {
+                                    if (!string.IsNullOrEmpty(answer.QuestionType) && answer.QuestionType.ToLower() == "matching")
+                                    {
+                                        var userPairs = answer.UserResponse?.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(p =>
+                                        p.Trim()).ToList() ?? new List<string>();
+                                        var correctPairs = answer.CorrectAnswer?.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(p
+                                        => p.Trim()).ToList() ?? new List<string>();
+                                        <div class="question-text">@answer.QuestionText</div>
+                                        <div class="question-compare">
+                                            <div class="question-box @(answer.IsCorrect ? "correct" : "incorrect")">
+                                                <h4>إجابتك</h4>
+                                                @foreach (var pair in userPairs)
+                                                {
+                                                    var parts = pair.Split("=>", StringSplitOptions.TrimEntries);
+                                                    if (parts.Length == 2)
+                                                    {
+                                                        <div class="pair-row">
+                                                            <div class="pair-box">@parts[0]</div>
+                                                            <div class="pair-box">@parts[1]</div>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="question-box correct">
+                                                <h4>الإجابة الصحيحة</h4>
+                                                @foreach (var pair in correctPairs)
+                                                {
+                                                    var parts = pair.Split("=>", StringSplitOptions.TrimEntries);
+                                                    if (parts.Length == 2)
+                                                    {
+                                                        <div class="pair-row">
+                                                            <div class="pair-box">@parts[0]</div>
+                                                            <div class="pair-box">@parts[1]</div>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="question-compare">
+                                            <div class="question-box @(answer.IsCorrect ? "correct" : "incorrect")">
+                                                <div class="question-text">@answer.QuestionText</div>
+                                                <div class="option @(answer.IsCorrect ? "correct" : "incorrect")">
+                                                    @answer.UserResponse (إجابتك)
+                                                </div>
+                                            </div>
+                                            <div class="question-box correct">
+                                                <div class="question-text">@answer.QuestionText</div>
+                                                <div class="option correct">
+                                                    @answer.CorrectAnswer (الإجابة الصحيحة)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        @if (Model.SpecialQuizzes != null && Model.SpecialQuizzes.Any())
+        {
+            <div class="special-quizzes-section">
+                <div class="special-quizzes-title"><i class="fas fa-envelope-open-text"></i> المسابقات الخاصة</div>
+                <div class="special-quizzes-list">
+                    @foreach (var quiz in Model.SpecialQuizzes)
+                    {
+                        <div class="special-quiz-card">
+                            <div class="quiz-item-header">
+                                <div class="quiz-name">
+                                    مسابقة خاصة - @quiz.CategoryName
+                                </div>
+                                <div class="quiz-date">@quiz.AssignedDate.ToString("dd/MM/yyyy")</div>
+                            </div>
+                            <div class="quiz-metric">
+                                <div class="quiz-metric-label">عدد الأسئلة</div>
+                                <div class="quiz-metric-value">@quiz.QuestionsCount</div>
+                            </div>
+                            <div class="quiz-actions">
+                                @if (quiz.IsCompleted)
+                                {
+                                    <span style="color: green; font-weight: bold;"><i class="fas fa-check-circle"></i> تم الحل</span>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("StartSpecialQuiz", "Questions", new { quizId = quiz.QuizId })"
+                                        class="btn-special">
+                                        <i class="fas fa-play-circle"></i> ابدأ المسابقة
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    <script>
+        function toggleDetails(id) {
+            var panel = document.getElementById('details-' + id);
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+            } else {
+                panel.style.display = 'block';
+            }
+        }
+        function showAnswerForm() {
+            const alreadyAnswered = @Model.HasAnsweredToday.ToString().ToLower();
+            if (alreadyAnswered === "true") {
+                alert("لقد أجبت على سؤال اليوم بالفعل.");
+                return;
+            }
+            document.getElementById('btnStartAnswer').style.display = 'none';
+            document.getElementById('answerForm').style.display = 'block';
+        }
+        function toggleTodayAnswer() {
+            const container = document.getElementById("todayAnswerContainer");
+            container.style.display = container.style.display === "none" ? "block" : "none";
+        }
+    </script>

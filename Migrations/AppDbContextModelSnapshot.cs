@@ -94,37 +94,6 @@ namespace CompetitionsWebsite.Migrations
                     b.ToTable("MatchingPairs");
                 });
 
-            modelBuilder.Entity("CompetitionsWebsite.Models.Participant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CompetitionId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("HasFinished")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("HasStarted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsNotified")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Participants");
-                });
-
             modelBuilder.Entity("CompetitionsWebsite.Models.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -396,9 +365,6 @@ namespace CompetitionsWebsite.Migrations
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ParticipantId")
-                        .HasColumnType("int");
-
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
@@ -417,8 +383,6 @@ namespace CompetitionsWebsite.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParticipantId");
 
                     b.HasIndex("QuestionId");
 
@@ -716,10 +680,6 @@ namespace CompetitionsWebsite.Migrations
 
             modelBuilder.Entity("CompetitionsWebsite.Models.UserAnswer", b =>
                 {
-                    b.HasOne("CompetitionsWebsite.Models.Participant", null)
-                        .WithMany("Answers")
-                        .HasForeignKey("ParticipantId");
-
                     b.HasOne("CompetitionsWebsite.Models.Question", "Question")
                         .WithMany()
                         .HasForeignKey("QuestionId")
@@ -820,11 +780,6 @@ namespace CompetitionsWebsite.Migrations
             modelBuilder.Entity("CompetitionsWebsite.Models.Category", b =>
                 {
                     b.Navigation("Questions");
-                });
-
-            modelBuilder.Entity("CompetitionsWebsite.Models.Participant", b =>
-                {
-                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("CompetitionsWebsite.Models.SpecialQuiz", b =>

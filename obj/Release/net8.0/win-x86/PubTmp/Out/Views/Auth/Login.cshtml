@@ -1,0 +1,114 @@
+@model CompetitionsWebsite.ViewModels.UserLoginViewModel
+@{
+    ViewData["Title"] = "تسجيل الدخول - مسابقات تعليمية إسلامية";
+}
+<link rel="stylesheet" href="~/css/home.css" />
+<style>
+    .auth-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px rgba(44, 90, 39, 0.08);
+        padding: 2rem 1.5rem 1.5rem 1.5rem;
+        max-width: 520px;
+        margin: 10px auto 0 auto;
+    }
+
+    .auth-title {
+        font-size: 2rem;
+        font-family: 'Amiri', serif;
+        color: #2d5a27;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    .auth-form-group {
+        margin-bottom: 1.3rem;
+        position: relative;
+    }
+
+    .auth-form-group label {
+        font-weight: 600;
+        color: #2d5a27;
+        margin-bottom: 0.3rem;
+        font-size: 1rem;
+        display: block;
+    }
+
+    .auth-form-group input {
+        width: 100%;
+        padding: 0.9rem 2.5rem 0.9rem 1rem;
+        border-radius: 10px;
+        border: 1.5px solid #e8f5e8;
+        font-size: 1rem;
+        font-family: 'Cairo', 'Amiri', serif;
+        background: #f8f9fa;
+        color: #2d5a27;
+        transition: border 0.2s;
+    }
+
+    .auth-form-group input:focus {
+        border-color: #f4a261;
+        outline: none;
+    }
+
+    .auth-form-group .input-icon {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #f4a261;
+        font-size: 1.2rem;
+    }
+
+    .auth-btn {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .auth-links {
+        text-align: center;
+        margin-top: 1.5rem;
+        color: #666;
+        font-size: 1rem;
+    }
+
+    .auth-links a {
+        color: #f4a261;
+        text-decoration: none;
+        font-weight: 600;
+        margin: 0 0.2rem;
+    }
+
+    .auth-links a:hover {
+        text-decoration: underline;
+    }
+
+    @@media(max - width: 500px) {
+            .auth-card {
+                padding: 1.2rem 0.5rem;
+            }
+        }
+    </style>
+    <div class="container" style="min-height:60vh; padding-top: 100px; padding-bottom: 40px;">
+        <div class="auth-card">
+            <div class="auth-title">تسجيل الدخول</div>
+            <form id="loginForm" asp-action="Login" asp-controller="Auth" method="post">
+                <div class="auth-form-group">
+                    <label for="email">البريد الإلكتروني</label>
+                    <input asp-for="Email" type="email" id="email" name="email" required />
+                    <span class="input-icon"><i class="fas fa-envelope"></i></span>
+                </div>
+                <div class="auth-form-group">
+                    <label for="password">كلمة المرور</label>
+                    <input asp-for="Password" type="password" id="password" name="password" required />
+                    <span class="input-icon"><i class="fas fa-lock"></i></span>
+                </div>
+                <button type="submit" class="btn btn-primary auth-btn">تسجيل الدخول</button>
+                <div asp-validation-summary="All" class="text-danger" style="margin-top:0.7rem;"></div>
+            </form>
+            <div class="auth-links">
+                <p>ليس لديك حساب؟ <a href="@Url.Action("Register", "Auth")">سجل الآن</a></p>
+                <p><a href="@Url.Action("ForgotPassword", "Auth")">نسيت كلمة المرور؟</a></p>
+            </div>
+        </div>
+    </div>

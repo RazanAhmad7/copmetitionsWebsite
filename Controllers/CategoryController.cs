@@ -79,18 +79,39 @@ namespace CompetitionsWebsite.Controllers
         [HttpGet]
         public IActionResult DeleteCategory(int id)
         {
-            var category = _context.Categories.FirstOrDefault(c => c.Id == id);
+            var category = _context.Categories
+                .Include(c => c.Questions)
+                .FirstOrDefault(c => c.Id == id);
+
             if (category == null)
             {
                 TempData["DeleteMessage"] = "لم يتم العثور على القسم.";
                 return RedirectToAction("Dashboard", "Admin", new { tab = "categories" });
             }
 
+            // حذف محاولات المستخدم المرتبطة بالقسم
+            var attemptsToDelete = _context.UserQuizAttempts
+                .Include(a => a.Answers)
+                .Where(a => a.CategoryId == id)
+                .ToList();
+
+            foreach (var attempt in attemptsToDelete)
+            {
+                // حذف الإجابات المرتبطة بالمحاولة
+                _context.UserAnswers.RemoveRange(attempt.Answers);
+            }
+
+            // حذف المحاولات نفسها
+            _context.UserQuizAttempts.RemoveRange(attemptsToDelete);
+
+            // حذف القسم (الأسئلة سيتم حذفها تلقائياً عبر Cascade)
             _context.Categories.Remove(category);
+
             _context.SaveChanges();
 
-            TempData["DeleteMessage"] = "تم حذف القسم وجميع أسئلته بنجاح!";
+            TempData["DeleteMessage"] = "تم حذف القسم وجميع أسئلته ومحاولات المستخدم المرتبطة به بنجاح!";
             return RedirectToAction("Dashboard", "Admin", new { tab = "categories" });
         }
+
     }
 }

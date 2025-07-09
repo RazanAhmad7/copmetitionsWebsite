@@ -1,0 +1,1020 @@
+@using CompetitionsWebsite.ViewModels
+@model CompetitionsWebsite.ViewModels.DashboardViewModel
+@{
+
+    ViewData["Title"] = "لوحة التحكم - مسابقات تعليمية إسلامية";
+
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    <main>
+        <div class="admin-container">
+            <!-- Enhanced Sidebar -->
+            <div class="admin-sidebar">
+                <div class="sidebar-header">
+                    <h2>🕌 لوحة التحكم</h2>
+                    <p>إدارة المسابقات الإسلامية</p>
+                </div>
+                
+                <ul class="sidebar-nav">
+                    <li data-tab="questions" class="admin-tab active">
+                        <a href="#questions">
+                            <i class="fas fa-brain"></i>
+                            <span class="nav-text">إدارة الأسئلة</span>
+                            <span class="nav-badge">@Model.Questions.Count()</span>
+                        </a>
+                    </li>
+                    <li data-tab="categories" class="admin-tab">
+                        <a href="#categories">
+                            <i class="fas fa-folder-open"></i>
+                            <span class="nav-text">إدارة الأقسام</span>
+                            <span class="nav-badge">@Model.Categories.Count()</span>
+                        </a>
+                    </li>
+                    <li data-tab="users" class="admin-tab">
+                        <a href="#users">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-text">المستخدمين</span>
+                            <span class="nav-badge">@Model.Users.Count()</span>
+                        </a>
+                    </li>
+                    <li data-tab="special-quiz" class="admin-tab">
+                        <a href="#special-quiz">
+                            <i class="fas fa-flask"></i>
+                            <span class="nav-text">المسابقات الخاصة</span>
+                        </a>
+                    </li>
+                    <li data-tab="ramadan-quiz" class="admin-tab">
+                        <a href="#ramadan-quiz">
+                            <i class="fas fa-moon"></i>
+                            <span class="nav-text">مسابقة رمضان</span>
+                            <span class="nav-badge">@Model.RamadanQuestions.Count()</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="admin-main">
+                <!-- Header -->
+                <div class="admin-header">
+                    <h2>لوحة التحكم الرئيسية</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="addQuestionBtn" asp-action="AddQuestion" asp-controller="Admin">
+                            <i class="fas fa-plus"></i> إضافة سؤال جديد
+                        </button>
+                        <button class="btn btn-success" id="addCategoryBtn" asp-action="AddCategory" asp-controller="Category" style="display:none;">
+                            <i class="fas fa-plus"></i> إضافة قسم جديد
+                        </button>
+                        <button class="btn btn-warning" id="startSpecialQuizBtn">
+                            <i class="fas fa-magic"></i> إنشاء مسابقة خاصة
+                        </button>
+                        <button class="btn btn-success" id="createRamadanQuizBtn">
+                            <i class="fas fa-crescent-moon"></i> إنشاء مسابقة رمضان
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Content Area -->
+                <div class="admin-content">
+                    <!-- Questions List -->
+                    <div class="elements-list" id="questionsList">
+                        @foreach (var question in Model.Questions)
+                        {
+                            <div class="elements-card m-2" data-id="@question.Id">
+                                <div class="element-info">
+                                    <h4>@question.Text</h4>
+                                    <p><i class="fas fa-tag"></i> نوع السؤال: @question.Type</p>
+                                    <p><i class="fas fa-folder"></i> القسم: @(Model.Categories.FirstOrDefault(c => c.Id == question.CategoryId)?.Name ?? "غير محدد")</p>
+                                </div>
+                                <div class="element-actions">
+                                    <button class="action-btn edit-btn" id="editQues-btn" data-bs-toggle="tooltip" title="تعديل السؤال">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete-btn" data-bs-toggle="tooltip" title="حذف السؤال">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Categories List -->
+                    <div class="elements-list" id="categoriesList" style="display:none">
+                        @foreach (var category in Model.Categories)
+                        {
+                            <div class="elements-card m-2" data-id="@category.Id">
+                                <div class="element-info">
+                                    <h4>@category.Name</h4>
+                                    <p><i class="fas fa-info-circle"></i> الوصف: @category.Description</p>
+                                    <p><i class="fas fa-question-circle"></i> عدد الأسئلة: @(Model.Questions.Count(q => q.CategoryId == category.Id))</p>
+                                </div>
+                                <div class="element-actions">
+                                    <button class="action-btn show-btn" data-bs-toggle="tooltip" title="عرض الأسئلة">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn edit-btn" data-bs-toggle="tooltip" title="تعديل القسم">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete-btn" data-bs-toggle="tooltip" title="حذف القسم">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Users List -->
+                    <div class="elements-list" id="usersList" style="display:none">
+                        @foreach (var user in Model.Users)
+                        {
+                            <div class="elements-card m-2" data-id="@user.Id">
+                                <div class="element-info">
+                                    <h4><i class="fas fa-user"></i> @user.UserName</h4>
+                                    <p><i class="fas fa-envelope"></i> البريد الإلكتروني: @user.Email</p>
+                                    <p><i class="fas fa-calendar"></i> تاريخ التسجيل: @user.JoinedAt.ToString("yyyy-MM-dd")</p>
+                                </div>
+                                <div class="element-actions">
+                                    <button class="action-btn show-btn" data-bs-toggle="tooltip" title="عرض تفاصيل المستخدم">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn edit-btn" data-bs-toggle="tooltip" title="تعديل المستخدم">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete-btn" data-bs-toggle="tooltip" title="حذف المستخدم">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    @functions {
+                        string GetQuizColor(List<SpecialQuizAssignmentViewModel> users)
+
+                        {
+
+                            var totalUsers = users.Count;
+
+                            var totalCompleted = users.Count(u => u.Attempts != null && u.Attempts.Any());
+
+
+
+                            if (totalCompleted == 0) return "#f8d7da"; // Red: no one answered
+
+                            if (totalCompleted < totalUsers) return "#fff3cd"; // Yellow: some answered
+
+                            return "#d4edda"; // Green: all answered
+
+                        }
+                    }
+                    <!-- Special Quiz Results -->
+                    <div class="elements-list" id="special-quizList">
+                        <!-- Legend -->
+                        <div class="legend mb-3" style="display: flex; gap: 15px; align-items: center;">
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 20px; height: 20px; background: #f8d7da; border-radius: 4px; margin-left: 5px;"></div>
+                                <span>لا أحد شارك</span>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 20px; height: 20px; background: #fff3cd; border-radius: 4px; margin-left: 5px;"></div>
+                                <span>بعض المستخدمين شاركوا</span>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 20px; height: 20px; background: #d4edda; border-radius: 4px; margin-left: 5px;"></div>
+                                <span>جميع المستخدمين أكملوا</span>
+                            </div>
+                        </div>
+
+                        @foreach (var quizGroup in Model.SpecialQuizAssignments.GroupBy(a => new { a.SpecialQuizId, a.SpecialQuizTitle }))
+
+                        {
+
+                            var quizTitle = quizGroup.Key.SpecialQuizTitle;
+
+                            var quizId = quizGroup.Key.SpecialQuizId;
+
+                            var assignments = quizGroup.ToList();
+
+                            var bgColor = GetQuizColor(assignments);
+
+                            <div class="elements-card m-2" style="background: @bgColor;">
+                                <div class="element-info">
+                                    <h4><i class="fas fa-clipboard-list"></i> المسابقة: @quizTitle</h4>
+                                    <p><i class="fas fa-users"></i> عدد المدعوين: @assignments.Count</p>
+                                    <p><i class="fas fa-check-circle"></i> عدد الذين أجابوا: @assignments.Count(a => a.Attempts != null && a.Attempts.Any())</p>
+
+                                    <button type="button" class="btn btn-primary mt-2 toggle-users" data-target="quiz-users-@quizId">
+                                        عرض المستخدمين
+                                    </button>
+
+                                    <div id="quiz-users-@quizId" class="user-list mt-3" style="display:none;">
+                                        @foreach (var assignment in assignments)
+
+                                        {
+                                            <div style="background: #fff; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                                                <p><strong><i class="fas fa-user"></i> المستخدم:</strong> @assignment.UserName</p>
+                                                <p>
+                                                    <strong>الحالة:</strong>
+                                                    @if (assignment.Attempts != null && assignment.Attempts.Any())
+
+                                                    {
+                                                        <span style="color: green;">✔️ شارك</span>
+                                                    }
+
+                                                    else
+
+                                                    {
+                                                        <span style="color: gray;">⏳ لم يشارك بعد</span>
+                                                    }
+
+                                                </p>
+                                                <p><strong>الدرجة:</strong> @assignment.Score</p>
+
+                                                @if (assignment.Attempts != null && assignment.Attempts.Any())
+
+                                                {
+                                                    <button class="btn btn-secondary show-answers" type="button" data-target="answers-@assignment.AssignmentId">
+                                                        عرض الإجابات
+                                                    </button>
+
+
+                                                    <div id="answers-@assignment.AssignmentId" style="display:none; margin-top:10px;">
+                                                        @foreach (var attempt in assignment.Attempts)
+
+                                                        {
+                                                            <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                                                                <strong>محاولة بتاريخ:</strong> @attempt.AttemptDate.ToString("yyyy-MM-dd HH:mm")<br />
+                                                                
+                                                                <strong>النتيجة:</strong> @attempt.Score
+
+                                                                <ul class="mt-2">
+                                                                    @foreach (var ans in attempt.Answers)
+
+                                                                    {
+                                                                        <li style="margin-bottom: 5px;">
+                                                                            <strong>السؤال:</strong> @ans.QuestionText <br />
+                                                                            <strong>إجابة المستخدم:</strong> @ans.UserResponse <br />
+                                                                            <strong>الحالة:</strong>
+                                                                            @if (ans.IsCorrect)
+
+                                                                            {
+                                                                                <span style="color: green;">✔️ صحيحة</span>
+                                                                            }
+
+                                                                            else
+
+                                                                            {
+                                                                                <span style="color: red;">❌ خاطئة</span>
+                                                                            }
+                                                                        </li>
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Ramadan Questions List -->
+                    <div class="elements-list" id="ramadan-quizList" style="display:none">
+                        @if (Model.RamadanQuestions.Any())
+                        {
+                            @foreach (var ramadanQuestion in Model.RamadanQuestions)
+                            {
+                                var questionAnswers = Model.RamadanQuestionAnswers.FirstOrDefault(qa => qa.QuestionId == ramadanQuestion.Id);
+                                var answerCount = questionAnswers?.UserAnswers.Count ?? 0;
+                                
+                                <div class="elements-card m-2" data-id="@ramadanQuestion.Id">
+                                    <div class="element-info">
+                                        <h4><i class="fas fa-moon"></i> @ramadanQuestion.QuestionText</h4>
+                                        <p><i class="fas fa-calendar-alt"></i> تاريخ العرض: @ramadanQuestion.ShowFrom.ToString("yyyy-MM-dd")</p>
+                                        <p><i class="fas fa-clock"></i> وقت العرض: @ramadanQuestion.ShowFrom.ToString("HH:mm") - @ramadanQuestion.ShowTo.ToString("HH:mm")</p>
+                                        <p><i class="fas fa-calendar-check"></i> اليوم: @(Model.RamadanQuestions.IndexOf(ramadanQuestion) + 1) من رمضان</p>
+                                        <p><i class="fas fa-users"></i> عدد الإجابات: @answerCount</p>
+                                        
+                                        @if (answerCount > 0)
+                                        {
+                                            <button type="button" class="btn btn-primary mt-2 toggle-ramadan-answers" data-target="ramadan-answers-@ramadanQuestion.Id">
+                                                <i class="fas fa-eye"></i> عرض الإجابات (@answerCount)
+                                            </button>
+
+                                            <div id="ramadan-answers-@ramadanQuestion.Id" class="ramadan-answers-list mt-3" style="display:none;">
+                                                @foreach (var userAnswer in questionAnswers.UserAnswers)
+                                                {
+                                                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-right: 4px solid #667eea;">
+                                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                                            <strong><i class="fas fa-user"></i> @userAnswer.UserName</strong>
+                                                            <small style="color: #666;"><i class="fas fa-clock"></i> @userAnswer.AnsweredAt.ToString("yyyy-MM-dd HH:mm")</small>
+                                                        </div>
+                                                        <p style="margin: 0; color: #333;"><strong>الإجابة:</strong> @userAnswer.Answer</p>
+                                                        <small style="color: #666;"><i class="fas fa-envelope"></i> @userAnswer.UserEmail</small>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="element-actions">
+                                        <button class="action-btn show-btn" data-bs-toggle="tooltip" title="عرض السؤال">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="action-btn edit-btn" data-bs-toggle="tooltip" title="تعديل السؤال">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="empty-state">
+                                <i class="fas fa-moon" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                                <h3>لا توجد أسئلة رمضان</h3>
+                                <p>لم يتم إنشاء أي أسئلة لمسابقة رمضان بعد.</p>
+                                <button class="btn btn-success" onclick="window.location.href='@Url.Action("CreateRamadanQuestions", "Admin")'">
+                                    <i class="fas fa-plus"></i> إنشاء أسئلة رمضان
+                                </button>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Add/Edit Question Form -->
+                    <form asp-action="SaveQuestion" asp-controller="Admin" method="post" class="question-form" id="questionForm" style="display: none">
+                        <input type="hidden" id="questionId" value="0">
+
+                        <div class="form-group">
+                            <label for="questionType">نوع السؤال</label>
+                            <select id="questionType" required>
+                                <option value="multipleChoice">اختيار من متعدد</option>
+                                <option value="matching">توصيل</option>
+                                <option value="wordBuilding">تركيب كلمات</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="questionText">نص السؤال</label>
+                            <textarea id="questionText" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="questionCategory">القسم</label>
+                            <select id="questionCategory" required>
+                                <option value="القرآن الكريم">القرآن الكريم</option>
+                                <option value="السنة النبوية">السنة النبوية</option>
+                                <option value="العقيدة">العقيدة</option>
+                                <option value="الثقافة الإسلامية">الثقافة الإسلامية</option>
+                                <option value="الفقه">الفقه</option>
+                                <option value="الألغاز">الألغاز</option>
+                            </select>
+                        </div>
+
+                        <!-- Multiple Choice Options -->
+                        <div id="multipleChoiceOptions" class="form-group">
+                            <label>الخيارات</label>
+                            <div class="options-list" id="optionsContainer">
+                                <div class="option-item">
+                                    <input type="text" placeholder="الخيار الأول" required>
+                                    <input type="radio" name="correctAnswer" value="0" required>
+                                    <button type="button" class="remove-option">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="add-option" id="addOptionBtn">
+                                <i class="fas fa-plus"></i>
+                                إضافة خيار
+                            </button>
+                        </div>
+
+                        <!-- Matching Pairs -->
+                        <div id="matchingPairs" class="form-group" style="display: none">
+                            <label>أزواج التوصيل</label>
+                            <div class="matching-pairs">
+                                <div class="matching-column">
+                                    <h4>العناصر</h4>
+                                    <div class="matching-items" id="matchingItemsContainer">
+                                        <input type="text" placeholder="العنصر الأول" required>
+                                    </div>
+                                    <button type="button" class="add-option" id="addMatchingItemBtn">
+                                        <i class="fas fa-plus"></i>
+                                        إضافة عنصر
+                                    </button>
+                                </div>
+                                <div class="matching-column">
+                                    <h4>الإجابات</h4>
+                                    <div class="matching-answers" id="matchingAnswersContainer">
+                                        <input type="text" placeholder="الإجابة الأولى" required>
+                                    </div>
+                                    <button type="button" class="add-option" id="addMatchingAnswerBtn">
+                                        <i class="fas fa-plus"></i>
+                                        إضافة إجابة
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Word Building -->
+                        <div id="wordBuildingLetters" class="form-group" style="display: none">
+                            <label>الحروف</label>
+                            <div class="word-building-letters">
+                                <input type="text" class="letter-input" maxlength="1" required>
+                                <input type="text" class="letter-input" maxlength="1" required>
+                                <input type="text" class="letter-input" maxlength="1" required>
+                                <input type="text" class="letter-input" maxlength="1" required>
+                                <input type="text" class="letter-input" maxlength="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="correctWord">الكلمة الصحيحة</label>
+                                <input type="text" id="correctWord" required>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">حفظ السؤال</button>
+                            <button type="button" class="btn btn-danger" id="cancelBtn">
+                                إلغاء
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>جميع الحقوق محفوظة © @DateTime.Now.Year</p>
+    </footer>
+
+    @if (TempData["DeleteMessage"] != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'تم الحذف بنجاح!',
+                    confirmButtonText: 'حسنًا'
+                });
+            });
+        </script>
+    }
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+   
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".toggle-users").forEach(button => {
+                button.addEventListener("click", function () {
+                    const targetId = this.getAttribute("data-target");
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        target.style.display = target.style.display === "none" ? "block" : "none";
+                    }
+                });
+            });
+
+            document.querySelectorAll(".show-answers").forEach(button => {
+                button.addEventListener("click", function () {
+                    const targetId = this.getAttribute("data-target");
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        target.style.display = target.style.display === "none" ? "block" : "none";
+                    }
+                });
+            });
+
+            // Ramadan answers toggle functionality
+            document.querySelectorAll(".toggle-ramadan-answers").forEach(button => {
+                button.addEventListener("click", function () {
+                    const targetId = this.getAttribute("data-target");
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        const isVisible = target.style.display !== "none";
+                        target.style.display = isVisible ? "none" : "block";
+                        
+                        // Update button text
+                        const icon = this.querySelector("i");
+                        const text = this.textContent;
+                        if (isVisible) {
+                            icon.className = "fas fa-eye";
+                            this.innerHTML = icon.outerHTML + " عرض الإجابات (" + target.children.length + ")";
+                        } else {
+                            icon.className = "fas fa-eye-slash";
+                            this.innerHTML = icon.outerHTML + " إخفاء الإجابات (" + target.children.length + ")";
+                        }
+                    }
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.admin-tab');
+            const addCatBtn = document.getElementById('addCategoryBtn');
+            const addQuesBtn = document.getElementById('addQuestionBtn');
+            const sections = {
+                questions: document.getElementById('questionsList'),
+                categories: document.getElementById('categoriesList'),
+                users: document.getElementById('usersList'),
+                "special-quiz": document.getElementById('special-quizList'),
+                "ramadan-quiz": document.getElementById('ramadan-quizList')
+            };
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    // Hide all sections
+                    Object.values(sections).forEach(sec => sec.style.display = 'none');
+
+                    // Show the selected section
+                    const tabName = tab.getAttribute('data-tab');
+                    if (sections[tabName]) {
+                        sections[tabName].style.display = 'block';
+                    }
+
+                    // Show/hide buttons
+                    switch (tabName) {
+                        case 'questions':
+                            addQuesBtn.style.display = 'inline-block';
+                            addCatBtn.style.display = 'none';
+                            break;
+                        case 'categories':
+                            addQuesBtn.style.display = 'none';
+                            addCatBtn.style.display = 'inline-block';
+                            break;
+                        case 'users':
+                            addQuesBtn.style.display = 'none';
+                            addCatBtn.style.display = 'none';
+                            break;
+                        case 'ramadan-quiz':
+                            addQuesBtn.style.display = 'none';
+                            addCatBtn.style.display = 'none';
+                            break;
+                    }
+                });
+            });
+
+            // --- THIS IS THE ONLY PLACE TO ACTIVATE THE INITIAL TAB ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const tab = urlParams.get('tab');
+            let tabToActivate = 'questions';
+            if (tab === 'categories') tabToActivate = 'categories';
+            if (tab === 'users') tabToActivate = 'users';
+            if (tab === 'ramadan-quiz') tabToActivate = 'ramadan-quiz';
+            const tabBtn = document.querySelector('.admin-tab[data-tab="' + tabToActivate + '"]');
+            if (tabBtn) tabBtn.click();
+        });
+
+        // تفعيل جميع التولتيبات في الصفحة
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+
+        // Admin Panel State
+        let isEditing = false;
+        let currentQuestionId = null;
+
+        // DOM Elements
+        const addQuestionBtn = document.getElementById("addQuestionBtn");
+        const questionForm = document.querySelector(".question-form");
+        const questionsList = document.querySelector(".elements-list");
+        const questionTypeSelect = document.getElementById("questionType");
+        const multipleChoiceOptions = document.getElementById("multipleChoiceOptions");
+        const matchingPairs = document.getElementById("matchingPairs");
+        const wordBuildingLetters = document.getElementById("wordBuildingLetters");
+
+        // Event Listeners
+        document.addEventListener("DOMContentLoaded", () => {
+          
+
+            // Add question button
+            document.getElementById('addQuestionBtn').addEventListener('click', function () {
+                window.location.href = '@Url.Action("AddQuestion", "Admin")';
+            });
+
+            document.getElementById('createRamadanQuizBtn').addEventListener('click', function () {
+                window.location.href = '@Url.Action("CreateRamadanQuestions", "Admin")';
+            });
+
+            // Add question button
+            document.getElementById('addCategoryBtn').addEventListener('click', function () {
+                window.location.href = '@Url.Action("AddCategory", "Category")';
+            });
+
+
+            // Question type change
+            questionTypeSelect.addEventListener("change", handleQuestionTypeChange);
+
+            // Form submission
+            questionForm.addEventListener("submit", handleFormSubmit);
+
+            // Add option buttons
+            document.getElementById("addOptionBtn").addEventListener("click", () => addOption(document.getElementById("addOptionBtn")));
+            document.getElementById("addMatchingItemBtn").addEventListener("click", () => addOption(document.getElementById("addMatchingItemBtn")));
+            document.getElementById("addMatchingAnswerBtn").addEventListener("click", () => addOption(document.getElementById("addMatchingAnswerBtn")));
+
+            // Remove option buttons (for initial options)
+            document.querySelectorAll(".remove-option").forEach((btn) => {
+                btn.addEventListener("click", () => removeOption(btn));
+            });
+
+            // Edit and delete buttons
+            document.querySelectorAll(".edit-btn").forEach((btn) => {
+                btn.addEventListener("click", () => editCategory(btn));
+            });
+            // Edit question button
+            document.querySelectorAll("#editQues-btn").forEach((btn) => {
+                btn.addEventListener("click", () => editQuestion(btn));
+            });
+
+            document.querySelectorAll(".delete-btn").forEach((btn) => {
+                btn.addEventListener("click", () => deleteQuestion(btn));
+            });
+
+            // Ramadan question action buttons
+            document.querySelectorAll('#ramadan-quizList .show-btn').forEach((btn) => {
+                btn.addEventListener('click', function () {
+                    const questionCard = btn.closest('.elements-card');
+                    const questionId = questionCard.getAttribute('data-id');
+                    // Show question details in a modal or redirect to view page
+                    Swal.fire({
+                        title: 'تفاصيل السؤال',
+                        html: questionCard.querySelector('.element-info').innerHTML,
+                        icon: 'info',
+                        confirmButtonText: 'حسنًا'
+                    });
+                });
+            });
+
+            document.querySelectorAll('#ramadan-quizList .edit-btn').forEach((btn) => {
+                btn.addEventListener('click', function () {
+                    const questionCard = btn.closest('.elements-card');
+                    const questionId = questionCard.getAttribute('data-id');
+                    // Redirect to edit page
+                    window.location.href = `/Admin/EditRamadanQuestion/${questionId}`;
+                });
+            });
+
+            // Cancel button
+            document.getElementById("cancelBtn").addEventListener("click", () => {
+                questionForm.style.display = "none";
+                questionsList.style.display = "grid";
+            });
+
+            // Add this after other event listeners
+            document.querySelectorAll('#categoriesList .delete-btn').forEach((btn) => {
+                btn.addEventListener('click', function () {
+                    const categoryCard = btn.closest('.elements-card');
+                    const categoryId = categoryCard.getAttribute('data-id');
+                    Swal.fire({
+                        title: 'هل أنت متأكد؟',
+                        text: 'سيتم حذف القسم وجميع أسئلته المرتبطة به! لن يمكنك التراجع عن هذا الإجراء!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'نعم، احذف',
+                        cancelButtonText: 'لا، إلغاء',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = `/Category/DeleteCategory/${categoryId}`;
+                        }
+                    });
+                });
+            });
+        });
+
+        // Handle question type change
+        function handleQuestionTypeChange() {
+            const type = questionTypeSelect.value;
+
+            // Hide all question type specific sections
+            multipleChoiceOptions.style.display = "none";
+            matchingPairs.style.display = "none";
+            wordBuildingLetters.style.display = "none";
+
+            // Show the selected type
+            switch (type) {
+                case "multipleChoice":
+                    multipleChoiceOptions.style.display = "block";
+                    break;
+                case "matching":
+                    matchingPairs.style.display = "block";
+                    break;
+                case "wordBuilding":
+                    wordBuildingLetters.style.display = "block";
+                    break;
+            }
+        }
+
+        // Add new option
+        function addOption(button) {
+            const container = button.closest(".form-group");
+            const optionsList = container.querySelector(
+                ".options-list, .matching-items, .matching-answers"
+            );
+
+            const optionItem = document.createElement("div");
+            optionItem.className = "option-item";
+
+            if (container.id === "multipleChoiceOptions") {
+                const optionCount = optionsList.querySelectorAll(".option-item").length;
+                optionItem.innerHTML = `
+                            <input type="text" placeholder="الخيار الجديد" required>
+                            <input type="radio" name="correctAnswer" value="${optionCount}" required>
+                            <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                        `;
+            } else if (container.id === "matchingPairs") {
+                if (button.id === "addMatchingItemBtn") {
+                    optionItem.innerHTML = `
+                                <input type="text" placeholder="عنصر جديد" required>
+                                <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                            `;
+                } else {
+                    optionItem.innerHTML = `
+                                <input type="text" placeholder="إجابة جديدة" required>
+                                <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                            `;
+                }
+            }
+
+            optionsList.appendChild(optionItem);
+
+            // Add event listener to new remove button
+            optionItem
+                .querySelector(".remove-option")
+                .addEventListener("click", () =>
+                    removeOption(optionItem.querySelector(".remove-option"))
+                );
+        }
+
+        // Remove option
+        function removeOption(button) {
+            const optionItem = button.closest(".option-item");
+            if (optionItem) {
+                optionItem.remove();
+            }
+        }
+
+        // Handle form submission
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const questionData = {
+                id: document.getElementById("questionId").value || Date.now().toString(),
+                type: questionTypeSelect.value,
+                text: document.getElementById("questionText").value,
+                category: document.getElementById("questionCategory").value,
+                options: [],
+                correctAnswer: null,
+                pairs: [],
+                letters: [],
+                correctWord: ""
+            };
+
+            // Collect data based on question type
+            switch (questionData.type) {
+                case "multipleChoice":
+                    document.querySelectorAll('#multipleChoiceOptions .option-item input[type="text"]').forEach((input, index) => {
+                        questionData.options.push(input.value);
+                        if (document.querySelector(`input[name="correctAnswer"][value="${index}"]:checked`)) {
+                            questionData.correctAnswer = index;
+                        }
+                    });
+                    break;
+                case "matching":
+                    document.querySelectorAll('.matching-items input').forEach(input => {
+                        questionData.pairs.push({ item: input.value });
+                    });
+                    document.querySelectorAll('.matching-answers input').forEach((input, index) => {
+                        if (questionData.pairs[index]) {
+                            questionData.pairs[index].answer = input.value;
+                        }
+                    });
+                    break;
+                case "wordBuilding":
+                    document.querySelectorAll('.letter-input').forEach(input => {
+                        questionData.letters.push(input.value);
+                    });
+                    questionData.correctWord = document.getElementById("correctWord").value;
+                    break;
+            }
+
+            fetch('/Admin/SaveQuestion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value // Only if you use anti-forgery
+                },
+                body: JSON.stringify(questionData)
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error("Failed to save question");
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Saved successfully:", data);
+                    if (isEditing) {
+                        updateQuestionInList(questionData);
+                    } else {
+                        addQuestionToList(questionData);
+                    }
+
+                    // Reset form
+                    questionForm.reset();
+                    questionForm.style.display = "none";
+                    questionsList.style.display = "grid";
+                })
+                .catch(error => {
+                    console.error("Error saving question:", error);
+                    alert("حدث خطأ أثناء حفظ السؤال. حاول مرة أخرى.");
+                });
+
+
+            // Add or update the question in the list
+            if (isEditing) {
+                updateQuestionInList(questionData);
+            } else {
+                addQuestionToList(questionData);
+            }
+
+            // Reset form
+            e.target.reset();
+            questionForm.style.display = "none";
+            questionsList.style.display = "grid";
+        }
+
+        // Edit question function - redirect to edit page
+        function editCategory(button) {
+            const questionCard = button.closest('.elements-card');
+            const questionId = questionCard.getAttribute('data-id');
+            window.location.href = `/Category/EditCategory/${questionId}`;
+        }
+
+        // Edit question function - redirect to edit page
+        function editQuestion(button) {
+            const questionCard = button.closest('.elements-card');
+            const questionId = questionCard.getAttribute('data-id');
+            window.location.href = `/Admin/EditQuestion/${questionId}`;
+        }
+
+        // Delete question function
+        function deleteQuestion(button) {
+            const questionCard = button.closest('.elements-card');
+            const questionId = questionCard.getAttribute('data-id');
+            
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: 'لن يمكنك التراجع عن هذا الإجراء!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، احذف',
+                cancelButtonText: 'لا، إلغاء',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/Admin/DeleteQuestion/${questionId}`;
+                }
+            });
+        }
+
+
+        //  for the spical compition : 
+
+        let selectedQuestionIds = [];
+        let selectedUserIds = [];
+
+        document.getElementById('startSpecialQuizBtn').addEventListener('click', function () {
+            // Show question checkboxes
+            document.querySelectorAll('#questionsList .element-actions').forEach(actionDiv => {
+                const questionId = actionDiv.closest('.elements-card').getAttribute('data-id');
+                actionDiv.innerHTML = `
+                        <label>
+                            <input type="checkbox" class="question-checkbox" value="${questionId}">
+                            اختيار
+                        </label>
+                    `;
+            });
+
+            // Add "Next" button if not exists
+            if (!document.getElementById('nextToUsersBtn')) {
+                const nextBtn = document.createElement('button');
+                nextBtn.id = 'nextToUsersBtn';
+                nextBtn.className = 'btn';
+                nextBtn.style = "margin: 15px;";
+                nextBtn.innerText = 'التالي';
+                nextBtn.addEventListener('click', goToUserSelection);
+                document.querySelector('.admin-content').prepend(nextBtn);
+            }
+
+            // Switch to questions tab if not already
+            document.querySelector('.admin-tab[data-tab="questions"]').click();
+        });
+
+        function goToUserSelection() {
+            // Get selected question IDs
+            selectedQuestionIds = Array.from(document.querySelectorAll('.question-checkbox:checked')).map(cb => cb.value);
+
+            if (selectedQuestionIds.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'يرجى اختيار سؤال واحد على الأقل',
+                    confirmButtonText: 'حسنًا'
+                });
+                return;
+            }
+
+            // Hide question section, show user section
+            document.getElementById('questionsList').style.display = 'none';
+            document.getElementById('usersList').style.display = 'grid';
+
+            // Modify user cards
+            document.querySelectorAll('#usersList .element-actions').forEach(actionDiv => {
+                const userId = actionDiv.closest('.elements-card').getAttribute('data-id');
+                actionDiv.innerHTML = `
+                        <label>
+                            <input type="checkbox" class="user-checkbox" value="${userId}">
+                            اختيار
+                        </label>
+                    `;
+            });
+
+            // Replace "Next" button to go to confirmation
+            const nextBtn = document.getElementById('nextToUsersBtn');
+            nextBtn.innerText = 'تأكيد الإرسال';
+            nextBtn.removeEventListener('click', goToUserSelection);
+            nextBtn.addEventListener('click', confirmSpecialQuiz);
+        }
+
+        function confirmSpecialQuiz() {
+            selectedUserIds = Array.from(document.querySelectorAll('.user-checkbox:checked')).map(cb => cb.value);
+
+            if (selectedUserIds.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'يرجى اختيار مستخدم واحد على الأقل',
+                    confirmButtonText: 'حسنًا'
+                });
+                return;
+            }
+
+            // Send data to backend
+            fetch('/Admin/CreateSpecialQuiz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                },
+                body: JSON.stringify({
+                    questionIds: selectedQuestionIds,
+                    userIds: selectedUserIds
+                })
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error('خطأ في إرسال المسابقة الخاصة');
+                    return res.json();
+                })
+                .then(data => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تم إنشاء المسابقة الخاصة!',
+                        confirmButtonText: 'حسنًا'
+                    }).then(() => {
+                        location.reload(); // أو الانتقال إلى صفحة عرض النتائج لاحقًا
+                    });
+                })
+                .catch(err => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'حدث خطأ!',
+                        text: err.message
+                    });
+                });
+        }
+
+
+    </script>
+</body>
+</html>

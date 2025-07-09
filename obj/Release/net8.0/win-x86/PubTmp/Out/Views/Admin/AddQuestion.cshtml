@@ -1,0 +1,422 @@
+@model CompetitionsWebsite.ViewModels.QuestionInputViewModel
+@{
+    ViewData["Title"] = "لوحة التحكم - مسابقات تعليمية إسلامية";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="~/css/addQuestion.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+
+<body>
+    <main>
+        <div class="admin-container">
+            <!-- Sidebar (copied from Dashboard) -->
+            <div class="admin-sidebar">
+                <div class="sidebar-header">
+                    <h2>🕌 لوحة التحكم</h2>
+                    <p>إدارة المسابقات الإسلامية</p>
+                </div>
+                <ul class="sidebar-nav">
+                    <li class="admin-tab">
+                        <a href="@Url.Action("Dashboard", "Admin")">
+                            <i class="fas fa-brain"></i>
+                            <span class="nav-text">إدارة الأسئلة</span>
+                        </a>
+                    </li>
+                    <li class="admin-tab">
+                        <a href="@Url.Action("AddCategory", "Category")">
+                            <i class="fas fa-folder-open"></i>
+                            <span class="nav-text">إدارة الأقسام</span>
+                        </a>
+                    </li>
+                    <li class="admin-tab">
+                        <a href="@Url.Action("Dashboard", "Admin", new { tab = "users" })">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-text">المستخدمين</span>
+                        </a>
+                    </li>
+                    <li class="admin-tab">
+                        <a href="@Url.Action("Dashboard", "Admin", new { tab = "special-quiz" })">
+                            <i class="fas fa-flask"></i>
+                            <span class="nav-text">المسابقات الخاصة</span>
+                        </a>
+                    </li>
+                    <li class="admin-tab">
+                        <a href="@Url.Action("CreateRamadanQuestions", "Admin")">
+                            <i class="fas fa-moon"></i>
+                            <span class="nav-text">مسابقة رمضان</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Main Content -->
+            <div class="admin-main">
+                <!-- Header -->
+                <div class="admin-header">
+                    <h2>إضافة سؤال جديد</h2>
+                    <button class="btn btn-primary" id="backToHome">
+                        <i class="fas fa-arrow-right"></i> عودة إلى الرئيسية
+                    </button>
+                </div>
+                <!-- Content Area -->
+                <div class="admin-content">
+            <div class="admin-tabs">
+                        <p>حدد نوع السؤال المراد إضافته واملأ جميع الأقسام ثم اضغط حفظ السؤال</p>
+            </div>
+                    <form asp-action="SaveQuestion" asp-controller="Admin" method="post" class="question-form"
+                        id="questionForm">
+                    <input type="hidden" id="questionId" name="Id" value="0">
+                    <div class="form-group">
+                        <label for="questionType">نوع السؤال</label>
+                        <select id="questionType" name="Type" required>
+                            <option value="multipleChoice">اختيار من متعدد</option>
+                            <option value="matching">توصيل</option>
+                            <option value="wordBuilding">تركيب كلمات</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="questionText">نص السؤال</label>
+                        <textarea id="questionText" name="Text" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="questionCategory">القسم</label>
+                        <select id="questionCategory" name="Category" required>
+                            @foreach (var category in (List<CompetitionsWebsite.Models.Category>)ViewBag.Categories)
+                            {
+                                <option value="@category.Name">@category.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="questionLevel">مستوى السؤال</label>
+                        <select id="questionLevel" name="Level" required>
+                            <option value="">اختر المستوى</option>
+                            <option value="easy">سهل</option>
+                            <option value="medium">متوسط</option>
+                            <option value="hard">صعب</option>
+                        </select>
+                    </div>
+                    <!-- Multiple Choice Options -->
+                    <div id="multipleChoiceOptions" class="form-group">
+                        <label>الخيارات</label>
+                            <p class="hint-text">يمكنك إضافة من ثلاثة إلى أربعة خيارات.</p>
+                        <div class="options-list" id="optionsContainer">
+                            <div class="option-item">
+                                <input type="text" name="Options" placeholder="الخيار الأول" required>
+                                <input type="radio" name="correctAnswer" value="0" required>
+                                    <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                            <button type="button" class="add-option" id="addOptionBtn">
+                                <i class="fas fa-plus"></i> إضافة خيار
+                            </button>
+                        </div>
+                    <!-- Matching Pairs -->
+                    <div id="matchingPairs" class="form-group" style="display: none">
+                        <label>أزواج التوصيل</label>
+                            <p class="hint-text">يمكنك إضافة من زوجين إلى أربعة أزواج.</p>
+                        <div id="matchingPairsContainer" class="matching-pairs">
+                            <div class="matching-pair option-item">
+                                    <input type="text" name="MatchingItems" placeholder="العنصر الأول">
+                                    <input type="text" name="MatchingAnswers" placeholder="الإجابة الأولى">
+                                <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                            </div>
+                            <div class="matching-pair option-item">
+                                    <input type="text" name="MatchingItems" placeholder="العنصر الثاني">
+                                    <input type="text" name="MatchingAnswers" placeholder="الإجابة الثانية">
+                                <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                            <button type="button" class="add-option" id="addPairBtn">
+                                <i class="fas fa-plus"></i> إضافة زوج جديد
+                            </button>
+                        </div>
+                    <!-- Word Building -->
+                    <div id="wordBuildingLetters" class="form-group" style="display: none">
+                       
+                        <div class="form-group">
+                            <label for="correctWord">الكلمة الصحيحة</label>
+                                <input type="text" id="correctWord" name="CorrectWord">
+                            </div>
+                        </div>
+                    <div class="form-actions">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> حفظ السؤال
+                            </button>
+                            <button type="button" class="btn btn-danger" id="cancelBtn">
+                                <i class="fas fa-times"></i> إلغاء
+                        </button>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>جميع الحقوق محفوظة © @DateTime.Now.Year</p>
+    </footer>
+    <div id="toast" class="toast">تم حفظ السؤال بنجاح!</div>
+    <script>
+        document.getElementById('backToHome').addEventListener('click', function () {
+            window.location.href = '@Url.Action("Dashboard", "Admin")';
+        });
+        // Admin Panel State
+        let isEditing = false;
+        let currentQuestionId = null;
+
+        // DOM Elements
+        const addQuestionBtn = document.getElementById("addQuestionBtn");
+        const questionForm = document.querySelector(".question-form");
+        const questionsList = document.querySelector(".elements-list");
+        const questionTypeSelect = document.getElementById("questionType");
+        const multipleChoiceOptions = document.getElementById("multipleChoiceOptions");
+        const matchingPairs = document.getElementById("matchingPairs");
+        const wordBuildingLetters = document.getElementById("wordBuildingLetters");
+
+        // Event Listeners
+        document.addEventListener("DOMContentLoaded", () => {
+       
+            // Question type change
+            questionTypeSelect.addEventListener("change", handleQuestionTypeChange);
+
+            // Form submission
+            questionForm.addEventListener("submit", handleFormSubmit);
+
+            // Add option buttons
+            document.getElementById("addOptionBtn").addEventListener("click", () => addOption(document.getElementById("addOptionBtn")));
+            document.getElementById("addPairBtn").addEventListener("click", () => addOption(document.getElementById("addPairBtn")));
+
+
+            // Remove option buttons (for initial options)
+            document.querySelectorAll(".remove-option").forEach((btn) => {
+                btn.addEventListener("click", () => removeOption(btn));
+            });
+
+          
+
+            // Cancel button
+            document.getElementById("cancelBtn").addEventListener("click", () => {
+                questionForm.style.display = "none";
+                questionsList.style.display = "grid";
+            });
+        });
+
+      
+
+        // Show question form
+        function showQuestionForm() {
+            questionsList.style.display = "none";
+            questionForm.style.display = "grid";
+            isEditing = false;
+            currentQuestionId = null;
+            questionForm.reset();
+            handleQuestionTypeChange();
+        }
+
+        // Handle question type change
+        function handleQuestionTypeChange() {
+            const type = questionTypeSelect.value;
+
+            // Hide all and remove required
+            multipleChoiceOptions.style.display = "none";
+            matchingPairs.style.display = "none";
+            wordBuildingLetters.style.display = "none";
+
+            // remove "required" from all inputs in hidden sections
+            document.querySelectorAll("#multipleChoiceOptions input, #matchingPairs input, #wordBuildingLetters input").forEach(input => {
+                input.removeAttribute("required");
+            });
+
+            // Show and set required only on the relevant section
+            if (type === "multipleChoice") {
+                multipleChoiceOptions.style.display = "block";
+                document.querySelectorAll('#multipleChoiceOptions input[type="text"]').forEach(input => {
+                    input.setAttribute("required", "required");
+                });
+            } else if (type === "matching") {
+                matchingPairs.style.display = "block";
+                document.querySelectorAll('#matchingPairs input').forEach(input => {
+                    input.setAttribute("required", "required");
+                });
+            } else if (type === "wordBuilding") {
+                wordBuildingLetters.style.display = "block";
+                document.querySelectorAll('#wordBuildingLetters input').forEach(input => {
+                    input.setAttribute("required", "required");
+                });
+            }
+        }
+
+        function addOption(button) {
+            const container = button.closest(".form-group");
+            const optionsList = container.querySelector(".options-list, #matchingPairsContainer");
+
+            // عدد الأزواج الحالية
+            const currentPairsCount = optionsList.querySelectorAll(".option-item").length;
+
+            // إذا وصلنا الحد الأقصى (4) لا نضيف زوج جديد
+            if (currentPairsCount >= 4) {
+                // إخفاء زر الإضافة عند الوصول للحد الأقصى
+                button.style.display = "none";
+                return;
+            }
+
+            const optionItem = document.createElement("div");
+            optionItem.className = "option-item";
+
+            if (container.id === "multipleChoiceOptions") {
+                optionItem.innerHTML = `
+                    <input type="text" name="Options" placeholder="الخيار الجديد" required>
+                    <input type="radio" name="correctAnswer" value="${currentPairsCount}" required>
+                    <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                `;
+            } else if (container.id === "matchingPairs") {
+                optionItem.innerHTML = `
+                    <input type="text" name="MatchingItems" placeholder="عنصر" required>
+                    <input type="text" name="MatchingAnswers" placeholder="إجابة" required>
+                    <button type="button" class="remove-option"><i class="fas fa-times"></i></button>
+                `;
+            }
+
+            optionsList.appendChild(optionItem);
+
+            // إضافة حدث إزالة العنصر
+            optionItem.querySelector(".remove-option").addEventListener("click", () => {
+                removeOption(optionItem.querySelector(".remove-option"));
+
+                // بعد الإزالة، إظهار زر الإضافة مجددًا إذا كان مخفي
+                if (currentPairsCount - 1 < 4) {
+                    button.style.display = "inline-block";
+                }
+            });
+
+            // إظهار الزر (للتأكد من ظهوره لو كان مخفي سابقًا)
+            button.style.display = "inline-block";
+
+            // إذا أصبحنا بالحد الأقصى بعد الإضافة، نخفي الزر
+            if (currentPairsCount + 1 >= 4) {
+                button.style.display = "none";
+            }
+        }
+
+        // Remove option
+        function removeOption(button) {
+            const optionItem = button.closest(".option-item");
+            if (optionItem) {
+                optionItem.remove();
+            }
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const questionData = {
+                id: document.getElementById("questionId").value || Date.now().toString(),
+                type: questionTypeSelect.value,
+                text: document.getElementById("questionText").value,
+                category: document.getElementById("questionCategory").value,
+                level: document.getElementById("questionLevel").value, // ✅ مستوى السؤال
+                options: [],
+                correctAnswer: null,
+                pairs: [],
+                letters: [],
+                correctWord: ""
+            };
+
+            // ✅ إضافة البيانات حسب نوع السؤال
+            switch (questionData.type) {
+                case "multipleChoice":
+                    const options = document.querySelectorAll('#multipleChoiceOptions input[name="Options"]');
+                    options.forEach((input, index) => {
+                        questionData.options.push(input.value);
+                    });
+
+                    const correctAnswerRadio = document.querySelector('input[name="correctAnswer"]:checked');
+                    if (correctAnswerRadio) {
+                        questionData.correctAnswer = parseInt(correctAnswerRadio.value);
+                    }
+                    break;
+
+                case "matching":
+                    const pairRows = document.querySelectorAll('#matchingPairsContainer .matching-pair');
+                    pairRows.forEach(pair => {
+                        const leftInput = pair.querySelector('input[name="MatchingItems"]');
+                        const rightInput = pair.querySelector('input[name="MatchingAnswers"]');
+                        const leftValue = leftInput?.value.trim();
+                        const rightValue = rightInput?.value.trim();
+                        if (leftValue && rightValue) {
+                            questionData.pairs.push({
+                                item: leftValue,
+                                answer: rightValue
+                            });
+                        }
+                    });
+
+                    if (questionData.pairs.length < 2) {
+                        alert("يجب إدخال على الأقل زوجين من العناصر والإجابات.");
+                        return;
+                    }
+                    break;
+
+
+                case "wordBuilding":
+                    questionData.correctWord = document.getElementById("correctWord").value.trim();
+
+                    // NEW: توليد الحروف من الكلمة الصحيحة
+                    if (questionData.correctWord) {
+                        questionData.letters = questionData.correctWord.split("");
+                    }
+                    break;
+
+            }
+
+            // ✅ إرسال الطلب
+            fetch('/Admin/SaveQuestion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                },
+                body: JSON.stringify(questionData)
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error("Failed to save question");
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Saved successfully:", data);
+                    showToast();
+                    setTimeout(() => {
+                        window.location.href = '@Url.Action("Dashboard", "Admin")';
+                    }, 2000);
+                })
+                .catch(async (error) => {
+                    const errorText = await error.text?.() || error.message;
+                    console.error("Error saving question:", errorText);
+                    alert("حدث خطأ أثناء حفظ السؤال. حاول مرة أخرى.");
+                });
+
+            e.target.reset();
+        }
+
+        function showToast(message = "تم حفظ السؤال بنجاح!") {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000); // Toast disappears after 3 seconds
+        }
+
+    </script>
+</body>
+
+</html>
